@@ -122,6 +122,21 @@ class MessageHandler
         if (Config.Server.LogMessages === true)
         {
             Logger.debug(`EDITED message: (${channel}) - ${uid} - ${author}: ${msg}`);
+
+            const embed = new Discord.RichEmbed()
+              .setDescription(`A message by ${author} has been edited.`)
+              .setAuthor(author, this.getAvatar(new_message))
+
+              .setColor('#FF0000')
+              .setFooter("© Corporate Clash 2017-2018")
+
+              .setTimestamp()
+              .addField('**Original Message**', "```" + omsg + "```")
+              .addField('**Edited Message**', "```" + msg + "```")
+              .addField('**Channel**', "```#" + channel + "```")
+              .addField('**User ID**', "```" + uid + "```");
+
+            this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
         }
 
         if (channel)
@@ -168,6 +183,13 @@ class MessageHandler
                 //this.processMessage(message);
             }
         }
+    }
+
+    sendChannelMessage(msg, channel)
+    {
+        var guildUser = this.parent.bot.guilds.array()[0].me;
+        var channel = guildUser.guild.channels.find('name', channel);
+        channel.send(msg);
     }
 
     checkProfanity(msg)

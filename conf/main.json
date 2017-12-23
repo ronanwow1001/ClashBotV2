@@ -5,10 +5,12 @@
     {
         "Token": "MzkzNTQ3MzA4NDQyMDU4NzYy.DR3XEw.nFYpLlFYucP-M9cjoBBGfS_MbCM",
         "Tick": 50,
+        "LogMessages": true,
 
         "Channels":
         {
-            "Default": "general"
+            "Default": "general",
+            "Moderation": "moderation"
         },
 
         "Admins":
