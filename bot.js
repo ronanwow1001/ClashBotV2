@@ -1,6 +1,6 @@
 const os = require('os');
 const botLoop = require('node-gameloop');
-const CommandHandler = require('./lib/CommandHandler');
+const CommandHandler = require('./handlers/CommandHandler');
 const MessageHandler = require('./handlers/MessageHandler');
 
 class Bot

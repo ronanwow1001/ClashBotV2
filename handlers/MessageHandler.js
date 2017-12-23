@@ -123,7 +123,6 @@ class MessageHandler
         }
       }
 
-      console.log(check);
       //arr.push(this.check);
 
       return this.check;
