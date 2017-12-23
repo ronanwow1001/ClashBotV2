@@ -77,7 +77,7 @@ class MessageHandler
                   .setFooter("© Corporate Clash 2017-2018")
 
                   .setTimestamp()
-                  .addField('**Message**', "```" + msg + "```")
+                  .addField('**New Message**', "```" + msg + "```")
                   .addField('**Detected Word**', "```" + 'placeholder' + "```");
 
                  message.author.send(
@@ -90,7 +90,66 @@ class MessageHandler
             }
             else
             {
+                //this.processMessage(message);
+            }
+        }
+    }
 
+    handleEdit(old_message, new_message)
+    {
+        var admin = new_message.member.hasPermission('ADMINISTRATOR');
+        var manager = new_message.member.hasPermission('MANAGE_MESSAGES');
+        var channel = new_message.channel.name;
+    	var author = new_message.author.username;
+        var uid = new_message.author.id;
+    	var msg = new_message.content;
+        var omsg = old_message.content;
+    	var date = new_message.createdAt;
+
+        if (Config.Server.LogMessages === true)
+        {
+            Logger.debug(`EDITED message: (${channel}) - ${uid} - ${author}: ${msg}`);
+        }
+
+        if (channel)
+        {
+
+            if (Config.Server.Admins.includes(uid))
+            {
+                var checkMsg = 0;
+            }
+            else
+            {
+                var checkMsg = this.checkMessage(msg);
+            }
+
+            if (checkMsg === 1)
+            {
+                Database.push(`/${uid}/profanity_warnings[]/content`, msg, true);
+
+                const embed = new Discord.RichEmbed()
+                  .setDescription('Our bot has detected you swearing!\nPlease remember no NFSW language is allowed in the Corporate Clash discord.\n')
+                  .setAuthor(author, this.getAvatar(new_message))
+
+                  .setColor('#FF0000')
+                  .setFooter("© Corporate Clash 2017-2018")
+
+                  .setTimestamp()
+                  .addField('**Original Message**', "```" + omsg + "```")
+                  .addField('**Edited Message**', "```" + msg + "```")
+                  .addField('**Detected Word**', "```" + 'placeholder' + "```");
+
+                 new_message.author.send(
+                     {
+                         embed
+                     }
+                 );
+
+                new_message.delete();
+            }
+            else
+            {
+                //this.processMessage(message);
             }
         }
     }

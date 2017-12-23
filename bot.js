@@ -77,6 +77,13 @@ class Bot
                 this.msg_hndler.handle(message);
             }
         );
+
+        this.bot.on('messageUpdate',
+        (old_message, new_message) =>
+            {
+                this.msg_hndler.handleEdit(old_message, new_message);
+            }
+        );
     }
 
     handleJoin()
