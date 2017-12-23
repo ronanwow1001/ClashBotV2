@@ -1,6 +1,6 @@
 {
   "name": "clash-bot-v2",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "description": "Corporate Clash Bot version 2",
   "main": "start.js",
   "scripts": {
@@ -20,6 +20,9 @@
   },
   "homepage": "https://github.com/xseano/ClashBotV2#readme",
   "dependencies": {
-    "colors": "^1.1.2"
+    "colors": "^1.1.2",
+    "columnify": "^1.5.4",
+    "discord.js": "^11.2.1",
+    "node-gameloop": "^0.1.4"
   }
 }
