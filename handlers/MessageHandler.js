@@ -85,6 +85,7 @@ class MessageHandler
                          embed
                      }
                  );
+
                 message.delete();
             }
             else
