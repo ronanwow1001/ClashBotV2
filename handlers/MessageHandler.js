@@ -15,6 +15,11 @@ class MessageHandler
 
     handle(message)
     {
+        if (message.author.bot === true)
+        {
+            return;
+        }
+
         var admin = message.member.hasPermission('ADMINISTRATOR');
         var manager = message.member.hasPermission('MANAGE_MESSAGES');
         var channel = message.channel.name;
@@ -97,6 +102,11 @@ class MessageHandler
 
     handleEdit(old_message, new_message)
     {
+        if (new_message.author.bot === true)
+        {
+            return;
+        }
+
         var admin = new_message.member.hasPermission('ADMINISTRATOR');
         var manager = new_message.member.hasPermission('MANAGE_MESSAGES');
         var channel = new_message.channel.name;
