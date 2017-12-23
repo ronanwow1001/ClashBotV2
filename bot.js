@@ -1,4 +1,3 @@
-const Discord = require('discord.js');
 const os = require('os');
 const botLoop = require('node-gameloop');
 const CommandHandler = require('./lib/CommandHandler');

@@ -4,6 +4,7 @@ global.readline = require('readline');
 global.Logger   = require('./lib/Logger');
 global.Database = require('./lib/Database');
 global.Colors   = require('colors');
+global.Discord  = require('discord.js');
 global.Bot      = require('./Bot');
 global.rl       = readline.createInterface(
     {

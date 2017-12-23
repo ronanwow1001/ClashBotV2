@@ -17,12 +17,17 @@
         ]
     },
 
+    "Links":
+    {
+        "Github": "https://github.com/xseano/ClashBotV2/"
+    },
+
     "Logger":
     {
         "Prompt": ">"
     },
 
-	"blacklist":
+	"Blacklist":
     [
 		"acrotomophilia",
 		"anal",
