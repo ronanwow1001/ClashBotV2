@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/xseano/ClashBotV2/issues"
   },
-  "homepage": "https://github.com/xseano/ClashBotV2#readme"
+  "homepage": "https://github.com/xseano/ClashBotV2#readme",
+  "dependencies": {
+    "colors": "^1.1.2"
+  }
 }

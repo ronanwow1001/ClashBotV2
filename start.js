@@ -1,7 +1,7 @@
 // Global Deps
-global.Config   = require('./main.json');
+global.Config   = require('./conf/main.json');
 global.readline = require('readline');
-global.Logger   = require('./library/Logger');
+global.Logger   = require('./lib/Logger');
 global.Colors   = require('colors');
 global.rl       = readline.createInterface(
     {
