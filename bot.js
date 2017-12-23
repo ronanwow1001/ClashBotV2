@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const os = require('os');
 const botLoop = require('node-gameloop');
 const CommandHandler = require('./lib/CommandHandler');
+const MessageHandler = require('./handlers/MessageHandler');
 
 class Bot
 {
@@ -22,6 +23,7 @@ class Bot
 
         // Command Handler
         this.commands = new CommandHandler(this);
+        this.msg_hndler = new MessageHandler(this);
 
     }
 
@@ -61,7 +63,28 @@ class Bot
 
     onConnect()
     {
-        Logger.warn(`Bot logged in!\n`)
+        var self = this;
+
+        this.bot.on('ready',
+        () =>
+            {
+                self.handleJoin();
+            }
+        );
+
+        this.bot.on('message',
+        message =>
+            {
+                this.msg_hndler.handle(message);
+            }
+        );
+    }
+
+    handleJoin()
+    {
+        var self = this;
+        var guild = this.bot.guilds.array();
+        Logger.warn(`${self.bot.user.username} joined the server: ${self.bot.guilds.array()}`);
     }
 
     sendMsg(message)

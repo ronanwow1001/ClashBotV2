@@ -18,6 +18,7 @@ Logger.start();
 
 global.Database = new Database(this);
 Database.start();
+global.Database = Database.db;
 
 // Start Bot
 var bot = new Bot(this);
