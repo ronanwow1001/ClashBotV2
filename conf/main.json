@@ -4,7 +4,11 @@
     "Server":
     {
         "Token": "MzkzNTQ3MzA4NDQyMDU4NzYy.DR3XEw.nFYpLlFYucP-M9cjoBBGfS_MbCM",
-        "Tick": 50
+        "Tick": 50,
+        "Channels":
+        {
+            "Default": "general"
+        }
     },
 
     "Logger":

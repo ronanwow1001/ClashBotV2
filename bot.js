@@ -66,7 +66,9 @@ class Bot
 
     sendMsg(message)
     {
-        // TODO
+        var guildUser = this.bot.guilds.array()[0].me;
+        var channel = guildUser.guild.channels.find('name', Config.Server.Channels.Default);
+        channel.send(message);
     }
 
     botLoop(delta)
