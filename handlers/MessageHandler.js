@@ -67,10 +67,10 @@ class MessageHandler
             }
             else
             {
-                var checkMsg = this.checkMessage(msg);
+                var checkMsg = this.checkProfanity(msg);
             }
 
-            if (checkMsg === 1)
+            if (checkMsg[0] === 1)
             {
                 Database.push(`/${uid}/profanity_warnings[]/content`, msg, true);
 
@@ -83,7 +83,7 @@ class MessageHandler
 
                   .setTimestamp()
                   .addField('**New Message**', "```" + msg + "```")
-                  .addField('**Detected Word**', "```" + 'placeholder' + "```");
+                  .addField('**Detected Word**', "```" + checkMsg[1] + "```");
 
                  message.author.send(
                      {
@@ -130,10 +130,10 @@ class MessageHandler
             }
             else
             {
-                var checkMsg = this.checkMessage(msg);
+                var checkMsg = this.checkProfanity(msg);
             }
 
-            if (checkMsg === 1)
+            if (checkMsg[0] === 1)
             {
                 Database.push(`/${uid}/profanity_warnings[]/content`, msg, true);
 
@@ -147,7 +147,7 @@ class MessageHandler
                   .setTimestamp()
                   .addField('**Original Message**', "```" + omsg + "```")
                   .addField('**Edited Message**', "```" + msg + "```")
-                  .addField('**Detected Word**', "```" + 'placeholder' + "```");
+                  .addField('**Detected Word**', "```" + checkMsg[1] + "```");
 
                  new_message.author.send(
                      {
@@ -166,35 +166,24 @@ class MessageHandler
 
     checkProfanity(msg)
     {
-        this.bad_word = false;
-        var d_word = "";
-        var s_word = msg.split(' ');
+        msg = msg.replace(/[^0-9a-z]/gi, '');
+        this.check = 0;
+        this.d_word = ""
+        var arr = [];
 
-        for (var i = 0; i < s_word.length; i++)
+        for (var i = 0; i < Config.Blacklist.length; i++)
         {
-            // TODO
-        }
-    }
-
-    checkMessage(msg)
-    {
-      this.check = 0;
-      var arr = [];
-
-      for (var i = 0; i < Config.Blacklist.length; i++)
-      {
-        var bWord = Config.Blacklist[i];
-        var regex = new RegExp(bWord, 'gi');
-        var check = msg.match(regex);
-        if (check !== null)
-        {
-            this.check = 1;
-        }
+          var bWord = Config.Blacklist[i];
+          var regex = new RegExp(bWord, 'gi');
+          var check = msg.match(regex);
+          if (check !== null)
+          {
+              this.d_word = bWord;
+              this.check = 1;
+          }
       }
 
-      //arr.push(this.check);
-
-      return this.check;
+      return [this.check, this.d_word];
     }
 
     getAvatar(message)
