@@ -49,11 +49,19 @@ class Bot
         Logger.info(`Took ${process.uptime()} seconds to start`);
         Logger.info(`Type 'help' or '?' for commands \n`)
 
+        this.login()
+
+    }
+
+    login()
+    {
+        this.bot.login(Config.Server.Token);
+        this.onConnect();
     }
 
     onConnect()
     {
-        // TODO
+        Logger.warn(`Bot logged in!\n`)
     }
 
     sendMsg(message)
