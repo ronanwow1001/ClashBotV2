@@ -1,0 +1,22 @@
+{
+  "name": "clash-bot-v2",
+  "version": "0.1.0",
+  "description": "Corporate Clash Bot version 2",
+  "main": "start.js",
+  "scripts": {
+    "test": "start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xseano/ClashBotV2.git"
+  },
+  "keywords": [
+    "corporateclash"
+  ],
+  "author": "Sean Oberoi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xseano/ClashBotV2/issues"
+  },
+  "homepage": "https://github.com/xseano/ClashBotV2#readme"
+}
