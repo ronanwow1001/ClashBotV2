@@ -72,7 +72,10 @@ class MessageHandler
 
             if (checkMsg[0] === 1)
             {
-                Database.push(`/${uid}/profanity_warnings[]/content`, msg, true);
+                Database.push(`/${uid}/profanity_warnings[]/`, {
+                    content: msg,
+                    detected_word: checkMsg[1]
+                }, true);
 
                 const embed = new Discord.RichEmbed()
                   .setDescription('Our bot has detected you swearing!\nPlease remember no NFSW language is allowed in the Corporate Clash discord.\n')
@@ -82,7 +85,7 @@ class MessageHandler
                   .setFooter("© Corporate Clash 2017-2018")
 
                   .setTimestamp()
-                  .addField('**New Message**', "```" + msg + "```")
+                  .addField('**Message**', "```" + msg + "```")
                   .addField('**Detected Word**', "```" + checkMsg[1] + "```");
 
                  message.author.send(
@@ -135,7 +138,10 @@ class MessageHandler
 
             if (checkMsg[0] === 1)
             {
-                Database.push(`/${uid}/profanity_warnings[]/content`, msg, true);
+                Database.push(`/${uid}/profanity_warnings[]/`, {
+                    content: msg,
+                    detected_word: checkMsg[1]
+                }, true);
 
                 const embed = new Discord.RichEmbed()
                   .setDescription('Our bot has detected you swearing!\nPlease remember no NFSW language is allowed in the Corporate Clash discord.\n')
