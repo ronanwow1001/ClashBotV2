@@ -11,7 +11,7 @@
         {
             "Default": "general",
             "Moderation": "moderation",
-            "Logging": "del"
+            "Logging": "logging"
         },
 
         "Admins":

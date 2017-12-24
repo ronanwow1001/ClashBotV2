@@ -78,6 +78,13 @@ class Bot
             }
         );
 
+        this.bot.on('messageDelete',
+        message =>
+            {
+                this.msg_hndler.handleDelete(message);
+            }
+        );
+
         this.bot.on('messageUpdate',
         (old_message, new_message) =>
             {

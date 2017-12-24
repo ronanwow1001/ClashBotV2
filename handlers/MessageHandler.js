@@ -103,6 +103,45 @@ class MessageHandler
         }
     }
 
+    /*
+    Handles a deleted message
+    */
+
+    handleDelete(message)
+    {
+        if (message.author.bot === true)
+        {
+            return;
+        }
+
+        var admin = message.member.hasPermission('ADMINISTRATOR');
+        var manager = message.member.hasPermission('MANAGE_MESSAGES');
+        var channel = message.channel.name;
+    	var author = message.author.username;
+        var uid = message.author.id;
+    	var msg = message.content;
+    	var date = message.createdAt;
+
+        if (Config.Server.LogMessages === true)
+        {
+            Logger.debug(`(${channel}) - ${uid} - ${author}: ${msg}`);
+
+            const embed = new Discord.RichEmbed()
+              .setDescription(`A message by ${author} has been deleted.`)
+              .setAuthor(author, this.getAvatar(message))
+
+              .setColor('#800080')
+              .setFooter("© Corporate Clash 2017-2018")
+
+              .setTimestamp()
+              .addField('**Original Message**', "```" + msg + "```")
+              .addField('**Channel**', "```#" + channel + "```")
+              .addField('**User ID**', "```" + uid + "```");
+
+            this.sendChannelMessage(embed, Config.Server.Channels.Logging);
+        }
+    }
+
     handleEdit(old_message, new_message)
     {
         if (new_message.author.bot === true)
@@ -127,7 +166,7 @@ class MessageHandler
               .setDescription(`A message by ${author} has been edited.`)
               .setAuthor(author, this.getAvatar(new_message))
 
-              .setColor('#FF0000')
+              .setColor('#800080')
               .setFooter("© Corporate Clash 2017-2018")
 
               .setTimestamp()
