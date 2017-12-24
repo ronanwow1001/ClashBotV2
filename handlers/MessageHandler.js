@@ -94,6 +94,25 @@ class MessageHandler
                      }
                  );
 
+                 if (Config.Server.LogMessages === true)
+                 {
+
+                     const embed = new Discord.RichEmbed()
+                       .setDescription(`A message by ${author} has been deleted for profanity.`)
+                       .setAuthor(author, this.getAvatar(message))
+
+                       .setColor('#FF0000')
+                       .setFooter("© Corporate Clash 2017-2018")
+
+                       .setTimestamp()
+                       .addField('**Original Message**', "```" + msg + "```")
+                       .addField('**Detected Word**', "```" + checkMsg[1] + "```")
+                       .addField('**Channel**', "```#" + channel + "```")
+                       .addField('**User ID**', "```" + uid + "```");
+
+                     this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
+                 }
+
                 message.delete();
             }
             else
@@ -219,7 +238,7 @@ class MessageHandler
                  {
 
                      const embed = new Discord.RichEmbed()
-                       .setDescription(`A message by ${author} that had been edited, has been deleted.`)
+                       .setDescription(`A message by ${author} that had been edited, has been deleted for profanity.`)
                        .setAuthor(author, this.getAvatar(new_message))
 
                        .setColor('#FF0000')
