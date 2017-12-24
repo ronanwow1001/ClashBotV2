@@ -10,7 +10,8 @@
         "Channels":
         {
             "Default": "general",
-            "Moderation": "moderation"
+            "Moderation": "moderation",
+            "Logging": "del"
         },
 
         "Admins":
