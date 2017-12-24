@@ -1,3 +1,5 @@
+const StatsHandler = require('./StatsHandler');
+
 class MessageHandler
 {
     /*
@@ -7,6 +9,7 @@ class MessageHandler
     constructor(parent)
     {
         this.parent = parent
+        this.stats_hndler = new StatsHandler(this);
     }
 
     /*
@@ -86,7 +89,8 @@ class MessageHandler
 
                   .setTimestamp()
                   .addField('**Message**', "```" + msg + "```")
-                  .addField('**Detected Word**', "```" + checkMsg[1] + "```");
+                  .addField('**Detected Word**', "```" + checkMsg[1] + "```")
+                  .addField('**Profanity Warnings**', "```" + this.stats_hndler.getProfanityStats(uid) + "```");
 
                  message.author.send(
                      {
@@ -108,7 +112,8 @@ class MessageHandler
                        .addField('**Original Message**', "```" + msg + "```")
                        .addField('**Detected Word**', "```" + checkMsg[1] + "```")
                        .addField('**Channel**', "```#" + channel + "```")
-                       .addField('**User ID**', "```" + uid + "```");
+                       .addField('**User ID**', "```" + uid + "```")
+                       .addField('**Profanity Warnings**', "```" + this.stats_hndler.getProfanityStats(uid) + "```");
 
                      this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
                  }
@@ -226,7 +231,8 @@ class MessageHandler
                   .setTimestamp()
                   .addField('**Original Message**', "```" + omsg + "```")
                   .addField('**Edited Message**', "```" + msg + "```")
-                  .addField('**Detected Word**', "```" + checkMsg[1] + "```");
+                  .addField('**Detected Word**', "```" + checkMsg[1] + "```")
+                  .addField('**Profanity Warnings**', "```" + this.stats_hndler.getProfanityStats(uid) + "```");
 
                  new_message.author.send(
                      {
@@ -249,7 +255,8 @@ class MessageHandler
                        .addField('**Edited Message**', "```" + msg + "```")
                        .addField('**Detected Word**', "```" + checkMsg[1] + "```")
                        .addField('**Channel**', "```#" + channel + "```")
-                       .addField('**User ID**', "```" + uid + "```");
+                       .addField('**User ID**', "```" + uid + "```")
+                       .addField('**Profanity Warnings**', "```" + this.stats_hndler.getProfanityStats(uid) + "```");
 
                      this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
                  }
