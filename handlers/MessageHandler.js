@@ -13,10 +13,10 @@ class MessageHandler
     }
 
     /*
-    Handles a message
+    Checks a message
     */
 
-    handle(message)
+    checkNormal(message)
     {
         if (message.author.bot === true)
         {
@@ -122,7 +122,7 @@ class MessageHandler
             }
             else
             {
-                //this.processMessage(message);
+                this.handleMessage(message);
             }
         }
     }
@@ -166,7 +166,11 @@ class MessageHandler
         }
     }
 
-    handleEdit(old_message, new_message)
+    /*
+    Checks an edited message
+    */
+
+    checkEdit(old_message, new_message)
     {
         if (new_message.author.bot === true)
         {
@@ -265,9 +269,18 @@ class MessageHandler
             }
             else
             {
-                //this.processMessage(message);
+                this.handleMessage(new_message);
             }
         }
+    }
+
+    /*
+    Main message handler that processes messages after being checked
+    */
+
+    handleMessage(message)
+    {
+
     }
 
     sendChannelMessage(msg, channel)
