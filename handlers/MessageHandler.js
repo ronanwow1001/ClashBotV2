@@ -88,9 +88,9 @@ class MessageHandler
                   .setFooter("© Corporate Clash 2017-2018")
 
                   .setTimestamp()
-                  .addField('**Message**', "```" + msg + "```")
-                  .addField('**Detected Word**', "```" + checkMsg[1] + "```")
-                  .addField('**Profanity Warnings**', "```" + this.stats_hndler.getProfanityStats(uid) + "```");
+                  .addField('**Message**', "```" + msg + "```", true)
+                  .addField('**Detected Word**', "```" + checkMsg[1] + "```", true)
+                  .addField('**Profanity Warnings**', "```" + this.stats_hndler.getProfanityStats(uid) + "```", true);
 
                  message.author.send(
                      {
@@ -109,11 +109,11 @@ class MessageHandler
                        .setFooter("© Corporate Clash 2017-2018")
 
                        .setTimestamp()
-                       .addField('**Original Message**', "```" + msg + "```")
-                       .addField('**Detected Word**', "```" + checkMsg[1] + "```")
-                       .addField('**Channel**', "```#" + channel + "```")
-                       .addField('**User ID**', "```" + uid + "```")
-                       .addField('**Profanity Warnings**', "```" + this.stats_hndler.getProfanityStats(uid) + "```");
+                       .addField('**Original Message**', "```" + msg + "```", true)
+                       .addField('**Detected Word**', "```" + checkMsg[1] + "```", true)
+                       .addField('**Channel**', "```#" + channel + "```", true)
+                       .addField('**User ID**', "```" + uid + "```", true)
+                       .addField('**Profanity Warnings**', "```" + this.stats_hndler.getProfanityStats(uid) + "```", true);
 
                      this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
                  }
@@ -158,9 +158,9 @@ class MessageHandler
               .setFooter("© Corporate Clash 2017-2018")
 
               .setTimestamp()
-              .addField('**Original Message**', "```" + msg + "```")
-              .addField('**Channel**', "```#" + channel + "```")
-              .addField('**User ID**', "```" + uid + "```");
+              .addField('**Original Message**', "```" + msg + "```", true)
+              .addField('**Channel**', "```#" + channel + "```", true)
+              .addField('**User ID**', "```" + uid + "```", true);
 
             this.sendChannelMessage(embed, Config.Server.Channels.Logging);
         }
@@ -198,10 +198,10 @@ class MessageHandler
               .setFooter("© Corporate Clash 2017-2018")
 
               .setTimestamp()
-              .addField('**Original Message**', "```" + omsg + "```")
-              .addField('**Edited Message**', "```" + msg + "```")
-              .addField('**Channel**', "```#" + channel + "```")
-              .addField('**User ID**', "```" + uid + "```");
+              .addField('**Original Message**', "```" + omsg + "```", true)
+              .addField('**Edited Message**', "```" + msg + "```", true)
+              .addField('**Channel**', "```#" + channel + "```", true)
+              .addField('**User ID**', "```" + uid + "```", true);
 
             this.sendChannelMessage(embed, Config.Server.Channels.Logging);
         }
@@ -233,10 +233,10 @@ class MessageHandler
                   .setFooter("© Corporate Clash 2017-2018")
 
                   .setTimestamp()
-                  .addField('**Original Message**', "```" + omsg + "```")
-                  .addField('**Edited Message**', "```" + msg + "```")
-                  .addField('**Detected Word**', "```" + checkMsg[1] + "```")
-                  .addField('**Profanity Warnings**', "```" + this.stats_hndler.getProfanityStats(uid) + "```");
+                  .addField('**Original Message**', "```" + omsg + "```", true)
+                  .addField('**Edited Message**', "```" + msg + "```", true)
+                  .addField('**Detected Word**', "```" + checkMsg[1] + "```", true)
+                  .addField('**Profanity Warnings**', "```" + this.stats_hndler.getProfanityStats(uid) + "```", true);
 
                  new_message.author.send(
                      {
@@ -255,12 +255,12 @@ class MessageHandler
                        .setFooter("© Corporate Clash 2017-2018")
 
                        .setTimestamp()
-                       .addField('**Original Message**', "```" + omsg + "```")
-                       .addField('**Edited Message**', "```" + msg + "```")
-                       .addField('**Detected Word**', "```" + checkMsg[1] + "```")
-                       .addField('**Channel**', "```#" + channel + "```")
-                       .addField('**User ID**', "```" + uid + "```")
-                       .addField('**Profanity Warnings**', "```" + this.stats_hndler.getProfanityStats(uid) + "```");
+                       .addField('**Original Message**', "```" + omsg + "```", true)
+                       .addField('**Edited Message**', "```" + msg + "```", true)
+                       .addField('**Detected Word**', "```" + checkMsg[1] + "```", true)
+                       .addField('**Channel**', "```#" + channel + "```", true)
+                       .addField('**User ID**', "```" + uid + "```", true)
+                       .addField('**Profanity Warnings**', "```" + this.stats_hndler.getProfanityStats(uid) + "```", true);
 
                      this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
                  }
@@ -322,10 +322,6 @@ class MessageHandler
             {
                 message.reply('sorry but you don\'t have the proper permissions to execute this command!')
             }
-        }
-        else
-        {
-            message.delete();
         }
     }
 
