@@ -30,6 +30,11 @@
         "Prompt": ">"
     },
 
+    "ToonTips":
+    [
+        "test tip"   
+    ],
+
 	"Blacklist":
     [
 		"acrotomophilia",
