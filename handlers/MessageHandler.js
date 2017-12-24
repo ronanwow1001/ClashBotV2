@@ -280,7 +280,91 @@ class MessageHandler
 
     handleMessage(message)
     {
+        var admin = message.member.hasPermission('ADMINISTRATOR');
+        var manager = message.member.hasPermission('MANAGE_MESSAGES');
+        var channel = message.channel.name;
+    	var author = message.author.username;
+        var uid = message.author.id;
+    	var msg = message.content;
+    	var date = message.createdAt;
+        var command_prefix = Config.Server.Prefix;
 
+        if (channel === Config.Server.Channels.Moderation)
+        {
+            if ((msg.startsWith(`${command_prefix}mute`)) && (this.checkPerms(message, uid) === true))
+            {
+                if (message.mentions.users.array()[0])
+                {
+                    var time = 0;
+                    var self = this;
+                    var user = message.mentions.users.array()[0];
+                    var guildUser = message.guild.members.get(user.id);
+                    var role = guildUser.guild.roles.find(r => r.name == Config.Roles.Muted);
+                    this.silence(guildUser, user, message, role);
+                }
+            }
+            else if ((msg.startsWith(`${command_prefix}mute`)) && (this.checkPerms(message, uid) === false))
+            {
+                message.reply('sorry but you don\'t have the proper permissions to execute this command!')
+            }
+
+            if ((msg.startsWith(`${command_prefix}unmute`)) && (this.checkPerms(message, uid) === true))
+            {
+                if (message.mentions.users.array()[0])
+                {
+                    var user = message.mentions.users.array()[0];
+                    var guildUser = message.guild.members.get(user.id);
+                    var role = guildUser.guild.roles.find(r => r.name == Config.Roles.Muted);
+                    this.un_silence(guildUser, user, message, role);
+                }
+            }
+            if ((msg.startsWith(`${command_prefix}unmute`)) && (this.checkPerms(message, uid) === false))
+            {
+                message.reply('sorry but you don\'t have the proper permissions to execute this command!')
+            }
+        }
+        else
+        {
+            message.delete();
+        }
+    }
+
+    checkPerms(message, uid)
+    {
+        if (message.guild.members.get(uid).roles.find(r => r.name === Config.Roles.Staff) !== null)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    silence(guildUser, user, message, role)
+    {
+        if (guildUser.roles.find(r => r.name === Config.Roles.Muted) == null)
+        {
+            guildUser.addRole(role);
+            message.reply(`I've muted the user: ${user.username}`);
+        }
+        else
+        {
+            message.reply(`${user.username} is already muted!`);
+        }
+    }
+
+    un_silence(guildUser, user, message, role)
+    {
+        if (guildUser.roles.find(r => r.name === Config.Roles.Muted) !== null)
+        {
+            guildUser.removeRole(role);
+            message.reply(`I unmuted the user: ${user.username}`);
+        }
+        else
+        {
+            message.reply(`${user.username} is not muted!`);
+        }
     }
 
     sendChannelMessage(msg, channel)
