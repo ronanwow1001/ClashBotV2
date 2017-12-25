@@ -1,3 +1,5 @@
+const StatsHandler = require('./StatsHandler');
+
 class MessageHandler
 {
     /*
@@ -7,13 +9,14 @@ class MessageHandler
     constructor(parent)
     {
         this.parent = parent
+        this.stats_hndler = new StatsHandler(this);
     }
 
     /*
-    Handles a message
+    Checks a message
     */
 
-    handle(message)
+    checkNormal(message)
     {
         if (message.author.bot === true)
         {
@@ -85,8 +88,9 @@ class MessageHandler
                   .setFooter("© Corporate Clash 2017-2018")
 
                   .setTimestamp()
-                  .addField('**Message**', "```" + msg + "```")
-                  .addField('**Detected Word**', "```" + checkMsg[1] + "```");
+                  .addField('**Message**', "```" + msg + "```", true)
+                  .addField('**Detected Word**', "```" + checkMsg[1] + "```", true)
+                  .addField('**Profanity Warnings**', "```" + this.stats_hndler.getProfanityStats(uid) + "```", true);
 
                  message.author.send(
                      {
@@ -105,10 +109,11 @@ class MessageHandler
                        .setFooter("© Corporate Clash 2017-2018")
 
                        .setTimestamp()
-                       .addField('**Original Message**', "```" + msg + "```")
-                       .addField('**Detected Word**', "```" + checkMsg[1] + "```")
-                       .addField('**Channel**', "```#" + channel + "```")
-                       .addField('**User ID**', "```" + uid + "```");
+                       .addField('**Original Message**', "```" + msg + "```", true)
+                       .addField('**Detected Word**', "```" + checkMsg[1] + "```", true)
+                       .addField('**Channel**', "```#" + channel + "```", true)
+                       .addField('**User ID**', "```" + uid + "```", true)
+                       .addField('**Profanity Warnings**', "```" + this.stats_hndler.getProfanityStats(uid) + "```", true);
 
                      this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
                  }
@@ -117,7 +122,7 @@ class MessageHandler
             }
             else
             {
-                //this.processMessage(message);
+                this.handleMessage(message);
             }
         }
     }
@@ -153,15 +158,19 @@ class MessageHandler
               .setFooter("© Corporate Clash 2017-2018")
 
               .setTimestamp()
-              .addField('**Original Message**', "```" + msg + "```")
-              .addField('**Channel**', "```#" + channel + "```")
-              .addField('**User ID**', "```" + uid + "```");
+              .addField('**Original Message**', "```" + msg + "```", true)
+              .addField('**Channel**', "```#" + channel + "```", true)
+              .addField('**User ID**', "```" + uid + "```", true);
 
             this.sendChannelMessage(embed, Config.Server.Channels.Logging);
         }
     }
 
-    handleEdit(old_message, new_message)
+    /*
+    Checks an edited message
+    */
+
+    checkEdit(old_message, new_message)
     {
         if (new_message.author.bot === true)
         {
@@ -189,10 +198,10 @@ class MessageHandler
               .setFooter("© Corporate Clash 2017-2018")
 
               .setTimestamp()
-              .addField('**Original Message**', "```" + omsg + "```")
-              .addField('**Edited Message**', "```" + msg + "```")
-              .addField('**Channel**', "```#" + channel + "```")
-              .addField('**User ID**', "```" + uid + "```");
+              .addField('**Original Message**', "```" + omsg + "```", true)
+              .addField('**Edited Message**', "```" + msg + "```", true)
+              .addField('**Channel**', "```#" + channel + "```", true)
+              .addField('**User ID**', "```" + uid + "```", true);
 
             this.sendChannelMessage(embed, Config.Server.Channels.Logging);
         }
@@ -224,9 +233,10 @@ class MessageHandler
                   .setFooter("© Corporate Clash 2017-2018")
 
                   .setTimestamp()
-                  .addField('**Original Message**', "```" + omsg + "```")
-                  .addField('**Edited Message**', "```" + msg + "```")
-                  .addField('**Detected Word**', "```" + checkMsg[1] + "```");
+                  .addField('**Original Message**', "```" + omsg + "```", true)
+                  .addField('**Edited Message**', "```" + msg + "```", true)
+                  .addField('**Detected Word**', "```" + checkMsg[1] + "```", true)
+                  .addField('**Profanity Warnings**', "```" + this.stats_hndler.getProfanityStats(uid) + "```", true);
 
                  new_message.author.send(
                      {
@@ -245,11 +255,12 @@ class MessageHandler
                        .setFooter("© Corporate Clash 2017-2018")
 
                        .setTimestamp()
-                       .addField('**Original Message**', "```" + omsg + "```")
-                       .addField('**Edited Message**', "```" + msg + "```")
-                       .addField('**Detected Word**', "```" + checkMsg[1] + "```")
-                       .addField('**Channel**', "```#" + channel + "```")
-                       .addField('**User ID**', "```" + uid + "```");
+                       .addField('**Original Message**', "```" + omsg + "```", true)
+                       .addField('**Edited Message**', "```" + msg + "```", true)
+                       .addField('**Detected Word**', "```" + checkMsg[1] + "```", true)
+                       .addField('**Channel**', "```#" + channel + "```", true)
+                       .addField('**User ID**', "```" + uid + "```", true)
+                       .addField('**Profanity Warnings**', "```" + this.stats_hndler.getProfanityStats(uid) + "```", true);
 
                      this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
                  }
@@ -258,8 +269,127 @@ class MessageHandler
             }
             else
             {
-                //this.processMessage(message);
+                this.handleMessage(new_message);
             }
+        }
+    }
+
+    /*
+    Main message handler that processes messages after being checked
+    */
+
+    handleMessage(message)
+    {
+        var admin = message.member.hasPermission('ADMINISTRATOR');
+        var manager = message.member.hasPermission('MANAGE_MESSAGES');
+        var channel = message.channel.name;
+    	var author = message.author.username;
+        var uid = message.author.id;
+    	var msg = message.content;
+    	var date = message.createdAt;
+        var command_prefix = Config.Server.Prefix;
+
+        if (channel === Config.Server.Channels.Moderation)
+        {
+            if ((msg.startsWith(`${command_prefix}mute`)) && (this.checkPerms(message, uid) === true))
+            {
+                if (message.mentions.users.array()[0])
+                {
+                    var time = 0;
+                    var self = this;
+                    var user = message.mentions.users.array()[0];
+                    var guildUser = message.guild.members.get(user.id);
+                    var role = guildUser.guild.roles.find(r => r.name == Config.Roles.Muted);
+                    this.silence(guildUser, user, message, role);
+                }
+            }
+            else if ((msg.startsWith(`${command_prefix}mute`)) && (this.checkPerms(message, uid) === false))
+            {
+                message.reply('sorry but you don\'t have the proper permissions to execute this command!')
+            }
+
+            if ((msg.startsWith(`${command_prefix}unmute`)) && (this.checkPerms(message, uid) === true))
+            {
+                if (message.mentions.users.array()[0])
+                {
+                    var user = message.mentions.users.array()[0];
+                    var guildUser = message.guild.members.get(user.id);
+                    var role = guildUser.guild.roles.find(r => r.name == Config.Roles.Muted);
+                    this.un_silence(guildUser, user, message, role);
+                }
+            }
+            if ((msg.startsWith(`${command_prefix}unmute`)) && (this.checkPerms(message, uid) === false))
+            {
+                message.reply('sorry but you don\'t have the proper permissions to execute this command!')
+            }
+        }
+    }
+
+    checkPerms(message, uid)
+    {
+        if (message.guild.members.get(uid).roles.find(r => r.name === Config.Roles.Staff) !== null)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    silence(guildUser, user, message, role)
+    {
+        if (guildUser.roles.find(r => r.name === Config.Roles.Muted) == null)
+        {
+            guildUser.addRole(role);
+            message.reply(`I've muted the user: ${user.username}`);
+
+            const embed = new Discord.RichEmbed()
+              .setDescription('**You\'ve been muted in the Corporate Clash discord for moderation purposes.**\n')
+              .setAuthor(user.username, this.getAvatar(message))
+
+              .setColor('#FF0000')
+              .setFooter("© Corporate Clash 2017-2018")
+
+              .setTimestamp();
+
+             user.send(
+                 {
+                     embed
+                 }
+             );
+        }
+        else
+        {
+            message.reply(`${user.username} is already muted!`);
+        }
+    }
+
+    un_silence(guildUser, user, message, role)
+    {
+        if (guildUser.roles.find(r => r.name === Config.Roles.Muted) !== null)
+        {
+            guildUser.removeRole(role);
+            message.reply(`I unmuted the user: ${user.username}`);
+
+            const embed = new Discord.RichEmbed()
+              .setDescription('**Your mute has been lifted in the Corporate Clash discord.**\n')
+              .setAuthor(user.username, this.getAvatar(message))
+
+              .setColor('#FF0000')
+              .setFooter("© Corporate Clash 2017-2018")
+
+              .setTimestamp();
+
+             user.send(
+                 {
+                     embed
+                 }
+             );
+        }
+        else
+        {
+            message.reply(`${user.username} is not muted!`);
         }
     }
 
