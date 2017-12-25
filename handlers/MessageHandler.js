@@ -293,11 +293,11 @@ class MessageHandler
         {
             if ((msg.startsWith(`${command_prefix}mute`)) && (this.checkPerms(message, uid) === true))
             {
-                if (message.mentions.users.array()[0])
+                if (message.mentions.users.first())
                 {
                     var time = 0;
                     var self = this;
-                    var user = message.mentions.users.array()[0];
+                    var user = message.mentions.users.first();
                     var guildUser = message.guild.members.get(user.id);
                     var role = guildUser.guild.roles.find(r => r.name == Config.Roles.Muted);
                     this.silence(guildUser, user, message, role);
@@ -310,9 +310,9 @@ class MessageHandler
 
             if ((msg.startsWith(`${command_prefix}unmute`)) && (this.checkPerms(message, uid) === true))
             {
-                if (message.mentions.users.array()[0])
+                if (message.mentions.users.first())
                 {
-                    var user = message.mentions.users.array()[0];
+                    var user = message.mentions.users.first();
                     var guildUser = message.guild.members.get(user.id);
                     var role = guildUser.guild.roles.find(r => r.name == Config.Roles.Muted);
                     this.un_silence(guildUser, user, message, role);
@@ -395,7 +395,7 @@ class MessageHandler
 
     sendChannelMessage(msg, channel)
     {
-        var guildUser = this.parent.bot.guilds.array()[0].me;
+        var guildUser = this.parent.bot.guilds.first().me;
         var channel = guildUser.guild.channels.find('name', channel);
         channel.send(msg);
     }
