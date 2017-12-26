@@ -78,6 +78,20 @@ class Bot
             }
         );
 
+        this.bot.on('messageReactionAdd',
+        (reaction, user) =>
+            {
+                this.msg_hndler.handleReaction(reaction, user, 'add');
+            }
+        );
+
+        this.bot.on('messageReactionRemove',
+        (reaction, user) =>
+            {
+                this.msg_hndler.handleReaction(reaction, user, 'remove');
+            }
+        );
+
         this.bot.on('messageDelete',
         message =>
             {

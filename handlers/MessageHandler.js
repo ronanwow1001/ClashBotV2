@@ -338,6 +338,60 @@ class MessageHandler
         }
     }
 
+    handleReaction(reaction, user, type)
+    {
+        if (user.bot == true)
+        {
+            return;
+        }
+
+        var message = reaction.message;
+        var emoji = reaction.emoji.name;
+        var auth_id = message.author.id;
+        var channel = message.channel.name;
+        var suggestion_count = Database.getData(`/${auth_id}/suggestion_count[0]`);
+        var uv = parseInt(suggestion_count.uv);
+        var dv = parseInt(suggestion_count.dv);
+
+        if (channel === Config.Server.Channels.Suggestions)
+        {
+            if (emoji == "✅")
+            {
+                if (type === 'add')
+                {
+                    Database.push(`/${auth_id}/suggestion_count[0]`, {
+                        "uv": (uv + 1),
+                        "dv": (dv)
+                    }, true);
+                }
+                else if (type === 'remove')
+                {
+                    Database.push(`/${auth_id}/suggestion_count[0]`, {
+                        "uv": (uv - 1),
+                        "dv": (dv)
+                    }, true);
+                }
+            }
+            else if (emoji == "❌")
+            {
+                if (type === 'add')
+                {
+                    Database.push(`/${auth_id}/suggestion_count[0]`, {
+                        "uv": (uv),
+                        "dv": (dv + 1)
+                    }, true);
+                }
+                else if (type === 'remove')
+                {
+                    Database.push(`/${auth_id}/suggestion_count[0]`, {
+                        "uv": (uv),
+                        "dv": (dv - 1)
+                    }, true);
+                }
+            }
+        }
+    }
+
     checkPerms(message, uid)
     {
         if (message.guild.members.get(uid).roles.find(r => r.name === Config.Roles.Staff) !== null)
