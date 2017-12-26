@@ -18,7 +18,8 @@
         {
             "Default": "general",
             "Moderation": "moderation",
-            "Logging": "logging"
+            "Logging": "logging",
+            "Suggestions": "suggestions"
         },
 
         "Admins":

@@ -52,15 +52,18 @@ class MessageHandler
                 }
                 catch(err)
                 {
-                    Logger.error(err);
+                    //Logger.error(err);
                     Database.push(`/${uid}/link_infractions[]`, {}, true);
-                    Database.push(`/${uid}/suggestion_count[]`, {}, true);
                     Database.push(`/${uid}/profanity_warnings[]`, {}, true);
                     Database.push(`/${uid}/user_notes[]`, {}, true);
                     Database.push(`/${uid}/user_warnings[]`, {}, true);
                     Database.push(`/${uid}/user_kicks[]`, {}, true);
                     Database.push(`/${uid}/user_bans[]`, {}, true);
                     Database.push(`/${uid}/user_unbans[]`, {}, true);
+                    Database.push(`/${uid}/suggestion_count[]`, {
+                        "uv": 0,
+                        "dv": 0
+                    }, true);
                 }
             }
 
@@ -289,6 +292,16 @@ class MessageHandler
     	var date = message.createdAt;
         var command_prefix = Config.Server.Prefix;
 
+        if (channel === Config.Server.Channels.Suggestions)
+        {
+            message.react("✅").then(
+                () =>
+                {
+                    message.react("❌");
+                }
+            );
+        }
+
         if (channel === Config.Server.Channels.Moderation)
         {
             if ((msg.startsWith(`${command_prefix}mute`)) && (this.checkPerms(message, uid) === true))
@@ -305,7 +318,7 @@ class MessageHandler
             }
             else if ((msg.startsWith(`${command_prefix}mute`)) && (this.checkPerms(message, uid) === false))
             {
-                message.reply('sorry but you don\'t have the proper permissions to execute this command!')
+                message.author.send('sorry but you don\'t have the proper permissions to execute this command!')
             }
 
             if ((msg.startsWith(`${command_prefix}unmute`)) && (this.checkPerms(message, uid) === true))
