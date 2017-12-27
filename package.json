@@ -2,7 +2,7 @@
   "name": "clash-bot-v2",
   "version": "2.0.0",
   "description": "Corporate Clash Bot version 2",
-  "main": "start.js",
+  "main": "--harmony start.js",
   "scripts": {
     "test": "start"
   },

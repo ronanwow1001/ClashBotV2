@@ -33,7 +33,7 @@ class MessageHandler
 
         if (Config.Server.LogMessages === true)
         {
-            Logger.debug(`(${channel}) - ${uid} - ${author}: ${msg}`);
+            //Logger.debug(`(${channel}) - ${uid} - ${author}: ${msg}`);
         }
 
         if ((msg === '.down') && (Config.Bot.Admins.includes(uid)))
@@ -151,7 +151,7 @@ class MessageHandler
 
         if (Config.Server.LogMessages === true)
         {
-            Logger.debug(`(${channel}) - ${uid} - ${author}: ${msg}`);
+            //Logger.debug(`(${channel}) - ${uid} - ${author}: ${msg}`);
 
             const embed = new Discord.RichEmbed()
               .setDescription(`A message by ${author} has been deleted.`)
@@ -191,7 +191,7 @@ class MessageHandler
 
         if (Config.Server.LogMessages === true)
         {
-            Logger.debug(`EDITED message: (${channel}) - ${uid} - ${author}: ${msg}`);
+            //Logger.debug(`EDITED message: (${channel}) - ${uid} - ${author}: ${msg}`);
 
             const embed = new Discord.RichEmbed()
               .setDescription(`A message by ${author} has been edited.`)
