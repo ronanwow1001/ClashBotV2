@@ -380,7 +380,7 @@ class MessageHandler
                         }
                         else
                         {
-                            Database.push(`/${uid}/user_warnings[]/`, {
+                            Database.push(`/${target_id}/user_warnings[]/`, {
                                 reason: `Rule ${rule}`,
                                 invoker: `${message.author.username}`,
                                 invoker_id: `${message.author.id}`
@@ -395,7 +395,7 @@ class MessageHandler
 
                               .setTimestamp()
                               .addField('**Reason**', `Rule ${rule}`, true)
-                              .addField('**Moderation Warnings**', this.stats_hndler.getModPoints(uid), true)
+                              .addField('**Moderation Warnings**', this.stats_hndler.getModPoints(target_id), true)
                               .addField('**Please Read**', '```' + reason + '```', true)
 
                             user.send(
@@ -409,7 +409,7 @@ class MessageHandler
                     }
                     else
                     {
-                        Database.push(`/${uid}/user_warnings[]/`, {
+                        Database.push(`/${target_id}/user_warnings[]/`, {
                             reason: `${reason}`,
                             invoker: `${message.author.username}`,
                             invoker_id: `${message.author.id}`
@@ -423,7 +423,7 @@ class MessageHandler
                           .setFooter("© Corporate Clash 2017-2018")
 
                           .setTimestamp()
-                          .addField('**Moderation Warnings**', this.stats_hndler.getModPoints(uid), true)
+                          .addField('**Moderation Warnings**', this.stats_hndler.getModPoints(target_id), true)
                           .addField('**Reason**', '```' + reason + '```', true)
 
                         user.send(
@@ -437,6 +437,130 @@ class MessageHandler
                 }
             }
             if ((msg.startsWith(`${command_prefix}warn`)) && (this.checkPerms(message, uid) === false))
+            {
+                message.reply('sorry but you don\'t have the proper permissions to execute this command!')
+            }
+
+            if ((msg.startsWith(`${command_prefix}kick`)) && (this.checkPerms(message, uid) === true))
+            {
+                var split_msg = msg.split(' ');
+                var target_id = split_msg[1];
+                var g_member = message.guild.members.get(target_id)
+                var type = this.checkType(split_msg[2]);
+                var reason = this.removeFirstThreeParams(msg);
+
+                if (target_id === undefined)
+                {
+                    message.reply('please supply the target user\'s id!')
+                }
+                else if (g_member === undefined)
+                {
+                    message.reply('this user does not exist!')
+                }
+                else if (type === undefined)
+                {
+                    message.reply('please supply a type kick!')
+                }
+                else if (type[0] === false)
+                {
+                    message.reply('please supply a valid type of kick!')
+                }
+                else if (/^\s*$/.test(reason) == true)
+                {
+                    message.reply('please supply a valid reason!')
+                }
+                else
+                {
+                    var user = g_member.user;
+
+                    if (type[1] == 1)
+                    {
+                        var rule = parseInt(reason)
+                        reason = Config.Server.Rules[rule - 1];
+
+                        if (reason === undefined)
+                        {
+                            message.reply('please supply a valid reason!')
+                            return;
+                        }
+                        else
+                        {
+                            Database.push(`/${target_id}/user_kicks[]/`, {
+                                reason: `Rule ${rule}`,
+                                invoker: `${message.author.username}`,
+                                invoker_id: `${message.author.id}`
+                            }, true);
+
+                            const embed = new Discord.RichEmbed()
+                              .setDescription('**You\'ve been kicked from the Corporate Clash discord for violation of our terms.**\n')
+                              .setAuthor(user.username, this.getAvatar(message))
+
+                              .setColor('#FF0000')
+                              .setFooter("© Corporate Clash 2017-2018")
+
+                              .setTimestamp()
+                              .addField('**Reason**', `Rule ${rule}`, true)
+                              .addField('**Moderation Warnings**', this.stats_hndler.getKickPoints(target_id), true)
+                              .addField('**Please Read**', '```' + reason + '```', true)
+
+
+                            try
+                            {
+                                user.send(
+                                    {
+                                        embed
+                                    }
+                                )
+
+                                g_member.kick()
+                            }
+                            catch(err)
+                            {
+                                g_member.kick()
+                            }
+
+                            message.reply(`I've kicked ${user.username} for breaking rule ${rule}`)
+                        }
+                    }
+                    else
+                    {
+                        Database.push(`/${target_id}/user_kicks[]/`, {
+                            reason: `${reason}`,
+                            invoker: `${message.author.username}`,
+                            invoker_id: `${message.author.id}`
+                        }, true);
+
+                        const embed = new Discord.RichEmbed()
+                          .setDescription('**You\'ve been kicked from the Corporate Clash discord for violation of our terms.**\n')
+                          .setAuthor(user.username, this.getAvatar(message))
+
+                          .setColor('#FF0000')
+                          .setFooter("© Corporate Clash 2017-2018")
+
+                          .setTimestamp()
+                          .addField('**Moderation Warnings**', this.stats_hndler.getKickPoints(target_id), true)
+                          .addField('**Reason**', '```' + reason + '```', true)
+
+                      try
+                      {
+                          user.send(
+                              {
+                                  embed
+                              }
+                          )
+
+                          g_member.kick()
+                      }
+                      catch(err)
+                      {
+                          g_member.kick()
+                      }
+
+                        message.reply(`I've kicked ${user.username} with the reason: ${reason}`)
+                    }
+                }
+            }
+            if ((msg.startsWith(`${command_prefix}kick`)) && (this.checkPerms(message, uid) === false))
             {
                 message.reply('sorry but you don\'t have the proper permissions to execute this command!')
             }

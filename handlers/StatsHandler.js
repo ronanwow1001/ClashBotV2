@@ -16,6 +16,12 @@ class StatsHandler
         var stats = Database.getData(`/${uid}/user_warnings`);
         return (stats.length - 1);
     }
+
+    getKickPoints(uid)
+    {
+        var stats = Database.getData(`/${uid}/user_kicks`);
+        return (stats.length - 1);
+    }
 }
 
 module.exports = StatsHandler;
