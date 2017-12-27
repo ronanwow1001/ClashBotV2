@@ -342,8 +342,9 @@ class MessageHandler
                         for (var i = 1; i < p.length; i++)
                         {
                             var obj = p[i];
-                            content += `${obj.content}\n`
-                            detected_words += `${obj.detected_word}\n`
+                            var inc = i - 1;
+                            content += `(${inc}) ${obj.content}\n`
+                            detected_words += `(${inc}) ${obj.detected_word}\n`
                         }
 
                         const embed = new Discord.RichEmbed()
@@ -371,9 +372,10 @@ class MessageHandler
                         for (var i = 1; i < p.length; i++)
                         {
                             var obj = p[i];
-                            reason += `${obj.reason}\n`
-                            inv += `${obj.invoker}\n`
-                            inv_id += `${obj.invoker_id}\n`
+                            var inc = i - 1;
+                            reason += `(${inc}) ${obj.reason}\n`
+                            inv += `(${inc}) ${obj.invoker}\n`
+                            inv_id += `(${inc}) ${obj.invoker_id}\n`
                         }
 
                         const embed = new Discord.RichEmbed()
@@ -385,6 +387,38 @@ class MessageHandler
 
                           .setTimestamp()
                           .addField('**Reason**', reason, true)
+                          .addField('**Invoker**', inv, true)
+                          .addField('**Invoker ID**', inv_id, true)
+
+
+                        await this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
+                    }
+
+                    if (log_type == 'n')
+                    {
+                        var content = '';
+                        var inv = '';
+                        var inv_id = '';
+                        var p = Database.getData(`/${target_id}/${db_type}`);
+
+                        for (var i = 1; i < p.length; i++)
+                        {
+                            var obj = p[i];
+                            var inc = i - 1;
+                            content += `(${inc}) ${obj.content}\n`
+                            inv += `(${inc}) ${obj.invoker}\n`
+                            inv_id += `(${inc}) ${obj.invoker_id}\n`
+                        }
+
+                        const embed = new Discord.RichEmbed()
+                          .setDescription('**User Notes**\n')
+                          .setAuthor(message.author.username, this.getAvatar(message))
+
+                          .setColor('#FF0000')
+                          .setFooter("© Corporate Clash 2017-2018")
+
+                          .setTimestamp()
+                          .addField('**Content**', content, true)
                           .addField('**Invoker**', inv, true)
                           .addField('**Invoker ID**', inv_id, true)
 
