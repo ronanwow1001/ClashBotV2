@@ -343,8 +343,11 @@ class MessageHandler
                         {
                             var obj = p[i];
                             var inc = i - 1;
-                            content += `(${inc}) ${obj.content}\n`
-                            detected_words += `(${inc}) ${obj.detected_word}\n`
+                            if (obj.content != undefined)
+                            {
+                                content += `(${inc}) ${obj.content}\n`
+                                detected_words += `(${inc}) ${obj.detected_word}\n`
+                            }
                         }
 
                         const embed = new Discord.RichEmbed()
@@ -369,13 +372,16 @@ class MessageHandler
                         var inv_id = '';
                         var p = Database.getData(`/${target_id}/${db_type}`);
 
-                        for (var i = 1; i < p.length; i++)
+                        for (var i = 0; i < p.length; i++)
                         {
                             var obj = p[i];
                             var inc = i - 1;
-                            reason += `(${inc}) ${obj.reason}\n`
-                            inv += `(${inc}) ${obj.invoker}\n`
-                            inv_id += `(${inc}) ${obj.invoker_id}\n`
+                            if (obj.reason != undefined)
+                            {
+                                reason += `(${inc}) ${obj.reason}\n`
+                                inv += `(${inc}) ${obj.invoker}\n`
+                                inv_id += `(${inc}) ${obj.invoker_id}\n`
+                            }
                         }
 
                         const embed = new Discord.RichEmbed()
@@ -401,13 +407,16 @@ class MessageHandler
                         var inv_id = '';
                         var p = Database.getData(`/${target_id}/${db_type}`);
 
-                        for (var i = 1; i < p.length; i++)
+                        for (var i = 0; i < p.length; i++)
                         {
                             var obj = p[i];
                             var inc = i - 1;
-                            content += `(${inc}) ${obj.content}\n`
-                            inv += `(${inc}) ${obj.invoker}\n`
-                            inv_id += `(${inc}) ${obj.invoker_id}\n`
+                            if (obj.content != undefined)
+                            {
+                                content += `(${inc}) ${obj.content}\n`
+                                inv += `(${inc}) ${obj.invoker}\n`
+                                inv_id += `(${inc}) ${obj.invoker_id}\n`
+                            }
                         }
 
                         const embed = new Discord.RichEmbed()
@@ -419,6 +428,41 @@ class MessageHandler
 
                           .setTimestamp()
                           .addField('**Content**', content, true)
+                          .addField('**Invoker**', inv, true)
+                          .addField('**Invoker ID**', inv_id, true)
+
+
+                        await this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
+                    }
+
+                    if (log_type == 'k')
+                    {
+                        var reason = '';
+                        var inv = '';
+                        var inv_id = '';
+                        var p = Database.getData(`/${target_id}/${db_type}`);
+
+                        for (var i = 0; i < p.length; i++)
+                        {
+                            var obj = p[i];
+                            var inc = i - 1;
+                            if (obj.reason != undefined)
+                            {
+                                reason += `(${inc}) ${obj.reason}\n`
+                                inv += `(${inc}) ${obj.invoker}\n`
+                                inv_id += `(${inc}) ${obj.invoker_id}\n`
+                            }
+                        }
+
+                        const embed = new Discord.RichEmbed()
+                          .setDescription('**User Kick Log**\n')
+                          .setAuthor(message.author.username, this.getAvatar(message))
+
+                          .setColor('#FF0000')
+                          .setFooter("© Corporate Clash 2017-2018")
+
+                          .setTimestamp()
+                          .addField('**Reason**', reason, true)
                           .addField('**Invoker**', inv, true)
                           .addField('**Invoker ID**', inv_id, true)
 
