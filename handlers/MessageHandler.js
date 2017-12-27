@@ -304,6 +304,96 @@ class MessageHandler
 
         if (channel === Config.Server.Channels.Moderation)
         {
+            if ((msg.startsWith(`${command_prefix}log`)) && (this.checkPerms(message, uid) === true))
+            {
+                var split_msg = msg.split(' ');
+                var target_id = split_msg[1];
+                var g_member = message.guild.members.get(target_id)
+                var log_type = this.removeFirstTwoParams(msg);
+                var check_type = this.checkLogType(log_type);
+
+                if (target_id === undefined)
+                {
+                    message.reply('please supply the target user\'s id!')
+                }
+                else if (g_member === undefined)
+                {
+                    message.reply('this user does not exist!')
+                }
+                else if (/^\s*$/.test(log_type) == true)
+                {
+                    message.reply('please supply a log type!')
+                }
+                else if (check_type[0] == false)
+                {
+                    message.reply('please supply a valid log type!')
+                }
+                else
+                {
+                    var db_type = check_type[1];
+                    var arr = [];
+
+                    if (log_type == 'pw')
+                    {
+                        var content = '';
+                        var detected_words = '';
+                        var p = Database.getData(`/${target_id}/${db_type}`);
+
+                        for (var i = 1; i < p.length; i++)
+                        {
+                            var obj = p[i];
+                            content += `${obj.content}\n`
+                            detected_words += `${obj.detected_word}\n`
+                        }
+
+                        const embed = new Discord.RichEmbed()
+                          .setDescription('**Profanity Warning Log**\n')
+                          .setAuthor(message.author.username, this.getAvatar(message))
+
+                          .setColor('#FF0000')
+                          .setFooter("© Corporate Clash 2017-2018")
+
+                          .setTimestamp()
+                          .addField('**Content**', content, true)
+                          .addField('**Detected Word**', detected_words, true)
+
+
+                        await this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
+                    }
+
+                    if (log_type == 'w')
+                    {
+                        var reason = '';
+                        var inv = '';
+                        var inv_id = '';
+                        var p = Database.getData(`/${target_id}/${db_type}`);
+
+                        for (var i = 1; i < p.length; i++)
+                        {
+                            var obj = p[i];
+                            reason += `${obj.reason}\n`
+                            inv += `${obj.invoker}\n`
+                            inv_id += `${obj.invoker_id}\n`
+                        }
+
+                        const embed = new Discord.RichEmbed()
+                          .setDescription('**Moderation Warning Log**\n')
+                          .setAuthor(message.author.username, this.getAvatar(message))
+
+                          .setColor('#FF0000')
+                          .setFooter("© Corporate Clash 2017-2018")
+
+                          .setTimestamp()
+                          .addField('**Reason**', reason, true)
+                          .addField('**Invoker**', inv, true)
+                          .addField('**Invoker ID**', inv_id, true)
+
+
+                        await this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
+                    }
+                }
+            }
+
             if ((msg.startsWith(`${command_prefix}mute`)) && (this.checkPerms(message, uid) === true))
             {
                 if (message.mentions.users.first())
@@ -920,6 +1010,34 @@ class MessageHandler
     getAvatar(message)
     {
         return message.guild.members.get(message.author.id).user.avatarURL;
+    }
+
+    checkLogType(type)
+    {
+        switch(type)
+        {
+            case 'w':
+                return [true, 'user_warnings'];
+                break;
+            case 'k':
+                return [true, 'user_kicks'];
+                break;
+            case 'b':
+                return [true, 'user_bans'];
+                break;
+            case 'pw':
+                return [true, 'profanity_warnings'];
+                break;
+            case 'ub':
+                return [true, 'user_unbans'];
+                break;
+            case 'n':
+                return [true, 'user_notes'];
+                break;
+            default:
+                return [false, ''];
+                break;
+        }
     }
 
     checkType(type)
