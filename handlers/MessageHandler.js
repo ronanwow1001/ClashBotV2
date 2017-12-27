@@ -398,13 +398,20 @@ class MessageHandler
                               .addField('**Moderation Warnings**', this.stats_hndler.getModPoints(target_id), true)
                               .addField('**Please Read**', '```' + reason + '```', true)
 
-                            user.send(
-                                {
-                                    embed
-                                }
-                            )
+                          try
+                          {
+                              user.send(
+                                  {
+                                      embed
+                                  }
+                              )
 
-                            message.reply(`I've warned ${user.username} for breaking rule ${rule}`)
+                              message.reply(`I've warned ${user.username} for breaking rule ${rule}`)
+                          }
+                          catch(err)
+                          {
+                              message.reply(err);
+                          }
                         }
                     }
                     else
@@ -425,14 +432,20 @@ class MessageHandler
                           .setTimestamp()
                           .addField('**Moderation Warnings**', this.stats_hndler.getModPoints(target_id), true)
                           .addField('**Reason**', '```' + reason + '```', true)
+                      try
+                      {
+                          user.send(
+                              {
+                                  embed
+                              }
+                          )
 
-                        user.send(
-                            {
-                                embed
-                            }
-                        )
-
-                        message.reply(`I've warned ${user.username} with the reason: ${reason}`)
+                          message.reply(`I've warned ${user.username} for: ${reason}`)
+                      }
+                      catch(err)
+                      {
+                          message.reply(err);
+                      }
                     }
                 }
             }
