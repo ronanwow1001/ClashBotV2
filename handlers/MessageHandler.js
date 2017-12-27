@@ -513,7 +513,7 @@ class MessageHandler
 
                               .setTimestamp()
                               .addField('**Reason**', `Rule ${rule}`, true)
-                              .addField('**Moderation Warnings**', this.stats_hndler.getKickPoints(target_id), true)
+                              .addField('**Kick Points**', this.stats_hndler.getKickPoints(target_id), true)
                               .addField('**Please Read**', '```' + reason + '```', true)
 
 
@@ -551,7 +551,7 @@ class MessageHandler
                           .setFooter("© Corporate Clash 2017-2018")
 
                           .setTimestamp()
-                          .addField('**Moderation Warnings**', this.stats_hndler.getKickPoints(target_id), true)
+                          .addField('**Kick Points**', this.stats_hndler.getKickPoints(target_id), true)
                           .addField('**Reason**', '```' + reason + '```', true)
 
                       try
@@ -574,6 +574,136 @@ class MessageHandler
                 }
             }
             if ((msg.startsWith(`${command_prefix}kick`)) && (this.checkPerms(message, uid) === false))
+            {
+                message.reply('sorry but you don\'t have the proper permissions to execute this command!')
+            }
+
+            if ((msg.startsWith(`${command_prefix}ban`)) && (this.checkPerms(message, uid) === true))
+            {
+                var split_msg = msg.split(' ');
+                var target_id = split_msg[1];
+                var d_messages = parseInt(split_msg[2]);
+                var g_member = message.guild.members.get(target_id)
+                var type = this.checkType(split_msg[3]);
+                var reason = this.removeFirstFourParams(msg);
+
+
+                if (d_messages === undefined)
+                {
+                    message.reply('please supply the # of days of messages to be removed!')
+                }
+                else if (target_id === undefined)
+                {
+                    message.reply('please supply the target user\'s id!')
+                }
+                else if (g_member === undefined)
+                {
+                    message.reply('this user does not exist!')
+                }
+                else if (type === undefined)
+                {
+                    message.reply('please supply a type ban!')
+                }
+                else if (type[0] === false)
+                {
+                    message.reply('please supply a valid type of ban!')
+                }
+                else if (/^\s*$/.test(reason) == true)
+                {
+                    message.reply('please supply a valid reason!')
+                }
+                else
+                {
+                    var user = g_member.user;
+
+                    if (type[1] == 1)
+                    {
+                        var rule = parseInt(reason)
+                        reason = Config.Server.Rules[rule - 1];
+
+                        if (reason === undefined)
+                        {
+                            message.reply('please supply a valid reason!')
+                            return;
+                        }
+                        else
+                        {
+                            Database.push(`/${target_id}/user_bans[]/`, {
+                                reason: `Rule ${rule}`,
+                                invoker: `${message.author.username}`,
+                                invoker_id: `${message.author.id}`
+                            }, true);
+
+                            const embed = new Discord.RichEmbed()
+                              .setDescription('**You\'ve been kicked from the Corporate Clash discord for repeated violations of our terms.**\n')
+                              .setAuthor(user.username, this.getAvatar(message))
+
+                              .setColor('#FF0000')
+                              .setFooter("© Corporate Clash 2017-2018")
+
+                              .setTimestamp()
+                              .addField('**Reason**', `Rule ${rule}`, true)
+                              .addField('**Ban Points**', this.stats_hndler.getBanPoints(target_id), true)
+                              .addField('**Please Read**', '```' + reason + '```', true)
+
+
+                            try
+                            {
+                                user.send(
+                                    {
+                                        embed
+                                    }
+                                )
+
+                                g_member.ban({ 'days': d_messages, 'reason': `Rule ${rule}` })
+                            }
+                            catch(err)
+                            {
+                                g_member.ban({ 'days': d_messages, 'reason': `Rule ${rule}` })
+                            }
+
+                            message.reply(`I've banned ${user.username} for breaking rule ${rule} and ${d_messages} days of his messages have been removed.`)
+                        }
+                    }
+                    else
+                    {
+                        Database.push(`/${target_id}/user_bans[]/`, {
+                            reason: `${reason}`,
+                            invoker: `${message.author.username}`,
+                            invoker_id: `${message.author.id}`
+                        }, true);
+
+                        const embed = new Discord.RichEmbed()
+                          .setDescription('**You\'ve been banned from the Corporate Clash discord for repeated violations of our terms.**\n')
+                          .setAuthor(user.username, this.getAvatar(message))
+
+                          .setColor('#FF0000')
+                          .setFooter("© Corporate Clash 2017-2018")
+
+                          .setTimestamp()
+                          .addField('**Ban Points**', this.stats_hndler.getBanPoints(target_id), true)
+                          .addField('**Reason**', '```' + reason + '```', true)
+
+                      try
+                      {
+                          user.send(
+                              {
+                                  embed
+                              }
+                          )
+
+                          g_member.ban({ 'days': d_messages, 'reason': reason })
+                      }
+                      catch(err)
+                      {
+                          g_member.ban({ 'days': d_messages, 'reason': reason })
+                      }
+
+                        message.reply(`I've banned ${user.username} with the reason: ${reason} and ${d_messages} days of his messages have been removed.`)
+                    }
+                }
+            }
+            if ((msg.startsWith(`${command_prefix}ban`)) && (this.checkPerms(message, uid) === false))
             {
                 message.reply('sorry but you don\'t have the proper permissions to execute this command!')
             }
@@ -775,6 +905,17 @@ class MessageHandler
     removeFirstThreeParams(msg)
     {
         var split_msg = msg.split(' ');
+        split_msg.shift()
+        split_msg.shift()
+        split_msg.shift()
+        var join_msg = split_msg.join(' ')
+        return join_msg;
+    }
+
+    removeFirstFourParams(msg)
+    {
+        var split_msg = msg.split(' ');
+        split_msg.shift()
         split_msg.shift()
         split_msg.shift()
         split_msg.shift()
