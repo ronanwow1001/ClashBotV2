@@ -335,6 +335,111 @@ class MessageHandler
             {
                 message.reply('sorry but you don\'t have the proper permissions to execute this command!')
             }
+
+            if ((msg.startsWith(`${command_prefix}warn`)) && (this.checkPerms(message, uid) === true))
+            {
+                var split_msg = msg.split(' ');
+                var target_id = split_msg[1];
+                var g_member = message.guild.members.get(target_id)
+                var type = this.checkType(split_msg[2]);
+                var reason = this.removeFirstThreeParams(msg);
+
+                if (target_id === undefined)
+                {
+                    message.reply('please supply the target user\'s id!')
+                }
+                else if (g_member === undefined)
+                {
+                    message.reply('this user does not exist!')
+                }
+                else if (type === undefined)
+                {
+                    message.reply('please supply a type warning!')
+                }
+                else if (type[0] === false)
+                {
+                    message.reply('please supply a valid type of warning!')
+                }
+                else if (/^\s*$/.test(reason) == true)
+                {
+                    message.reply('please supply a valid reason!')
+                }
+                else
+                {
+                    var user = g_member.user;
+
+                    if (type[1] == 1)
+                    {
+                        var rule = parseInt(reason)
+                        reason = Config.Server.Rules[rule - 1];
+
+                        if (reason === undefined)
+                        {
+                            message.reply('please supply a valid reason!')
+                            return;
+                        }
+                        else
+                        {
+                            Database.push(`/${uid}/user_warnings[]/`, {
+                                reason: `Rule ${rule}`,
+                                invoker: `${message.author.username}`,
+                                invoker_id: `${message.author.id}`
+                            }, true);
+
+                            const embed = new Discord.RichEmbed()
+                              .setDescription('**You\'ve been warned in the Corporate Clash discord for violation of our terms.**\n')
+                              .setAuthor(user.username, this.getAvatar(message))
+
+                              .setColor('#FF0000')
+                              .setFooter("© Corporate Clash 2017-2018")
+
+                              .setTimestamp()
+                              .addField('**Reason**', `Rule ${rule}`, true)
+                              .addField('**Moderation Warnings**', this.stats_hndler.getModPoints(uid), true)
+                              .addField('**Please Read**', '```' + reason + '```', true)
+
+                            user.send(
+                                {
+                                    embed
+                                }
+                            )
+
+                            message.reply(`I've warned ${user.username} for breaking rule ${rule}`)
+                        }
+                    }
+                    else
+                    {
+                        Database.push(`/${uid}/user_warnings[]/`, {
+                            reason: `${reason}`,
+                            invoker: `${message.author.username}`,
+                            invoker_id: `${message.author.id}`
+                        }, true);
+
+                        const embed = new Discord.RichEmbed()
+                          .setDescription('**You\'ve been warned in the Corporate Clash discord for violation of our terms.**\n')
+                          .setAuthor(user.username, this.getAvatar(message))
+
+                          .setColor('#FF0000')
+                          .setFooter("© Corporate Clash 2017-2018")
+
+                          .setTimestamp()
+                          .addField('**Moderation Warnings**', this.stats_hndler.getModPoints(uid), true)
+                          .addField('**Reason**', '```' + reason + '```', true)
+
+                        user.send(
+                            {
+                                embed
+                            }
+                        )
+
+                        message.reply(`I've warned ${user.username} with the reason: ${reason}`)
+                    }
+                }
+            }
+            if ((msg.startsWith(`${command_prefix}warn`)) && (this.checkPerms(message, uid) === false))
+            {
+                message.reply('sorry but you don\'t have the proper permissions to execute this command!')
+            }
         }
     }
 
@@ -510,6 +615,34 @@ class MessageHandler
     getAvatar(message)
     {
         return message.guild.members.get(message.author.id).user.avatarURL;
+    }
+
+    checkType(type)
+    {
+        type = parseInt(type)
+
+        if (type == 1)
+        {
+            return [true, type];
+        }
+        else if (type == 2)
+        {
+            return [true, type];
+        }
+        else
+        {
+            return [false, type];
+        }
+    }
+
+    removeFirstThreeParams(msg)
+    {
+        var split_msg = msg.split(' ');
+        split_msg.shift()
+        split_msg.shift()
+        split_msg.shift()
+        var join_msg = split_msg.join(' ')
+        return join_msg;
     }
 
 }
