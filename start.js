@@ -17,13 +17,37 @@ global.rl       = readline.createInterface(
 Logger.print("Loading Dependencies...".green.dim);
 Logger.start();
 
-global.Database = new Database(this);
-Database.start();
-global.Database = Database.db;
+const startDatabase = async () =>
+{
+    try
+    {
+        global.Database = new Database(this);
+        await Database.start();
+        global.Database = Database.db;
+    }
+    catch(err)
+    {
+        Logger.error(err);
+    }
+}
 
-// Start Bot
-var bot = new Bot(this);
-bot.start();
+const startBot = async() =>
+{
+    try
+    {
+        // Start Bot
+        var bot = new Bot(this);
+        await bot.start();
+    }
+    catch(err)
+    {
+        Logger.error(err);
+    }
+
+}
+
+startDatabase();
+startBot();
 
 // Error handling
 process.on('uncaughtException', (error) => Logger.error(error));

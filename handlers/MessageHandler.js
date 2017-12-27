@@ -16,7 +16,7 @@ class MessageHandler
     Checks a message
     */
 
-    checkNormal(message)
+    async checkNormal(message)
     {
         if (message.author.bot === true)
         {
@@ -118,10 +118,10 @@ class MessageHandler
                        .addField('**User ID**', "```" + uid + "```", true)
                        .addField('**Profanity Warnings**', "```" + this.stats_hndler.getProfanityStats(uid) + "```", true);
 
-                     this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
+                     await this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
                  }
 
-                message.delete();
+                await message.delete();
             }
             else
             {
@@ -134,7 +134,7 @@ class MessageHandler
     Handles a deleted message
     */
 
-    handleDelete(message)
+    async handleDelete(message)
     {
         if (message.author.bot === true)
         {
@@ -165,7 +165,7 @@ class MessageHandler
               .addField('**Channel**', "```#" + channel + "```", true)
               .addField('**User ID**', "```" + uid + "```", true);
 
-            this.sendChannelMessage(embed, Config.Server.Channels.Logging);
+            await this.sendChannelMessage(embed, Config.Server.Channels.Logging);
         }
     }
 
@@ -173,7 +173,7 @@ class MessageHandler
     Checks an edited message
     */
 
-    checkEdit(old_message, new_message)
+    async checkEdit(old_message, new_message)
     {
         if (new_message.author.bot === true)
         {
@@ -265,14 +265,14 @@ class MessageHandler
                        .addField('**User ID**', "```" + uid + "```", true)
                        .addField('**Profanity Warnings**', "```" + this.stats_hndler.getProfanityStats(uid) + "```", true);
 
-                     this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
+                    await this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
                  }
 
-                new_message.delete();
+                await new_message.delete();
             }
             else
             {
-                this.handleMessage(new_message);
+                await this.handleMessage(new_message);
             }
         }
     }
@@ -281,7 +281,7 @@ class MessageHandler
     Main message handler that processes messages after being checked
     */
 
-    handleMessage(message)
+    async handleMessage(message)
     {
         var admin = message.member.hasPermission('ADMINISTRATOR');
         var manager = message.member.hasPermission('MANAGE_MESSAGES');
@@ -294,7 +294,7 @@ class MessageHandler
 
         if (channel === Config.Server.Channels.Suggestions)
         {
-            message.react("✅").then(
+            await message.react("✅").then(
                 () =>
                 {
                     message.react("❌");
@@ -460,7 +460,7 @@ class MessageHandler
         }
     }
 
-    sendChannelMessage(msg, channel)
+    async sendChannelMessage(msg, channel)
     {
         var guildUser = this.parent.bot.guilds.first().me;
         var channel = guildUser.guild.channels.find('name', channel);
