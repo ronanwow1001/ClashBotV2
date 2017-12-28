@@ -1,0 +1,91 @@
+{
+  "_from": "relib@^0.2.1",
+  "_id": "relib@0.2.1",
+  "_inBundle": false,
+  "_integrity": "sha1-MpbizqTaCm9qakdlOuSSn25ReJc=",
+  "_location": "/relib",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "relib@^0.2.1",
+    "name": "relib",
+    "escapedName": "relib",
+    "rawSpec": "^0.2.1",
+    "saveSpec": null,
+    "fetchSpec": "^0.2.1"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/relib/-/relib-0.2.1.tgz",
+  "_shasum": "3296e2cea4da0a6f6a6a47653ae4929f6e517897",
+  "_spec": "relib@^0.2.1",
+  "_where": "/Users/xseano/ClashBotV2",
+  "author": {
+    "name": "Mark Zhan",
+    "email": "markzhann@qq.com",
+    "url": "markzhan.com"
+  },
+  "bugs": {
+    "url": "https://github.com/markzhan/relib/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "recoo": "^1.0.7"
+  },
+  "deprecated": false,
+  "description": "A regular expression library for node.js",
+  "devDependencies": {
+    "chai": "^2.0.0",
+    "istanbul": "^0.3.5",
+    "mocha": "^2.1.0",
+    "tlds": "^1.27.0"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "homepage": "https://github.com/markzhan/relib",
+  "keywords": [
+    "re",
+    "regex",
+    "regexp",
+    "regular",
+    "expression",
+    "ip",
+    "url",
+    "email",
+    "domain",
+    "address",
+    "internet",
+    "protocol",
+    "string",
+    "text",
+    "is",
+    "test",
+    "find",
+    "parse",
+    "check",
+    "match",
+    "contain",
+    "pattern",
+    "validate"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "relib",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/markzhan/relib.git"
+  },
+  "scripts": {
+    "prepublish": "node lib/tlds.js",
+    "pretest": "node lib/tlds.js",
+    "test": "make test"
+  },
+  "version": "0.2.1"
+}
