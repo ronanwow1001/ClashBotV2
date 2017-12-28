@@ -76,7 +76,8 @@ class MessageHandler
             if (checkLink[0] === true)
             {
                 Database.push(`/${uid}/link_infractions[]/`, {
-                    content: checkLink[1]
+                    content: msg,
+                    detected_links: checkLink[1]
                 }, true);
 
                 const embed = new Discord.RichEmbed()
@@ -90,13 +91,13 @@ class MessageHandler
                   .addField('**Message**', "```" + msg + "```", true)
                   .addField('**Parsed Link**', "```" + checkLink[1] + "```", true)
 
-                 await message.author.send(
+                 message.author.send(
                      {
                          embed
                      }
                  );
 
-                 await message.delete();
+                 message.delete();
             }
 
             if (checkMsg[0] === 1)
@@ -144,7 +145,7 @@ class MessageHandler
                      await this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
                  }
 
-                await message.delete();
+                message.delete();
             }
             else
             {
@@ -244,7 +245,8 @@ class MessageHandler
             if (checkLink[0] === true)
             {
                 Database.push(`/${uid}/link_infractions[]/`, {
-                    content: checkLink[1]
+                    content: msg,
+                    detected_links: checkLink[1]
                 }, true);
 
                 const embed = new Discord.RichEmbed()
@@ -264,7 +266,7 @@ class MessageHandler
                      }
                  );
 
-                 await new_message.delete();
+                 new_message.delete();
             }
 
             if (checkMsg[0] === 1)
@@ -314,7 +316,7 @@ class MessageHandler
                     await this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
                  }
 
-                await new_message.delete();
+                new_message.delete();
             }
             else
             {
