@@ -123,6 +123,13 @@ class Bot
                 this.event_hndler.handleUnban(guild, user);
             }
         );
+
+        this.bot.on('guildMemberRemove',
+        (g_member) =>
+            {
+                this.event_hndler.handleRemoval(g_member);
+            }
+        );
     }
 
     sendMsg(message)
