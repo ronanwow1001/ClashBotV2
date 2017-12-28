@@ -26,7 +26,8 @@
             "Default": "general",
             "Moderation": "moderation",
             "Logging": "logging",
-            "Suggestions": "suggestions"
+            "Suggestions": "suggestions",
+            "ToonHQ": "hq"
         },
 
         "Admins":

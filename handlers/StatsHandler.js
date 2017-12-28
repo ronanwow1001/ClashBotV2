@@ -5,6 +5,12 @@ class StatsHandler
         this.parent = parent;
     }
 
+    getSuggestionStats(uid)
+    {
+        var data = Database.getData(`/${uid}/suggestion_count[0]`);
+        return (data);
+    }
+
     getProfanityStats(uid)
     {
         var stats = Database.getData(`/${uid}/profanity_warnings`);

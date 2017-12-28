@@ -7,7 +7,6 @@ class MessageHandler
     constructor(parent)
     {
         this.parent = parent
-        this.stats_hndler = parent.stats_hndler;
     }
 
     /*
@@ -91,7 +90,7 @@ class MessageHandler
                   .setTimestamp()
                   .addField('**Message**', "```" + msg + "```", true)
                   .addField('**Detected Word**', "```" + checkMsg[1] + "```", true)
-                  .addField('**Profanity Warnings**', "```" + this.stats_hndler.getProfanityStats(uid) + "```", true);
+                  .addField('**Profanity Warnings**', "```" + this.parent.stats_hndler.getProfanityStats(uid) + "```", true);
 
                  message.author.send(
                      {
@@ -114,7 +113,7 @@ class MessageHandler
                        .addField('**Detected Word**', "```" + checkMsg[1] + "```", true)
                        .addField('**Channel**', "```#" + channel + "```", true)
                        .addField('**User ID**', "```" + uid + "```", true)
-                       .addField('**Profanity Warnings**', "```" + this.stats_hndler.getProfanityStats(uid) + "```", true);
+                       .addField('**Profanity Warnings**', "```" + this.parent.stats_hndler.getProfanityStats(uid) + "```", true);
 
                      await this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
                  }
@@ -237,7 +236,7 @@ class MessageHandler
                   .addField('**Original Message**', "```" + omsg + "```", true)
                   .addField('**Edited Message**', "```" + msg + "```", true)
                   .addField('**Detected Word**', "```" + checkMsg[1] + "```", true)
-                  .addField('**Profanity Warnings**', "```" + this.stats_hndler.getProfanityStats(uid) + "```", true);
+                  .addField('**Profanity Warnings**', "```" + this.parent.stats_hndler.getProfanityStats(uid) + "```", true);
 
                  new_message.author.send(
                      {
@@ -261,7 +260,7 @@ class MessageHandler
                        .addField('**Detected Word**', "```" + checkMsg[1] + "```", true)
                        .addField('**Channel**', "```#" + channel + "```", true)
                        .addField('**User ID**', "```" + uid + "```", true)
-                       .addField('**Profanity Warnings**', "```" + this.stats_hndler.getProfanityStats(uid) + "```", true);
+                       .addField('**Profanity Warnings**', "```" + this.parent.stats_hndler.getProfanityStats(uid) + "```", true);
 
                     await this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
                  }
@@ -298,6 +297,30 @@ class MessageHandler
                     message.react("❌");
                 }
             );
+        }
+
+        if (channel === Config.Server.Channels.ToonHQ)
+        {
+            if (msg == `${command_prefix}stats`)
+            {
+                var suggestion_count = this.parent.stats_hndler.getSuggestionStats(uid);
+                var uv = parseInt(suggestion_count.uv);
+                var dv = parseInt(suggestion_count.dv);
+
+                const embed = new Discord.RichEmbed()
+                  .setDescription('**User Stats**\n')
+                  .setAuthor(author, this.getAvatar(message))
+
+                  .setColor('#00ff00')
+                  .setFooter("© Corporate Clash 2017-2018")
+
+                  .setTimestamp()
+                  .addField('**Upvotes**', `**${uv}**`, true)
+                  .addField('**Downvotes**', `**${dv}**`, true)
+
+
+                await this.sendChannelMessage(embed, Config.Server.Channels.ToonHQ);
+            }
         }
 
         if (channel === Config.Server.Channels.Moderation)
@@ -337,10 +360,10 @@ class MessageHandler
                       .addField('**Highest Role**', g_member.highestRole, true)
                       .addField('**Join Date**', g_member.joinedAt, true)
                       .addField('**Display Name**', g_member.displayName, true)
-                      .addField('**Profanity Warnings**', this.stats_hndler.getProfanityStats(target_id), true)
-                      .addField('**Moderation Warnings**', this.stats_hndler.getModPoints(target_id), true)
-                      .addField('**Kick Points**', this.stats_hndler.getKickPoints(target_id), true)
-                      .addField('**Ban Points**', this.stats_hndler.getBanPoints(target_id), true)
+                      .addField('**Profanity Warnings**', this.parent.stats_hndler.getProfanityStats(target_id), true)
+                      .addField('**Moderation Warnings**', this.parent.stats_hndler.getModPoints(target_id), true)
+                      .addField('**Kick Points**', this.parent.stats_hndler.getKickPoints(target_id), true)
+                      .addField('**Ban Points**', this.parent.stats_hndler.getBanPoints(target_id), true)
 
 
                     await this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
@@ -645,7 +668,7 @@ class MessageHandler
 
                               .setTimestamp()
                               .addField('**Reason**', `Rule ${rule}`, true)
-                              .addField('**Moderation Warnings**', this.stats_hndler.getModPoints(target_id), true)
+                              .addField('**Moderation Warnings**', this.parent.stats_hndler.getModPoints(target_id), true)
                               .addField('**Please Read**', '```' + reason + '```', true)
 
                           try
@@ -680,7 +703,7 @@ class MessageHandler
                           .setFooter("© Corporate Clash 2017-2018")
 
                           .setTimestamp()
-                          .addField('**Moderation Warnings**', this.stats_hndler.getModPoints(target_id), true)
+                          .addField('**Moderation Warnings**', this.parent.stats_hndler.getModPoints(target_id), true)
                           .addField('**Reason**', '```' + reason + '```', true)
                       try
                       {
@@ -763,7 +786,7 @@ class MessageHandler
 
                               .setTimestamp()
                               .addField('**Reason**', `Rule ${rule}`, true)
-                              .addField('**Kick Points**', this.stats_hndler.getKickPoints(target_id), true)
+                              .addField('**Kick Points**', this.parent.stats_hndler.getKickPoints(target_id), true)
                               .addField('**Please Read**', '```' + reason + '```', true)
 
 
@@ -801,7 +824,7 @@ class MessageHandler
                           .setFooter("© Corporate Clash 2017-2018")
 
                           .setTimestamp()
-                          .addField('**Kick Points**', this.stats_hndler.getKickPoints(target_id), true)
+                          .addField('**Kick Points**', this.parent.stats_hndler.getKickPoints(target_id), true)
                           .addField('**Reason**', '```' + reason + '```', true)
 
                       try
@@ -893,7 +916,7 @@ class MessageHandler
 
                               .setTimestamp()
                               .addField('**Reason**', `Rule ${rule}`, true)
-                              .addField('**Ban Points**', this.stats_hndler.getBanPoints(target_id), true)
+                              .addField('**Ban Points**', this.parent.stats_hndler.getBanPoints(target_id), true)
                               .addField('**Please Read**', '```' + reason + '```', true)
 
 
@@ -931,7 +954,7 @@ class MessageHandler
                           .setFooter("© Corporate Clash 2017-2018")
 
                           .setTimestamp()
-                          .addField('**Ban Points**', this.stats_hndler.getBanPoints(target_id), true)
+                          .addField('**Ban Points**', this.parent.stats_hndler.getBanPoints(target_id), true)
                           .addField('**Reason**', '```' + reason + '```', true)
 
                       try
@@ -1009,7 +1032,7 @@ class MessageHandler
         var emoji = reaction.emoji.name;
         var auth_id = message.author.id;
         var channel = message.channel.name;
-        var suggestion_count = Database.getData(`/${auth_id}/suggestion_count[0]`);
+        var suggestion_count = this.parent.stats_hndler.getSuggestionStats(auth_id);
         var uv = parseInt(suggestion_count.uv);
         var dv = parseInt(suggestion_count.dv);
 
