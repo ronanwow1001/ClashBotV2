@@ -61,6 +61,7 @@ class Bot
     login()
     {
         this.bot.login(Config.Server.Token);
+        this.bot.login(Config.Server.Token);
         this.onConnect();
     }
 

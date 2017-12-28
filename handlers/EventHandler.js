@@ -10,6 +10,8 @@ class EventHandler
         //var self = this.pa;
         var guild = this.parent.bot.guilds.array();
         await Logger.warn(`${this.parent.bot.user.username} joined the server: ${this.parent.bot.guilds.array()}`);
+        await this.parent.bot.user.setAvatar('assets/images/_icon.png');
+        await this.parent.bot.user.setGame('Corporate Clash');
     }
 
     async handleBan(guild, user)
