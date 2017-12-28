@@ -304,6 +304,55 @@ class MessageHandler
 
         if (channel === Config.Server.Channels.Moderation)
         {
+            if ((msg.startsWith(`${command_prefix}user`)) && (this.checkPerms(message, uid) === true))
+            {
+                var split_msg = msg.split(' ');
+                var target_id = split_msg[1];
+                var g_member = message.guild.members.get(target_id)
+                var u_member = g_member.user;
+
+                if (target_id === undefined)
+                {
+                    message.reply('please supply the target user\'s id!')
+                }
+                else if (g_member === undefined)
+                {
+                    message.reply('this user does not exist!')
+                }
+                else
+                {
+                    const embed = new Discord.RichEmbed()
+                      .setDescription('**User Information**\n')
+                      .setAuthor(message.author.username, this.getAvatar(message))
+
+                      .setColor('#33CCCC')
+                      .setFooter("© Corporate Clash 2017-2018")
+
+                      .setTimestamp()
+                      .setImage(u_member.avatarURL)
+                      .addField('**ID**', g_member.id, true)
+                      .addField('**Username**', u_member.username, true)
+                      .addField('**Tag**', u_member.tag, true)
+                      .addField('**Avatar URL**', u_member.avatarURL, true)
+                      .addField('**Is bot?**', u_member.bot, true)
+                      .addField('**Account Creation**', u_member.createdAt, true)
+                      .addField('**Highest Role**', g_member.highestRole, true)
+                      .addField('**Join Date**', g_member.joinedAt, true)
+                      .addField('**Display Name**', g_member.displayName, true)
+                      .addField('**Profanity Warnings**', this.stats_hndler.getProfanityStats(target_id), true)
+                      .addField('**Moderation Warnings**', this.stats_hndler.getModPoints(target_id), true)
+                      .addField('**Kick Points**', this.stats_hndler.getKickPoints(target_id), true)
+                      .addField('**Ban Points**', this.stats_hndler.getBanPoints(target_id), true)
+
+
+                    await this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
+                }
+            }
+            else if ((msg.startsWith(`${command_prefix}user`)) && (this.checkPerms(message, uid) === false))
+            {
+                message.author.send('sorry but you don\'t have the proper permissions to execute this command!')
+            }
+
             if ((msg.startsWith(`${command_prefix}log`)) && (this.checkPerms(message, uid) === true))
             {
                 var split_msg = msg.split(' ');
