@@ -448,6 +448,38 @@ class MessageHandler
                     var db_type = check_type[1];
                     var arr = [];
 
+                    if (log_type == 'li')
+                    {
+                        var content = '';
+                        var detected_links = '';
+                        var p = Database.getData(`/${target_id}/${db_type}`);
+
+                        for (var i = 1; i < p.length; i++)
+                        {
+                            var obj = p[i];
+                            var inc = i - 1;
+                            if (obj.content != undefined)
+                            {
+                                content += `(${inc}) ${obj.content}\n`
+                                detected_links += `(${inc}) ${obj.detected_links}\n`
+                            }
+                        }
+
+                        const embed = new Discord.RichEmbed()
+                          .setDescription('**Link Infraction Log**\n')
+                          .setAuthor(message.author.username, this.getAvatar(message))
+
+                          .setColor('#FF0000')
+                          .setFooter("© Corporate Clash 2017-2018")
+
+                          .setTimestamp()
+                          .addField('**Content**', content, true)
+                          .addField('**Detected Links**', detected_links, true)
+
+
+                        await this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
+                    }
+
                     if (log_type == 'pw')
                     {
                         var content = '';
@@ -1259,6 +1291,9 @@ class MessageHandler
     {
         switch(type)
         {
+            case 'li':
+                return [true, 'link_infractions'];
+                break;
             case 'w':
                 return [true, 'user_warnings'];
                 break;
