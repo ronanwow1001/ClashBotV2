@@ -2,6 +2,8 @@ const os = require('os');
 const botLoop = require('node-gameloop');
 const CommandHandler = require('./handlers/CommandHandler');
 const MessageHandler = require('./handlers/MessageHandler');
+const StatsHandler = require('./handlers/StatsHandler');
+const EventHandler = require('./handlers/EventHandler');
 
 class Bot
 {
@@ -23,6 +25,8 @@ class Bot
         // Command Handler
         this.commands = new CommandHandler(this);
         this.msg_hndler = new MessageHandler(this);
+        this.event_hndler = new EventHandler(this);
+        this.stats_hndler = new StatsHandler(this);
 
     }
 
@@ -67,7 +71,7 @@ class Bot
         this.bot.on('ready',
         () =>
             {
-                self.handleJoin();
+                this.event_hndler.handleJoin();
             }
         );
 
@@ -105,13 +109,13 @@ class Bot
                 this.msg_hndler.checkEdit(old_message, new_message);
             }
         );
-    }
 
-    handleJoin()
-    {
-        var self = this;
-        var guild = this.bot.guilds.array();
-        Logger.warn(`${self.bot.user.username} joined the server: ${self.bot.guilds.array()}`);
+        this.bot.on('guildBanAdd',
+        (guild, user) =>
+            {
+                this.event_hndler.handleBan(guild, user);
+            }
+        );
     }
 
     sendMsg(message)

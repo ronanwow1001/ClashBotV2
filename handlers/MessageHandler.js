@@ -1,5 +1,3 @@
-const StatsHandler = require('./StatsHandler');
-
 class MessageHandler
 {
     /*
@@ -9,7 +7,7 @@ class MessageHandler
     constructor(parent)
     {
         this.parent = parent
-        this.stats_hndler = new StatsHandler(this);
+        this.stats_hndler = parent.stats_hndler;
     }
 
     /*
