@@ -1,4 +1,5 @@
 // Global Deps
+global.Raven    = require('raven');
 global.Config   = require('./conf/main.json');
 global.readline = require('readline');
 global.Logger   = require('./lib/Logger');
@@ -15,6 +16,7 @@ global.rl       = readline.createInterface(
 
 // Start deps
 Logger.print("Loading Dependencies...".green.dim);
+Raven.config(`https://${Config.Sentry.DSN1}:${Config.Sentry.DSN2}@sentry.io/${Config.Sentry.DSN3}`).install()
 Logger.start();
 
 const startDatabase = async () =>
@@ -49,5 +51,11 @@ const startBot = async() =>
 startDatabase();
 startBot();
 
-// Error handling
-process.on('uncaughtException', (error) => Logger.error(error));
+// Error handling;
+process.on('uncaughtException',
+    (error) =>
+    {
+        Raven.captureException(error);
+        Logger.error(error)
+    }
+);
