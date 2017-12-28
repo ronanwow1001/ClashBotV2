@@ -291,12 +291,8 @@ class MessageHandler
 
         if (channel === Config.Server.Channels.Suggestions)
         {
-            await message.react("✅").then(
-                () =>
-                {
-                    message.react("❌");
-                }
-            );
+            await message.react("✅");
+            await message.react("❌");
         }
 
         if (channel === Config.Server.Channels.ToonHQ)
