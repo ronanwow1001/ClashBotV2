@@ -20,8 +20,6 @@ class MessageHandler
             return;
         }
 
-        var admin = message.member.hasPermission('ADMINISTRATOR');
-        var manager = message.member.hasPermission('MANAGE_MESSAGES');
         var channel = message.channel.name;
     	var author = message.author.username;
         var uid = message.author.id;
@@ -38,7 +36,7 @@ class MessageHandler
             message.reply('shutting down!').then(function() { process.exit() }).catch(function() { console.log('Error shutting down!') });
         }
 
-        if (channel)
+        if (message.channel.type == "text")
         {
             // Check that the user has data, if not then create the dummy data
             if(uid !== this.parent.bot.user.id)
@@ -138,8 +136,6 @@ class MessageHandler
             return;
         }
 
-        var admin = message.member.hasPermission('ADMINISTRATOR');
-        var manager = message.member.hasPermission('MANAGE_MESSAGES');
         var channel = message.channel.name;
     	var author = message.author.username;
         var uid = message.author.id;
@@ -177,8 +173,6 @@ class MessageHandler
             return;
         }
 
-        var admin = new_message.member.hasPermission('ADMINISTRATOR');
-        var manager = new_message.member.hasPermission('MANAGE_MESSAGES');
         var channel = new_message.channel.name;
     	var author = new_message.author.username;
         var uid = new_message.author.id;
@@ -206,7 +200,7 @@ class MessageHandler
             this.sendChannelMessage(embed, Config.Server.Channels.Logging);
         }
 
-        if (channel)
+        if (message.channel.type == "text")
         {
 
             if (Config.Server.Admins.includes(uid))
@@ -280,8 +274,6 @@ class MessageHandler
 
     async handleMessage(message)
     {
-        var admin = message.member.hasPermission('ADMINISTRATOR');
-        var manager = message.member.hasPermission('MANAGE_MESSAGES');
         var channel = message.channel.name;
     	var author = message.author.username;
         var uid = message.author.id;
