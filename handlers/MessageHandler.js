@@ -68,7 +68,34 @@ class MessageHandler
             }
             else
             {
+                var checkLink = this.checkLink(msg);
                 var checkMsg = this.checkProfanity(msg);
+            }
+
+            if (checkLink[0] === true)
+            {
+                Database.push(`/${uid}/link_infractions[]/`, {
+                    content: checkLink[1]
+                }, true);
+
+                const embed = new Discord.RichEmbed()
+                  .setDescription('Our bot has detected you sending invalid links!\nPlease remember the Corporate Clash rules.\n')
+                  .setAuthor(author, this.getAvatar(message))
+
+                  .setColor('#FF0000')
+                  .setFooter("© Corporate Clash 2017-2018")
+
+                  .setTimestamp()
+                  .addField('**Message**', "```" + msg + "```", true)
+                  .addField('**Parsed Link**', "```" + checkLink[1] + "```", true)
+
+                 await message.author.send(
+                     {
+                         embed
+                     }
+                 );
+
+                 await message.delete();
             }
 
             if (checkMsg[0] === 1)
@@ -1136,6 +1163,43 @@ class MessageHandler
         var guildUser = this.parent.bot.guilds.first().me;
         var channel = guildUser.guild.channels.find('name', channel);
         channel.send(msg);
+    }
+
+    checkLink(msg)
+    {
+        msg = msg.split(' ').join('');
+        var link_reg = /(([a-z]+:\/\/)?(([a-z0-9\-]+\.)+([a-z]{2}|aero|arpa|biz|com|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel|local|internal))(:[0-9]{1,5})?(\/[a-z0-9_\-\.~]+)*(\/([a-z0-9_\-\.]*)(\?[a-z0-9+_\-\.%=&amp;]*)?)?(#[a-zA-Z0-9!$&'()*+.=-_~:@/?]*)?)(\s+|$)/gi;
+        var link_pattern = new RegExp(
+            '^(https?:\\/\\/)?' +  // protocol
+            '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+            '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+            '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+            '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+            '(\\#[-a-z\\d_]*)?$','gi'
+        );
+
+         //console.log(link_reg.test(msg));
+         //console.log(link_pattern.test(msg));
+
+        if (!link_pattern.test(msg))
+        {
+            return [false, msg];
+
+            /*
+            if (!link_reg.test(msg))
+            {
+                return [false, msg];
+            }
+            else
+            {
+                return [true, msg];
+            }
+            */
+        }
+        else
+        {
+            return [true, msg];
+        }
     }
 
     checkProfanity(msg)
