@@ -1242,6 +1242,22 @@ class MessageHandler
         }
     }
 
+    /*
+    checkProfanity_test(msg)
+    {
+        var is_swear = Profane.getCategoryCounts(msg);
+
+        if (is_swear != '{}')
+        {
+            var regex = new RegExp("(.)(?=\\1{1})", "g");
+            var msg_1 = msg.replace(regex, "").split(' ').join('');
+            msg_1 = msg_1.replace(/[^0-9a-z]/gi, '');
+            is_swear = Profane.getCategoryCounts(msg_1);
+            console.log(is_swear);
+        }
+    }
+    */
+
     checkProfanity(msg)
     {
         var regex = new RegExp("(.)(?=\\1{1})", "g");

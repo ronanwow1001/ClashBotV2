@@ -2,3 +2,5 @@ node_modules
 npm-debug.log
 usersDB.json
 conf/main.json
+yarn.lock
+package-lock.json
