@@ -8,6 +8,7 @@ class MessageHandler
     {
         this.parent = parent
         this.relib = require('../lib/relib')
+        this.exec = require('child_process').exec;
     }
 
     /*
@@ -32,9 +33,25 @@ class MessageHandler
             //Logger.debug(`(${channel}) - ${uid} - ${author}: ${msg}`);
         }
 
-        if ((msg === '.down') && (Config.Bot.Admins.includes(uid)))
+        if ((msg === '-update') && (Config.Server.Admins.includes(uid)))
         {
-            message.reply('shutting down!').then(function() { process.exit() }).catch(function() { console.log('Error shutting down!') });
+
+            await message.reply('updating...');
+
+            await this.exec('sh update.sh',
+            (err, out, stderr) =>
+                {
+                    message.reply(`reply: ${out}`);
+                    console.log(`${stderr}`);
+
+                    if (err !== null)
+                    {
+                        console.log(`exec error: ${err}`);
+                    }
+                }
+            );
+
+            //await message.reply('updated code!');
         }
 
         if (message.channel.type == "text")

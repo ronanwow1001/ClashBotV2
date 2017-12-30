@@ -1,2 +1,2 @@
 yarn
-node start
+node-dev start
