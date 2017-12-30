@@ -6,7 +6,7 @@ global.Logger   = require('./lib/Logger');
 global.Database = require('./lib/Database');
 global.Colors   = require('colors');
 global.Discord  = require('discord.js');
-global.Bot      = require('./Bot');
+global.Bot      = require('./bot');
 global.rl       = readline.createInterface(
     {
         input:  process.stdin,
