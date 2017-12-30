@@ -465,6 +465,16 @@ class MessageHandler
                             }
                         }
 
+                        if (content == '')
+                        {
+                            content = 'None'
+                        }
+
+                        if (detected_links == '')
+                        {
+                            detected_links = 'None'
+                        }
+
                         const embed = new Discord.RichEmbed()
                           .setDescription('**Link Infraction Log**\n')
                           .setAuthor(message.author.username, this.getAvatar(message))
@@ -495,6 +505,16 @@ class MessageHandler
                                 content += `(${inc}) ${obj.content}\n`
                                 detected_words += `(${inc}) ${obj.detected_word}\n`
                             }
+                        }
+
+                        if (content == '')
+                        {
+                            content = 'None'
+                        }
+
+                        if (detected_words == '')
+                        {
+                            detected_words = 'None'
                         }
 
                         const embed = new Discord.RichEmbed()
@@ -529,6 +549,21 @@ class MessageHandler
                                 inv += `(${inc}) ${obj.invoker}\n`
                                 inv_id += `(${inc}) ${obj.invoker_id}\n`
                             }
+                        }
+
+                        if (reason == '')
+                        {
+                            reason = 'None'
+                        }
+
+                        if (inv == '')
+                        {
+                            inv = 'None'
+                        }
+
+                        if (inv_id == '')
+                        {
+                            inv_id = 'None'
                         }
 
                         const embed = new Discord.RichEmbed()
@@ -566,6 +601,21 @@ class MessageHandler
                             }
                         }
 
+                        if (reason == '')
+                        {
+                            reason = 'None'
+                        }
+
+                        if (inv == '')
+                        {
+                            inv = 'None'
+                        }
+
+                        if (inv_id == '')
+                        {
+                            inv_id = 'None'
+                        }
+
                         const embed = new Discord.RichEmbed()
                           .setDescription('**Moderation Warning Log**\n')
                           .setAuthor(message.author.username, this.getAvatar(message))
@@ -601,6 +651,21 @@ class MessageHandler
                             }
                         }
 
+                        if (content == '')
+                        {
+                            content = 'None'
+                        }
+
+                        if (inv == '')
+                        {
+                            inv = 'None'
+                        }
+
+                        if (inv_id == '')
+                        {
+                            inv_id = 'None'
+                        }
+
                         const embed = new Discord.RichEmbed()
                           .setDescription('**User Notes**\n')
                           .setAuthor(message.author.username, this.getAvatar(message))
@@ -634,6 +699,21 @@ class MessageHandler
                                 inv += `(${inc}) ${obj.invoker}\n`
                                 inv_id += `(${inc}) ${obj.invoker_id}\n`
                             }
+                        }
+
+                        if (reason == '')
+                        {
+                            reason = 'None'
+                        }
+
+                        if (inv == '')
+                        {
+                            inv = 'None'
+                        }
+
+                        if (inv_id == '')
+                        {
+                            inv_id = 'None'
                         }
 
                         const embed = new Discord.RichEmbed()
