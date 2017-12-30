@@ -419,6 +419,43 @@ class MessageHandler
                 message.author.send('sorry but you don\'t have the proper permissions to execute this command!')
             }
 
+            if ((msg.startsWith(`${command_prefix}remove`)) && (this.checkPerms(message, uid) === true))
+            {
+                var split_msg = msg.split(' ');
+                var target_id = split_msg[1];
+                var g_member = message.guild.members.get(target_id)
+                var log_type = this.removeFirstTwoParams(msg);
+                log_type = log_type.split(' ');
+                var check_type = this.checkLogType(log_type[0]);
+                var item_id = parseInt(this.removeFirstThreeParams(msg));
+
+                if (target_id === undefined)
+                {
+                    message.reply('please supply the target user\'s id!')
+                }
+                else if (g_member === undefined)
+                {
+                    message.reply('this user does not exist!')
+                }
+                else if (/^\s*$/.test(log_type) == true)
+                {
+                    message.reply('please supply a log type!')
+                }
+                else if (check_type[0] == false)
+                {
+                    message.reply('please supply a valid log type!')
+                }
+                else if (!item_id)
+                {
+                    message.reply('please supply the item for removal!')
+                }
+                else
+                {
+                    message.reply(item_id);
+                }
+
+            }
+
             if ((msg.startsWith(`${command_prefix}log`)) && (this.checkPerms(message, uid) === true))
             {
                 var split_msg = msg.split(' ');
