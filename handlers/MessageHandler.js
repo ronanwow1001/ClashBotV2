@@ -66,6 +66,7 @@ class MessageHandler
             if (Config.Server.Admins.includes(uid))
             {
                 var checkMsg = 0;
+                var checkLink = [false, ''];
             }
             else
             {
