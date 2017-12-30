@@ -425,9 +425,10 @@ class MessageHandler
                 var target_id = split_msg[1];
                 var g_member = message.guild.members.get(target_id)
                 var log_type = this.removeFirstTwoParams(msg);
-                log_type = log_type.split(' ');
-                var check_type = this.checkLogType(log_type[0]);
+                var log_type = log_type.split(' ')[0];
+                var check_type = this.checkLogType(log_type);
                 var item_id = parseInt(this.removeFirstThreeParams(msg));
+                var item = item_id + 1;
 
                 if (target_id === undefined)
                 {
@@ -445,15 +446,17 @@ class MessageHandler
                 {
                     message.reply('please supply a valid log type!')
                 }
-                else if (!item_id)
+                else if (item_id < 0)
                 {
                     message.reply('please supply the item for removal!')
                 }
                 else
                 {
-                    message.reply(item_id);
-                }
+                    var db_type = check_type[1];
 
+                    await Database.delete(`/${target_id}/${db_type}[${item}]`);
+                    await message.reply(`deleted item ${item_id} in /${target_id}/${db_type}/`);
+                }
             }
 
             if ((msg.startsWith(`${command_prefix}log`)) && (this.checkPerms(message, uid) === true))
