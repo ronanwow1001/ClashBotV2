@@ -33,6 +33,12 @@ class MessageHandler
             //Logger.debug(`(${channel}) - ${uid} - ${author}: ${msg}`);
         }
 
+        if ((msg === '-down') && (Config.Server.Admins.includes(uid)))
+        {
+            await message.reply('shutting down!');
+            await process.exit();
+        }
+
         if ((msg === '-update') && (Config.Server.Admins.includes(uid)))
         {
 
