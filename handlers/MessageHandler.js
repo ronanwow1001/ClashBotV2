@@ -351,10 +351,10 @@ class MessageHandler
                 var suggestion_count = this.parent.stats_hndler.getSuggestionStats(uid);
                 var uv = parseInt(suggestion_count.uv);
                 var dv = parseInt(suggestion_count.dv);
+                var total = (uv) - (dv);
 
                 const embed = new Discord.RichEmbed()
-                  .setDescription('**User Stats**\n')
-                  .setAuthor(author, this.getAvatar(message))
+                  .setAuthor(`${author}'s stats`, this.getAvatar(message))
 
                   .setColor('#00ff00')
                   .setFooter("© Corporate Clash 2017-2018")
@@ -362,6 +362,7 @@ class MessageHandler
                   .setTimestamp()
                   .addField('**Upvotes**', `**${uv}**`, true)
                   .addField('**Downvotes**', `**${dv}**`, true)
+                  .addField('**Total Score**', `**${total}**`, true)
 
 
                 await this.sendChannelMessage(embed, Config.Server.Channels.ToonHQ);
