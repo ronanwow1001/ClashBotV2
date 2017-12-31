@@ -1368,9 +1368,15 @@ class MessageHandler
 
     async sendChannelMessage(msg, channel)
     {
-        var guildUser = this.parent.bot.guilds.first().me;
-        var channel = guildUser.guild.channels.find('name', channel);
-        channel.send(msg);
+        var channels = this.parent.bot.channels.array();
+        var channel = channels.find(
+            (c) =>
+            {
+                return c.name === channel;
+            }
+        );
+
+        await channel.send(msg);
     }
 
     checkLink(msg)
