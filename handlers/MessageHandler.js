@@ -87,7 +87,7 @@ class MessageHandler
             }
             else
             {
-                var checkLink = this.checkLink(msg);
+                var checkLink = this.checkLink(msg, channel);
                 var checkMsg = this.checkProfanity(msg);
             }
 
@@ -257,7 +257,7 @@ class MessageHandler
             }
             else
             {
-                var checkLink = this.checkLink(msg);
+                var checkLink = this.checkLink(msg, channel);
                 var checkMsg = this.checkProfanity(msg);
             }
 
@@ -1373,7 +1373,7 @@ class MessageHandler
         await channel.send(msg);
     }
 
-    checkLink(msg)
+    checkLink(msg, channel)
     {
 
         if (/\s/.test(msg))
@@ -1386,7 +1386,41 @@ class MessageHandler
 
         if (link_len > 0)
         {
-            return [true, find_link[0].value];
+            if (channel === Config.Server.Channels.ToonHQ)
+            {
+
+                for (var i = 0; i < Config.Server.Links.ToonHQ.length; i++)
+                {
+                  var link_2_check = Config.Server.Links.ToonHQ[i];
+                  var regex = new RegExp(link_2_check, 'gi');
+                  var check = msg.match(regex);
+                  if (check !== null)
+                  {
+                      return [false, ''];
+                  }
+                }
+
+                return [true, find_link[0].value];
+            }
+            else if (channel !== Config.Server.Channels.ToonHQ)
+            {
+                for (var i = 0; i < Config.Server.Links.Default.length; i++)
+                {
+                  var link_2_check = Config.Server.Links.Default[i];
+                  var regex = new RegExp(link_2_check, 'gi');
+                  var check = msg.match(regex);
+                  if (check !== null)
+                  {
+                      return [false, ''];
+                  }
+                }
+
+                return [true, find_link[0].value];
+            }
+            else
+            {
+                return [true, find_link[0].value];
+            }
         }
         else
         {

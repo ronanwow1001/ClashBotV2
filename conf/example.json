@@ -21,6 +21,27 @@
         "LogMessages": true,
         "Prefix": "-",
 
+        "Links":
+        {
+            "ToonHQ":
+            [
+                "http://youtu.be/",
+                "http://www.youtube.com/",
+                "http://youtube.com/",
+                "youtu.be",
+                "www.youtube.com",
+                "youtube.com"
+            ],
+
+            "Default":
+            [
+                "http://corporateclash.net/",
+                "http://corpclash.com/",
+                "corporateclash.net",
+                "corpclash.com"
+            ]
+        },
+
         "Channels":
         {
             "Default": "general",
