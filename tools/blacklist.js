@@ -1,17 +1,42 @@
 const Config = require('../conf/main.json');
-var str = 'fuck bitches acquire money dick';
-var prof = checkMessage(str);
-console.log(prof);
+var profanity = require('profanity-util', { forbiddenList: Config.Blacklist });
+
+
+var str = 'hello ni}g}|ger how do u do';
+var regex = new RegExp("(.)(?=\\1{2})", "gi");
+var msg = str.replace(regex, "").split(' ').join('');
+msg = msg.replace(/[^0-9a-z]/gi, '');
+console.log(msg);
+//var prof = findWord('ass', str);
+//var prof = checkMessage(str);
+console.log(profanity.check(msg));
+//console.log(`${str} returns ${prof}`);
+
+function findWord(word, str) {
+  return RegExp(`\\b${bWord}\\b`).test(str)
+}
 
 function checkMessage(msg)
 {
-    var regex = new RegExp("(.)(?=\\1{1})", "g");
+    var regex = new RegExp("(.)(?=\\1{1})", "gi");
     var msg_1 = msg.replace(regex, "").split(' ').join('');
     msg_1 = msg_1.replace(/[^0-9a-z]/gi, '');
 
     this.check = 0;
     this.d_word = ""
     var arr = [];
+
+    for (var i = 0; i < Config.Blacklist.length; i++)
+    {
+      var bWord = Config.Blacklist[i];
+      var regex = new RegExp(`\\b${bWord}\\b`, 'gi');
+      var check = msg_1.match(regex);
+      if (check !== null)
+      {
+          this.d_word = bWord;
+          this.check = 1;
+      }
+    }
 
     for (var i = 0; i < Config.Blacklist.length; i++)
     {
