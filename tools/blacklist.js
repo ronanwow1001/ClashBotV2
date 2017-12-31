@@ -6,11 +6,8 @@ var str = 'hello ni}g}|ger how do u do';
 var regex = new RegExp("(.)(?=\\1{2})", "gi");
 var msg = str.replace(regex, "").split(' ').join('');
 msg = msg.replace(/[^0-9a-z]/gi, '');
-console.log(msg);
-//var prof = findWord('ass', str);
-//var prof = checkMessage(str);
 console.log(profanity.check(msg));
-//console.log(`${str} returns ${prof}`);
+
 
 function findWord(word, str) {
   return RegExp(`\\b${bWord}\\b`).test(str)

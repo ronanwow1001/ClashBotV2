@@ -9,6 +9,11 @@ class MessageHandler
         this.parent = parent
         this.relib = require('../lib/relib')
         this.exec = require('child_process').exec;
+        this.profanity = require('profanity-util',
+            {
+                forbiddenList: Config.Blacklist
+            }
+        );
     }
 
     /*
@@ -1387,60 +1392,78 @@ class MessageHandler
         }
     }
 
-    /*
-    checkProfanity_test(msg)
-    {
-        var is_swear = Profane.getCategoryCounts(msg);
-
-        if (is_swear != '{}')
-        {
-            var regex = new RegExp("(.)(?=\\1{1})", "g");
-            var msg_1 = msg.replace(regex, "").split(' ').join('');
-            msg_1 = msg_1.replace(/[^0-9a-z]/gi, '');
-            is_swear = Profane.getCategoryCounts(msg_1);
-            console.log(is_swear);
-        }
-    }
-    */
-
     checkProfanity(msg)
     {
-        var regex = new RegExp("(.)(?=\\1{1})", "g");
-        var msg_1 = msg.replace(regex, "").split(' ').join('');
-        msg_1 = msg_1.replace(/[^0-9a-z]/gi, '');
-
         this.check = 0;
-        this.d_word = ""
-        var arr = [];
+        this.d_word = '';
 
-        for (var i = 0; i < Config.Blacklist.length; i++)
+        var o_msg = msg;
+
+        var regex=/^[0-9A-Za-z]+$/;
+
+        if (/\s/.test(msg))
         {
-          var bWord = Config.Blacklist[i];
-          var regex = new RegExp(bWord, 'gi');
-          var check = msg_1.match(regex);
-          if (check !== null)
-          {
-              this.d_word = bWord;
-              this.check = 1;
-          }
+            msg = msg.split(' ').join('');
         }
 
-        if (this.check > 0)
+        if (!regex.test(msg))
         {
-            for (var i = 0; i < Config.Blacklist.length; i++)
+            msg = msg.replace(/[^0-9a-z]/gi, '');
+        }
+
+        var check_1 = this.profanity.check(msg);
+
+        if (check_1.length <= 0)
+        {
+            check_1 = this.profanity.check(o_msg);
+
+            if (check_1.length <= 0)
             {
-              var bWord = Config.Blacklist[i];
-              var regex = new RegExp(bWord, 'gi');
-              var check = msg.match(regex);
-              if (check !== null)
-              {
-                  this.d_word = bWord;
-                  this.check = 1;
-              }
-          }
+                o_msg = o_msg.split(' ');
+                for (var i = 0; i < o_msg.length; i++)
+                {
+                    var n_msg = o_msg[i];
+
+                    if (!regex.test(n_msg))
+                    {
+                        n_msg = n_msg.replace(/[^0-9a-z]/gi, '');
+                    }
+
+                    var check_2 = this.profanity.check(n_msg);
+
+                    if (check_2.length > 0)
+                    {
+                        this.check = 1;
+                        this.d_word = check_2[0];
+                    }
+                }
+            }
+        }
+        else if (check_1.length > 0)
+        {
+            this.check = 1;
+            this.d_word = check_1[0];
         }
 
-      return [this.check, this.d_word];
+        return [this.check, this.d_word];
+    }
+
+    checkUnique(msg)
+    {
+        for (var i = 0; i < msg.length; i++)
+        {
+            var char = msg[i];
+
+            for (var j = i; j <= msg.length - 1; j++)
+            {
+                if (char == msg[j])
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     getAvatar(message)
