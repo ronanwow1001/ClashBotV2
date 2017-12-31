@@ -9,11 +9,7 @@ class MessageHandler
         this.parent = parent
         this.relib = require('../lib/relib')
         this.exec = require('child_process').exec;
-        this.profanity = require('profanity-util',
-            {
-                forbiddenList: Config.Blacklist
-            }
-        );
+        this.profanity = require('../lib/profanity-util');
     }
 
     /*
