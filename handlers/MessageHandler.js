@@ -107,7 +107,7 @@ class MessageHandler
 
                   .setTimestamp()
                   .addField('**Message**', "```" + msg + "```", true)
-                  .addField('**Parsed Link**', "```" + checkLink[1] + "```", true)
+                  .addField('**Detected Link**', "```" + checkLink[1] + "```", true)
 
                  message.author.send(
                      {
@@ -277,7 +277,7 @@ class MessageHandler
 
                   .setTimestamp()
                   .addField('**Message**', "```" + msg + "```", true)
-                  .addField('**Parsed Link**', "```" + checkLink[1] + "```", true)
+                  .addField('**Detected Link**', "```" + checkLink[1] + "```", true)
 
                  await new_message.author.send(
                      {
