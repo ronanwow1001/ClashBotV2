@@ -67,18 +67,11 @@ class MessageHandler
             {
                 try
                 {
-                    var user_data = Database.getData(`/${uid}/user_unbans[0]`);
+                    var user_data = Database.getData(`/${uid}/suggestion_count[]`);
                 }
                 catch(err)
                 {
                     //Logger.error(err);
-                    Database.push(`/${uid}/link_infractions[]`, {}, true);
-                    Database.push(`/${uid}/profanity_warnings[]`, {}, true);
-                    Database.push(`/${uid}/user_notes[]`, {}, true);
-                    Database.push(`/${uid}/user_warnings[]`, {}, true);
-                    Database.push(`/${uid}/user_kicks[]`, {}, true);
-                    Database.push(`/${uid}/user_bans[]`, {}, true);
-                    Database.push(`/${uid}/user_unbans[]`, {}, true);
                     Database.push(`/${uid}/suggestion_count[]`, {
                         "uv": 0,
                         "dv": 0
