@@ -6,8 +6,8 @@ class MessageHandler
 
     constructor(parent)
     {
-        this.parent = parent
-        this.relib = require('../lib/relib')
+        this.parent = parent;
+        this.linkify = require('linkifyjs');
         this.exec = require('child_process').exec;
         this.profanity = require('../lib/profanity-util');
     }
@@ -1375,17 +1375,24 @@ class MessageHandler
 
     checkLink(msg)
     {
-        var url = this.relib.url;
 
-        if (this.relib.url.contain(msg) == true)
+        if (/\s/.test(msg))
         {
-            var domainArr = this.relib.url.match(msg);
-            return [true, domainArr];
+            msg = msg.split(' ').join('');
+        }
+
+        var find_link = this.linkify.find(msg);
+        var link_len = find_link.length;
+
+        if (link_len > 0)
+        {
+            return [true, find_link[0].value];
         }
         else
         {
             return [false, ''];
         }
+
     }
 
     checkProfanity(msg)
