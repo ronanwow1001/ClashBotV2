@@ -1434,6 +1434,10 @@ class MessageHandler
                     }
                     else
                     {
+                        this.check = 0;
+                        this.d_word = check_2[0]
+
+                        /* // Do not read the word after rebuilding with each character
                         var str = '';
 
                         for (var j = 0; j < o_msg.length; j++)
@@ -1447,7 +1451,7 @@ class MessageHandler
                                 this.check = 1;
                                 this.d_word = check_3[0];
                             }
-                            /*else
+                            else
                             {
                                 for (var j = 0; j < o_msg.length; j++)
                                 {
@@ -1461,8 +1465,10 @@ class MessageHandler
                                         this.d_word = check_4[0];
                                     }
                                 }
-                            }*/
+                            }
                         }
+
+                        */
                     }
                 }
             }
