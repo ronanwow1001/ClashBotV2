@@ -1419,10 +1419,10 @@ class MessageHandler
 
             if (check_1.length <= 0)
             {
-                o_msg = o_msg.split(' ');
-                for (var i = 0; i < o_msg.length; i++)
+                var od_msg = o_msg.split(' ');
+                for (var i = 0; i < od_msg.length; i++)
                 {
-                    var n_msg = o_msg[i];
+                    var n_msg = od_msg[i];
 
                     if (!regex.test(n_msg))
                     {
@@ -1436,7 +1436,44 @@ class MessageHandler
                         this.check = 1;
                         this.d_word = check_2[0];
                     }
+                    else
+                    {
+                        var str = '';
+
+                        for (var j = 0; j < o_msg.length; j++)
+                        {
+                            str += o_msg[j];
+
+                            var check_3 = this.profanity.check(str);
+
+                            if (check_3.length > 0)
+                            {
+                                this.check = 1;
+                                this.d_word = check_3[0];
+                            }
+                            /*else
+                            {
+                                for (var j = 0; j < o_msg.length; j++)
+                                {
+                                    str += od_msg[i][j];
+
+                                    var check_4 = this.profanity.check(str);
+
+                                    if (check_4.length > 0)
+                                    {
+                                        this.check = 1;
+                                        this.d_word = check_4[0];
+                                    }
+                                }
+                            }*/
+                        }
+                    }
                 }
+            }
+            else
+            {
+                this.check = 1;
+                this.d_word = check_1[0];
             }
         }
         else if (check_1.length > 0)
