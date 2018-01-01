@@ -617,19 +617,45 @@ class MessageHandler
                             detected_words = 'None'
                         }
 
-                        const embed = new Discord.RichEmbed()
-                          .setDescription('**Profanity Warning Log**\n')
-                          .setAuthor(message.author.username, this.getAvatar(message))
+                        if (content.length >= 1024)
+                        {
+                            var content_arr = this.splitStr(content);
+                            var d_arr = this.splitStr(detected_words);
+                            console.log(content_arr);
 
-                          .setColor('#FF0000')
-                          .setFooter("© Corporate Clash 2017-2018")
+                            for (var j = 0; j < content_arr.length; j++)
+                            {
+                                const embed = new Discord.RichEmbed()
+                                  .setDescription('**Profanity Warning Log**\n')
+                                  .setAuthor(message.author.username, this.getAvatar(message))
 
-                          .setTimestamp()
-                          .addField('**Content**', content, true)
-                          .addField('**Detected Word**', detected_words, true)
+                                  .setColor('#FF0000')
+                                  .setFooter("© Corporate Clash 2017-2018")
+
+                                  .setTimestamp()
+                                  .addField('**Content**', content_arr[j], true)
+                                  .addField('**Detected Word**', d_arr[j], true)
 
 
-                        this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
+                                this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
+                            }
+                        }
+                        else
+                        {
+                            const embed = new Discord.RichEmbed()
+                              .setDescription('**Profanity Warning Log**\n')
+                              .setAuthor(message.author.username, this.getAvatar(message))
+
+                              .setColor('#FF0000')
+                              .setFooter("© Corporate Clash 2017-2018")
+
+                              .setTimestamp()
+                              .addField('**Content**', content, true)
+                              .addField('**Detected Word**', detected_words, true)
+
+
+                            this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
+                        }
                     }
 
                     if (log_type == 'b')
@@ -1410,7 +1436,13 @@ class MessageHandler
             }
         );
 
+        //channel.send(msg, {split: {maxLength: 1024, char: "\n", prepend: '', append: '' }});
         channel.send(msg);
+    }
+
+    splitStr (str)
+    {
+        return str.match(/[^]{1,1024}/g);
     }
 
     checkLink(msg, channel)
