@@ -98,6 +98,11 @@ class MessageHandler
                     detected_links: checkLink[1]
                 }, true);
 
+                if (msg.length >= 600)
+                {
+                    msg = msg.substring(0, 500);
+                }
+
                 const embed = new Discord.RichEmbed()
                   .setDescription('Our bot has detected you sending invalid links!\nPlease remember the Corporate Clash rules.\n')
                   .setAuthor(author, this.getAvatar(message))
@@ -125,6 +130,11 @@ class MessageHandler
                     detected_word: checkMsg[1]
                 }, true);
 
+                if (msg.length >= 600)
+                {
+                    msg = msg.substring(0, 500);
+                }
+
                 const embed = new Discord.RichEmbed()
                   .setDescription('Our bot has detected you swearing!\nPlease remember no NFSW language is allowed in the Corporate Clash discord.\n')
                   .setAuthor(author, this.getAvatar(message))
@@ -146,6 +156,11 @@ class MessageHandler
                  if (Config.Server.LogMessages === true)
                  {
 
+                     if (msg.length >= 600)
+                     {
+                         msg = msg.substring(0, 500);
+                     }
+
                      const embed = new Discord.RichEmbed()
                        .setDescription(`A message by ${author} has been deleted for profanity.`)
                        .setAuthor(author, this.getAvatar(message))
@@ -160,7 +175,7 @@ class MessageHandler
                        .addField('**User ID**', "```" + uid + "```", true)
                        .addField('**Profanity Warnings**', "```" + this.parent.stats_hndler.getProfanityStats(uid) + "```", true);
 
-                     await this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
+                     this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
                  }
 
                 message.delete();
@@ -193,6 +208,11 @@ class MessageHandler
         {
             //Logger.debug(`(${channel}) - ${uid} - ${author}: ${msg}`);
 
+            if (msg.length >= 600)
+            {
+                msg = msg.substring(0, 500);
+            }
+
             const embed = new Discord.RichEmbed()
               .setDescription(`A message by ${author} has been deleted.`)
               .setAuthor(author, this.getAvatar(message))
@@ -205,7 +225,7 @@ class MessageHandler
               .addField('**Channel**', "```#" + channel + "```", true)
               .addField('**User ID**', "```" + uid + "```", true);
 
-            await this.sendChannelMessage(embed, Config.Server.Channels.Logging);
+            this.sendChannelMessage(embed, Config.Server.Channels.Logging);
         }
     }
 
@@ -230,6 +250,11 @@ class MessageHandler
         if (Config.Server.LogMessages === true)
         {
             //Logger.debug(`EDITED message: (${channel}) - ${uid} - ${author}: ${msg}`);
+
+            if (msg.length >= 600)
+            {
+                msg = msg.substring(0, 500);
+            }
 
             const embed = new Discord.RichEmbed()
               .setDescription(`A message by ${author} has been edited.`)
@@ -268,6 +293,11 @@ class MessageHandler
                     detected_links: checkLink[1]
                 }, true);
 
+                if (msg.length >= 600)
+                {
+                    msg = msg.substring(0, 500);
+                }
+
                 const embed = new Discord.RichEmbed()
                   .setDescription('Our bot has detected you sending invalid links!\nPlease remember the Corporate Clash rules.\n')
                   .setAuthor(author, this.getAvatar(new_message))
@@ -279,7 +309,7 @@ class MessageHandler
                   .addField('**Message**', "```" + msg + "```", true)
                   .addField('**Detected Link**', "```" + checkLink[1] + "```", true)
 
-                 await new_message.author.send(
+                 new_message.author.send(
                      {
                          embed
                      }
@@ -294,6 +324,11 @@ class MessageHandler
                     content: msg,
                     detected_word: checkMsg[1]
                 }, true);
+
+                if (msg.length >= 600)
+                {
+                    msg = msg.substring(0, 500);
+                }
 
                 const embed = new Discord.RichEmbed()
                   .setDescription('Our bot has detected you swearing!\nPlease remember no NFSW language is allowed in the Corporate Clash discord.\n')
@@ -317,6 +352,11 @@ class MessageHandler
                  if (Config.Server.LogMessages === true)
                  {
 
+                     if (msg.length >= 600)
+                     {
+                         msg = msg.substring(0, 500);
+                     }
+
                      const embed = new Discord.RichEmbed()
                        .setDescription(`A message by ${author} that had been edited, has been deleted for profanity.`)
                        .setAuthor(author, this.getAvatar(new_message))
@@ -332,14 +372,14 @@ class MessageHandler
                        .addField('**User ID**', "```" + uid + "```", true)
                        .addField('**Profanity Warnings**', "```" + this.parent.stats_hndler.getProfanityStats(uid) + "```", true);
 
-                    await this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
+                    this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
                  }
 
                 new_message.delete();
             }
             else
             {
-                await this.handleMessage(new_message);
+                this.handleMessage(new_message);
             }
         }
     }
@@ -384,7 +424,7 @@ class MessageHandler
                   .addField('**Total Score**', `**${total}**`, true)
 
 
-                await this.sendChannelMessage(embed, Config.Server.Channels.ToonHQ);
+                this.sendChannelMessage(embed, Config.Server.Channels.ToonHQ);
             }
         }
 
@@ -431,7 +471,7 @@ class MessageHandler
                       .addField('**Ban Points**', this.parent.stats_hndler.getBanPoints(target_id), true)
 
 
-                    await this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
+                    this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
                 }
             }
             else if ((msg.startsWith(`${command_prefix}user`)) && (this.checkPerms(message, uid) === false))
@@ -547,7 +587,7 @@ class MessageHandler
                           .addField('**Detected Links**', detected_links, true)
 
 
-                        await this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
+                        this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
                     }
 
                     if (log_type == 'pw')
@@ -589,7 +629,7 @@ class MessageHandler
                           .addField('**Detected Word**', detected_words, true)
 
 
-                        await this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
+                        this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
                     }
 
                     if (log_type == 'b')
@@ -639,7 +679,7 @@ class MessageHandler
                           .addField('**Invoker ID**', inv_id, true)
 
 
-                        await this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
+                        this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
                     }
 
                     if (log_type == 'w')
@@ -689,7 +729,7 @@ class MessageHandler
                           .addField('**Invoker ID**', inv_id, true)
 
 
-                        await this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
+                        this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
                     }
 
                     if (log_type == 'n')
@@ -739,7 +779,7 @@ class MessageHandler
                           .addField('**Invoker ID**', inv_id, true)
 
 
-                        await this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
+                        this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
                     }
 
                     if (log_type == 'k')
@@ -789,7 +829,7 @@ class MessageHandler
                           .addField('**Invoker ID**', inv_id, true)
 
 
-                        await this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
+                        this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
                     }
                 }
             }
@@ -1370,7 +1410,7 @@ class MessageHandler
             }
         );
 
-        await channel.send(msg);
+        channel.send(msg);
     }
 
     checkLink(msg, channel)
@@ -1477,39 +1517,6 @@ class MessageHandler
                     {
                         this.check = 0;
                         this.d_word = check_2[0]
-
-                        /* // Do not read the word after rebuilding with each character
-                        var str = '';
-
-                        for (var j = 0; j < o_msg.length; j++)
-                        {
-                            str += o_msg[j];
-
-                            var check_3 = this.profanity.check(str);
-
-                            if (check_3.length > 0)
-                            {
-                                this.check = 1;
-                                this.d_word = check_3[0];
-                            }
-                            else
-                            {
-                                for (var j = 0; j < o_msg.length; j++)
-                                {
-                                    str += od_msg[i][j];
-
-                                    var check_4 = this.profanity.check(str);
-
-                                    if (check_4.length > 0)
-                                    {
-                                        this.check = 1;
-                                        this.d_word = check_4[0];
-                                    }
-                                }
-                            }
-                        }
-
-                        */
                     }
                 }
             }
