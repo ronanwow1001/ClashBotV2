@@ -68,15 +68,17 @@ class MessageHandler
             {
                 try
                 {
-                    var user_data = Database.getData(`/${uid}/suggestion_count[]`);
+                    var user_data = Database.getData(`/${uid}/suggestion_count[0]`);
                 }
                 catch(err)
                 {
-                    //Logger.error(err);
-                    Database.push(`/${uid}/suggestion_count[]`, {
-                        "uv": 0,
-                        "dv": 0
-                    }, true);
+                    if (err.message.startsWith('Can\'t find dataPath:'))
+                    {
+                        Database.push(`/${uid}/suggestion_count[]`, {
+                            "uv": 0,
+                            "dv": 0
+                        }, true);
+                    }
                 }
             }
 
@@ -617,45 +619,19 @@ class MessageHandler
                             detected_words = 'None'
                         }
 
-                        if (content.length >= 1024)
-                        {
-                            var content_arr = this.splitStr(content);
-                            var d_arr = this.splitStr(detected_words);
-                            console.log(content_arr);
+                        const embed = new Discord.RichEmbed()
+                          .setDescription('**Profanity Warning Log**\n')
+                          .setAuthor(message.author.username, this.getAvatar(message))
 
-                            for (var j = 0; j < content_arr.length; j++)
-                            {
-                                const embed = new Discord.RichEmbed()
-                                  .setDescription('**Profanity Warning Log**\n')
-                                  .setAuthor(message.author.username, this.getAvatar(message))
+                          .setColor('#FF0000')
+                          .setFooter("© Corporate Clash 2017-2018")
 
-                                  .setColor('#FF0000')
-                                  .setFooter("© Corporate Clash 2017-2018")
-
-                                  .setTimestamp()
-                                  .addField('**Content**', content_arr[j], true)
-                                  .addField('**Detected Word**', d_arr[j], true)
+                          .setTimestamp()
+                          .addField('**Content**', content, true)
+                          .addField('**Detected Word**', detected_words, true)
 
 
-                                this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
-                            }
-                        }
-                        else
-                        {
-                            const embed = new Discord.RichEmbed()
-                              .setDescription('**Profanity Warning Log**\n')
-                              .setAuthor(message.author.username, this.getAvatar(message))
-
-                              .setColor('#FF0000')
-                              .setFooter("© Corporate Clash 2017-2018")
-
-                              .setTimestamp()
-                              .addField('**Content**', content, true)
-                              .addField('**Detected Word**', detected_words, true)
-
-
-                            this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
-                        }
+                        this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
                     }
 
                     if (log_type == 'b')
