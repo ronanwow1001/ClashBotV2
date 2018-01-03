@@ -508,7 +508,7 @@ class MessageHandler
                 {
                     message.reply('please supply a valid log type!')
                 }
-                else if (item_id < 0)
+                else if (item_id < -1)
                 {
                     message.reply('please supply the item for removal!')
                 }

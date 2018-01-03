@@ -13,26 +13,54 @@ class StatsHandler
 
     getProfanityStats(uid)
     {
-        var stats = Database.getData(`/${uid}/profanity_warnings`);
-        return (stats.length - 1);
+        try
+        {
+            var stats = Database.getData(`/${uid}/profanity_warnings`);
+            return (stats.length);
+        }
+        catch (err)
+        {
+            return (0);
+        }
     }
 
     getModPoints(uid)
     {
-        var stats = Database.getData(`/${uid}/user_warnings`);
-        return (stats.length - 1);
+        try
+        {
+            var stats = Database.getData(`/${uid}/user_warnings`);
+            return (stats.length);
+        }
+        catch (err)
+        {
+            return (0);
+        }
     }
 
     getKickPoints(uid)
     {
-        var stats = Database.getData(`/${uid}/user_kicks`);
-        return (stats.length - 1);
+        try
+        {
+            var stats = Database.getData(`/${uid}/user_kicks`);
+            return (stats.length);
+        }
+        catch (err)
+        {
+            return (0);
+        }
     }
 
     getBanPoints(uid)
     {
-        var stats = Database.getData(`/${uid}/user_bans`);
-        return (stats.length - 1);
+        try
+        {
+            var stats = Database.getData(`/${uid}/user_bans`);
+            return (stats.length);
+        }
+        catch (err)
+        {
+            return (0);
+        }
     }
 }
 
