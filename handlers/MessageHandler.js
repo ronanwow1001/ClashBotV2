@@ -836,13 +836,15 @@ class MessageHandler
                 }
             }
 
-            if ((msg.startsWith(`${command_prefix}mute`)) && (this.checkPerms(message, uid) === true))
+            if ((msg.startsWith(`${command_prefix}limit`)) && (this.checkPerms(message, uid) === true))
             {
                 var split_msg = msg.split(' ');
                 var target_id = split_msg[1];
                 var g_member = message.guild.members.get(target_id)
-                var mute_type = this.removeFirstTwoParams(msg);
-                var check_type = this.checkMuteType(mute_type);
+                var limit_type = this.removeFirstTwoParams(msg);
+                    limit_type = limit_type.split(' ')[0];
+                var check_type = this.checkLimitType(limit_type);
+                var reason = this.removeFirstThreeParams(msg);
 
                 if (target_id === undefined)
                 {
@@ -852,13 +854,17 @@ class MessageHandler
                 {
                     message.reply('this user does not exist!')
                 }
-                else if (/^\s*$/.test(log_type) == true)
+                else if (/^\s*$/.test(limit_type) == true)
                 {
-                    message.reply('please supply a mute type!')
+                    message.reply('please supply a limit type!')
                 }
                 else if (check_type[0] == false)
                 {
-                    message.reply('please supply a valid mute type!')
+                    message.reply('please supply a valid limit type!')
+                }
+                else if (/^\s*$/.test(reason) == true)
+                {
+                    message.reply('please supply a valid reason!')
                 }
                 else
                 {
@@ -866,47 +872,118 @@ class MessageHandler
                     var roles = this.parent.bot.guilds.first().roles.array();
                     var role = roles.find(r => r.name === check_type[1]);
                     var has_role = g_member.roles.find(r => r.name === check_type[1]);
+                    var type = 0;
 
-                    if (mute_type == 'a')
+                    if (limit_type == 'a')
                     {
                         if (has_role == null)
                         {
-                            g_member.addRole(role);
-                            message.reply('user has been art limited!');
+                            g_member.addRole(role, [reason]);
+                            message.reply(`user has been art limited because: ${reason}`);
+                            type = 1;
                         }
                         else
                         {
-                            g_member.removeRole(role);
-                            message.reply('user has been un-art limited!');
+                            g_member.removeRole(role, [reason]);
+                            message.reply(`user has been art un-limited because: ${reason}`);
                         }
                     }
 
-                    if (mute_type == 's')
+                    if (limit_type == 's')
                     {
                         if (has_role == null)
                         {
-                            g_member.addRole(role);
-                            message.reply('user has been suggestion limited!');
+                            g_member.addRole(role, [reason]);
+                            message.reply(`user has been suggestion limited because: ${reason}`);
+                            type = 1;
                         }
                         else
                         {
-                            g_member.removeRole(role);
-                            message.reply('user has been un-suggestion limited!');
+                            g_member.removeRole(role, [reason])
+                            message.reply(`user has been suggestion un-limited because: ${reason}`);
                         }
                     }
 
-                    if (mute_type == 'hq')
+                    if (limit_type == 'm')
                     {
                         if (has_role == null)
                         {
-                            g_member.addRole(role);
-                            message.reply('user has been hq limited!');
+                            g_member.addRole(role, [reason]);
+                            message.reply(`user has been muted because: ${reason}`);
+                            type = 1;
                         }
                         else
                         {
-                            g_member.removeRole(role);
-                            message.reply('user has been un-hq limited!');
+                            g_member.removeRole(role, [reason])
+                            message.reply(`user has been unmuted because: ${reason}`);
                         }
+                    }
+
+                    if (limit_type == 'hq')
+                    {
+                        if (has_role == null)
+                        {
+                            g_member.addRole(role, [reason]);
+                            message.reply(`user has been hq limited because: ${reason}`);
+                            type = 1;
+                        }
+                        else
+                        {
+                            g_member.removeRole(role, [reason])
+
+                            message.reply(`user has been hq un-limited because: ${reason}`);
+                        }
+                    }
+
+                    if (type == 1)
+                    {
+                        const embed = new Discord.RichEmbed()
+                          .setDescription('**You\'ve been give restricted in the Corporate Clash discord for violation of our terms.**\n')
+                          .setAuthor(g_member.user.username, this.getAnonAvatar(message, target_id))
+
+                          .setColor('#FF0000')
+                          .setFooter("© Corporate Clash 2017-2018")
+
+                          .setTimestamp()
+                          .addField('**Role**', '```' + role.name + '```', true)
+                          .addField('**Reason**', '```' + reason + '```', true)
+
+                      try
+                      {
+                          g_member.user.send(
+                              {
+                                  embed
+                              }
+                          )
+                      }
+                      catch(err)
+                      {
+                          message.reply(err);
+                      }
+                    }
+                    else
+                    {
+                        const embed = new Discord.RichEmbed()
+                          .setDescription('**You\'re restriction from the Corporate Clash discord has been lifted.**\n')
+                          .setAuthor(g_member.user.username, this.getAnonAvatar(message, target_id))
+
+                          .setColor('#FF0000')
+                          .setFooter("© Corporate Clash 2017-2018")
+
+                          .setTimestamp()
+
+                      try
+                      {
+                          g_member.user.send(
+                              {
+                                  embed
+                              }
+                          )
+                      }
+                      catch(err)
+                      {
+                          message.reply(err);
+                      }
                     }
                 }
             }
@@ -1553,12 +1630,20 @@ class MessageHandler
         return message.guild.members.get(message.author.id).user.avatarURL;
     }
 
-    checkMuteType(type)
+    getAnonAvatar(message, id)
+    {
+        return message.guild.members.get(id).user.avatarURL;
+    }
+
+    checkLimitType(type)
     {
         switch(type)
         {
             case 's':
                 return [true, 'Suggestion Limit'];
+                break;
+            case 'm':
+                return [true, 'Mute'];
                 break;
             case 'a':
                 return [true, 'Art Limit'];
