@@ -51,11 +51,10 @@ class MessageHandler
             (err, out, stderr) =>
                 {
                     message.reply(`reply: ${out}`);
-                    console.log(`${stderr}`);
 
                     if (err !== null)
                     {
-                        console.log(`exec error: ${err}`);
+                        message.reply(`exec error: ${err}`);
                     }
                 }
             );
