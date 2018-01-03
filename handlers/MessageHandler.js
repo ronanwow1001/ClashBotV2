@@ -84,9 +84,8 @@ class MessageHandler
                 }
             }
 
-            if (Config.Server.Admins.includes(uid))
+            if (this.checkPerms(message, uid) === true)
             {
-                var checkMsg = 0;
                 var checkLink = [false, ''];
             }
             else
@@ -279,9 +278,8 @@ class MessageHandler
         if (new_message.channel.type == "text")
         {
 
-            if (Config.Server.Admins.includes(uid))
+            if (this.checkPerms(new_message, uid) === true)
             {
-                var checkMsg = 0;
                 var checkLink = [false, ''];
             }
             else
