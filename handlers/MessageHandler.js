@@ -1389,62 +1389,6 @@ class MessageHandler
         }
     }
 
-    silence(guildUser, user, message, role)
-    {
-        if (guildUser.roles.find(r => r.name === Config.Roles.Muted) == null)
-        {
-            guildUser.addRole(role);
-            message.reply(`I've muted the user: ${user.username}`);
-
-            const embed = new Discord.RichEmbed()
-              .setDescription('**You\'ve been muted in the Corporate Clash discord for moderation purposes.**\n')
-              .setAuthor(user.username, this.getAvatar(message))
-
-              .setColor('#FF0000')
-              .setFooter("© Corporate Clash 2017-2018")
-
-              .setTimestamp();
-
-             user.send(
-                 {
-                     embed
-                 }
-             );
-        }
-        else
-        {
-            message.reply(`${user.username} is already muted!`);
-        }
-    }
-
-    un_silence(guildUser, user, message, role)
-    {
-        if (guildUser.roles.find(r => Config.Roles.includes(r.name)) !== null)
-        {
-            guildUser.removeRole(role);
-            message.reply(`I unmuted the user: ${user.username}`);
-
-            const embed = new Discord.RichEmbed()
-              .setDescription('**Your mute has been lifted in the Corporate Clash discord.**\n')
-              .setAuthor(user.username, this.getAvatar(message))
-
-              .setColor('#FF0000')
-              .setFooter("© Corporate Clash 2017-2018")
-
-              .setTimestamp();
-
-             user.send(
-                 {
-                     embed
-                 }
-             );
-        }
-        else
-        {
-            message.reply(`${user.username} is not muted!`);
-        }
-    }
-
     async sendChannelMessage(msg, channel)
     {
         var channels = this.parent.bot.channels.array();
