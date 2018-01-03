@@ -853,6 +853,74 @@ class MessageHandler
                 message.author.send('sorry but you don\'t have the proper permissions to execute this command!')
             }
 
+            if ((msg.startsWith(`${command_prefix}s_mute`)) && (this.checkPerms(message, uid) === true))
+            {
+                if (message.mentions.users.first())
+                {
+                    var time = 0;
+                    var self = this;
+                    var user = message.mentions.users.first();
+                    var guildUser = message.guild.members.get(user.id);
+                    var role = guildUser.guild.roles.find(r => r.name == Config.Roles.MutedSuggestions);
+                    this.silence(guildUser, user, message, role);
+                }
+            }
+            else if ((msg.startsWith(`${command_prefix}s_mute`)) && (this.checkPerms(message, uid) === false))
+            {
+                message.author.send('sorry but you don\'t have the proper permissions to execute this command!')
+            }
+
+            if ((msg.startsWith(`${command_prefix}s_unmute`)) && (this.checkPerms(message, uid) === true))
+            {
+                if (message.mentions.users.first())
+                {
+                    var time = 0;
+                    var self = this;
+                    var user = message.mentions.users.first();
+                    var guildUser = message.guild.members.get(user.id);
+                    var role = guildUser.guild.roles.find(r => r.name == Config.Roles.MutedSuggestions);
+                    this.un_silence(guildUser, user, message, role);
+                }
+            }
+            else if ((msg.startsWith(`${command_prefix}s_unmute`)) && (this.checkPerms(message, uid) === false))
+            {
+                message.author.send('sorry but you don\'t have the proper permissions to execute this command!')
+            }
+
+            if ((msg.startsWith(`${command_prefix}a_mute`)) && (this.checkPerms(message, uid) === true))
+            {
+                if (message.mentions.users.first())
+                {
+                    var time = 0;
+                    var self = this;
+                    var user = message.mentions.users.first();
+                    var guildUser = message.guild.members.get(user.id);
+                    var role = guildUser.guild.roles.find(r => r.name == Config.Roles.MutedArt);
+                    this.silence(guildUser, user, message, role);
+                }
+            }
+            else if ((msg.startsWith(`${command_prefix}a_mute`)) && (this.checkPerms(message, uid) === false))
+            {
+                message.author.send('sorry but you don\'t have the proper permissions to execute this command!')
+            }
+
+            if ((msg.startsWith(`${command_prefix}a_unmute`)) && (this.checkPerms(message, uid) === true))
+            {
+                if (message.mentions.users.first())
+                {
+                    var time = 0;
+                    var self = this;
+                    var user = message.mentions.users.first();
+                    var guildUser = message.guild.members.get(user.id);
+                    var role = guildUser.guild.roles.find(r => r.name == Config.Roles.MutedArt);
+                    this.un_silence(guildUser, user, message, role);
+                }
+            }
+            else if ((msg.startsWith(`${command_prefix}a_unmute`)) && (this.checkPerms(message, uid) === false))
+            {
+                message.author.send('sorry but you don\'t have the proper permissions to execute this command!')
+            }
+
             if ((msg.startsWith(`${command_prefix}unmute`)) && (this.checkPerms(message, uid) === true))
             {
                 if (message.mentions.users.first())
@@ -1376,7 +1444,7 @@ class MessageHandler
 
     un_silence(guildUser, user, message, role)
     {
-        if (guildUser.roles.find(r => r.name === Config.Roles.Muted) !== null)
+        if (guildUser.roles.find(r => Config.Roles.includes(r.name)) !== null)
         {
             guildUser.removeRole(role);
             message.reply(`I unmuted the user: ${user.username}`);
