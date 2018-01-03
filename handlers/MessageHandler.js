@@ -458,19 +458,27 @@ class MessageHandler
 
                       .setTimestamp()
                       .setImage(u_member.avatarURL)
+
                       .addField('**ID**', g_member.id, true)
                       .addField('**Username**', u_member.username, true)
                       .addField('**Tag**', u_member.tag, true)
                       .addField('**Avatar URL**', u_member.avatarURL, true)
                       .addField('**Is bot?**', u_member.bot, true)
+
                       .addField('**Account Creation**', u_member.createdAt, true)
                       .addField('**Highest Role**', g_member.highestRole, true)
                       .addField('**Join Date**', g_member.joinedAt, true)
                       .addField('**Display Name**', g_member.displayName, true)
+
                       .addField('**Profanity Warnings**', this.parent.stats_hndler.getProfanityStats(target_id), true)
                       .addField('**Moderation Warnings**', this.parent.stats_hndler.getModPoints(target_id), true)
                       .addField('**Kick Points**', this.parent.stats_hndler.getKickPoints(target_id), true)
                       .addField('**Ban Points**', this.parent.stats_hndler.getBanPoints(target_id), true)
+
+                      .addField('**HQ Limit**', this.checkRole(target_id, 'HQ Limit'), true)
+                      .addField('**Art Limit**', this.checkRole(target_id, 'Art Limit'), true)
+                      .addField('**Suggestion Limit**', this.checkRole(target_id, 'Suggestion Limit'), true)
+                      .addField('**Muted**', this.checkRole(target_id, 'Muted'), true)
 
 
                     this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
@@ -1457,6 +1465,20 @@ class MessageHandler
     checkPerms(message, uid)
     {
         if (message.guild.members.get(uid).roles.find(r => r.name === Config.Roles.Staff) !== null)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    checkRole(uid, role_name)
+    {
+        var roles = this.parent.bot.guilds.first().members.get(uid).roles.array();
+
+        if (roles.find(r => r.name === role_name))
         {
             return true;
         }
