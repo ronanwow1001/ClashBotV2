@@ -10,6 +10,8 @@ class MessageHandler
         this.linkify = require('linkifyjs');
         this.exec = require('child_process').exec;
         this.profanity = require('../lib/profanity-util');
+        this.fs = require('fs');
+        this.shell = require('shelljs');
     }
 
     /*
@@ -529,6 +531,41 @@ class MessageHandler
                 }
             }
 
+            if ((msg.startsWith(`${command_prefix}testlog`)) && (this.checkPerms(message, uid) === true))
+            {
+                let target_id = '300403718959136769';
+                let db_type = 'link_infractions';
+                let path = `./u_logs/${target_id}`;
+
+                this.fs.exists(path,
+                (exists) =>
+                    {
+                        if (exists === false)
+                        {
+                            this.shell.mkdir('-p', path);
+                        }
+
+                        let stream = this.fs.createWriteStream(`${path}/${db_type}.log`);
+
+                        for (var i = 0; i < 10; i ++)
+                        {
+                            stream.write('hi\n', 'utf8');
+                        }
+
+                        stream.on('finish',
+                        () =>
+                            {
+                                let file = new Discord.Attachment(`${path}/${db_type}.log`, `${target_id}_${db_type}.log`)
+                                this.sendChannelMessage(file, Config.Server.Channels.Moderation);
+                            }
+                        );
+
+                        stream.end();
+                    }
+                );
+            }
+
+
             if ((msg.startsWith(`${command_prefix}log`)) && (this.checkPerms(message, uid) === true))
             {
                 var split_msg = msg.split(' ');
@@ -536,6 +573,7 @@ class MessageHandler
                 var g_member = message.guild.members.get(target_id)
                 var log_type = this.removeFirstTwoParams(msg);
                 var check_type = this.checkLogType(log_type);
+                var db_type = check_type[1];
 
                 if (target_id === undefined)
                 {
@@ -555,292 +593,84 @@ class MessageHandler
                 }
                 else
                 {
-                    var db_type = check_type[1];
-                    var arr = [];
+                    let path = `./u_logs/${target_id}`;
 
-                    if (log_type == 'li')
-                    {
-                        var content = '';
-                        var detected_links = '';
-                        var p = Database.getData(`/${target_id}/${db_type}`);
-
-                        for (var i = 1; i < p.length; i++)
+                    this.fs.exists(path,
+                    (exists) =>
                         {
-                            var obj = p[i];
-                            var inc = i - 1;
-                            if (obj.content != undefined)
+                            if (exists === false)
                             {
-                                content += `(${inc}) ${obj.content}\n`
-                                detected_links += `(${inc}) ${obj.detected_links}\n`
+                                this.shell.mkdir('-p', path);
                             }
-                        }
 
-                        if (content == '')
-                        {
-                            content = 'None'
-                        }
+                            let stream = this.fs.createWriteStream(`${path}/${db_type}.log`);
 
-                        if (detected_links == '')
-                        {
-                            detected_links = 'None'
-                        }
+                            var p = Database.getData(`/${target_id}/${db_type}`);
 
-                        const embed = new Discord.RichEmbed()
-                          .setDescription('**Link Infraction Log**\n')
-                          .setAuthor(message.author.username, this.getAvatar(message))
-
-                          .setColor('#FF0000')
-                          .setFooter("© Corporate Clash 2017-2018")
-
-                          .setTimestamp()
-                          .addField('**Content**', content, true)
-                          .addField('**Detected Links**', detected_links, true)
-
-
-                        this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
-                    }
-
-                    if (log_type == 'pw')
-                    {
-                        var content = '';
-                        var detected_words = '';
-                        var p = Database.getData(`/${target_id}/${db_type}`);
-
-                        for (var i = 1; i < p.length; i++)
-                        {
-                            var obj = p[i];
-                            var inc = i - 1;
-                            if (obj.content != undefined)
+                            if (log_type == 'li')
                             {
-                                content += `(${inc}) ${obj.content}\n`
-                                detected_words += `(${inc}) ${obj.detected_word}\n`
+                                for (let i = 1; i < p.length; i++)
+                                {
+                                    let obj = p[i];
+                                    let inc = i - 1;
+                                    if (obj.content != undefined)
+                                    {
+                                        stream.write(`|${inc}| - |${obj.content}| - |${obj.detected_links}| \n\n`, 'utf8');
+                                    }
+                                }
                             }
-                        }
 
-                        if (content == '')
-                        {
-                            content = 'None'
-                        }
-
-                        if (detected_words == '')
-                        {
-                            detected_words = 'None'
-                        }
-
-                        const embed = new Discord.RichEmbed()
-                          .setDescription('**Profanity Warning Log**\n')
-                          .setAuthor(message.author.username, this.getAvatar(message))
-
-                          .setColor('#FF0000')
-                          .setFooter("© Corporate Clash 2017-2018")
-
-                          .setTimestamp()
-                          .addField('**Content**', content, true)
-                          .addField('**Detected Word**', detected_words, true)
-
-
-                        this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
-                    }
-
-                    if (log_type == 'b')
-                    {
-                        var reason = '';
-                        var inv = '';
-                        var inv_id = '';
-                        var p = Database.getData(`/${target_id}/${db_type}`);
-
-                        for (var i = 0; i < p.length; i++)
-                        {
-                            var obj = p[i];
-                            var inc = i - 1;
-                            if (obj.reason != undefined)
+                            if (log_type == 'pw')
                             {
-                                reason += `(${inc}) ${obj.reason}\n`
-                                inv += `(${inc}) ${obj.invoker}\n`
-                                inv_id += `(${inc}) ${obj.invoker_id}\n`
+                                for (let i = 1; i < p.length; i++)
+                                {
+                                    let obj = p[i];
+                                    let inc = i - 1;
+                                    if (obj.content != undefined)
+                                    {
+                                        stream.write(`|${inc}| - |${obj.content}| - |${obj.detected_word}| \n\n`, 'utf8');
+                                    }
+                                }
                             }
-                        }
 
-                        if (reason == '')
-                        {
-                            reason = 'None'
-                        }
-
-                        if (inv == '')
-                        {
-                            inv = 'None'
-                        }
-
-                        if (inv_id == '')
-                        {
-                            inv_id = 'None'
-                        }
-
-                        const embed = new Discord.RichEmbed()
-                          .setDescription('**User Ban Log**\n')
-                          .setAuthor(message.author.username, this.getAvatar(message))
-
-                          .setColor('#FF0000')
-                          .setFooter("© Corporate Clash 2017-2018")
-
-                          .setTimestamp()
-                          .addField('**Reason**', reason, true)
-                          .addField('**Invoker**', inv, true)
-                          .addField('**Invoker ID**', inv_id, true)
-
-
-                        this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
-                    }
-
-                    if (log_type == 'w')
-                    {
-                        var reason = '';
-                        var inv = '';
-                        var inv_id = '';
-                        var p = Database.getData(`/${target_id}/${db_type}`);
-
-                        for (var i = 0; i < p.length; i++)
-                        {
-                            var obj = p[i];
-                            var inc = i - 1;
-                            if (obj.reason != undefined)
+                            if ([ 'w', 'k', 'b' ].includes(log_type) === true)
                             {
-                                reason += `(${inc}) ${obj.reason}\n`
-                                inv += `(${inc}) ${obj.invoker}\n`
-                                inv_id += `(${inc}) ${obj.invoker_id}\n`
+                                for (let i = 1; i < p.length; i++)
+                                {
+                                    let obj = p[i];
+                                    let inc = i - 1;
+                                    console.log(obj);
+                                    if (obj.reason != undefined)
+                                    {
+                                        stream.write(`|${inc}| - |${obj.reason}| - |${obj.invoker}:${obj.invoker_id}| \n\n`, 'utf8');
+                                    }
+                                }
                             }
-                        }
 
-                        if (reason == '')
-                        {
-                            reason = 'None'
-                        }
-
-                        if (inv == '')
-                        {
-                            inv = 'None'
-                        }
-
-                        if (inv_id == '')
-                        {
-                            inv_id = 'None'
-                        }
-
-                        const embed = new Discord.RichEmbed()
-                          .setDescription('**Moderation Warning Log**\n')
-                          .setAuthor(message.author.username, this.getAvatar(message))
-
-                          .setColor('#FF0000')
-                          .setFooter("© Corporate Clash 2017-2018")
-
-                          .setTimestamp()
-                          .addField('**Reason**', reason, true)
-                          .addField('**Invoker**', inv, true)
-                          .addField('**Invoker ID**', inv_id, true)
-
-
-                        this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
-                    }
-
-                    if (log_type == 'n')
-                    {
-                        var content = '';
-                        var inv = '';
-                        var inv_id = '';
-                        var p = Database.getData(`/${target_id}/${db_type}`);
-
-                        for (var i = 0; i < p.length; i++)
-                        {
-                            var obj = p[i];
-                            var inc = i - 1;
-                            if (obj.content != undefined)
+                            if (log_type == 'n')
                             {
-                                content += `(${inc}) ${obj.content}\n`
-                                inv += `(${inc}) ${obj.invoker}\n`
-                                inv_id += `(${inc}) ${obj.invoker_id}\n`
+                                for (let i = 1; i < p.length; i++)
+                                {
+                                    let obj = p[i];
+                                    let inc = i - 1;
+                                    if (obj.content != undefined)
+                                    {
+                                        stream.write(`|${inc}| - |${obj.content}| - |${obj.invoker}:${obj.invoker_id}| \n\n`, 'utf8');
+                                    }
+                                }
                             }
+
+                            stream.on('finish',
+                            () =>
+                                {
+                                    let file = new Discord.Attachment(`${path}/${db_type}.log`, `${target_id}_${db_type}.log`)
+                                    this.sendChannelMessage(file, Config.Server.Channels.Moderation);
+                                }
+                            );
+
+                            stream.end();
                         }
-
-                        if (content == '')
-                        {
-                            content = 'None'
-                        }
-
-                        if (inv == '')
-                        {
-                            inv = 'None'
-                        }
-
-                        if (inv_id == '')
-                        {
-                            inv_id = 'None'
-                        }
-
-                        const embed = new Discord.RichEmbed()
-                          .setDescription('**User Notes**\n')
-                          .setAuthor(message.author.username, this.getAvatar(message))
-
-                          .setColor('#FF0000')
-                          .setFooter("© Corporate Clash 2017-2018")
-
-                          .setTimestamp()
-                          .addField('**Content**', content, true)
-                          .addField('**Invoker**', inv, true)
-                          .addField('**Invoker ID**', inv_id, true)
-
-
-                        this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
-                    }
-
-                    if (log_type == 'k')
-                    {
-                        var reason = '';
-                        var inv = '';
-                        var inv_id = '';
-                        var p = Database.getData(`/${target_id}/${db_type}`);
-
-                        for (var i = 0; i < p.length; i++)
-                        {
-                            var obj = p[i];
-                            var inc = i - 1;
-                            if (obj.reason != undefined)
-                            {
-                                reason += `(${inc}) ${obj.reason}\n`
-                                inv += `(${inc}) ${obj.invoker}\n`
-                                inv_id += `(${inc}) ${obj.invoker_id}\n`
-                            }
-                        }
-
-                        if (reason == '')
-                        {
-                            reason = 'None'
-                        }
-
-                        if (inv == '')
-                        {
-                            inv = 'None'
-                        }
-
-                        if (inv_id == '')
-                        {
-                            inv_id = 'None'
-                        }
-
-                        const embed = new Discord.RichEmbed()
-                          .setDescription('**User Kick Log**\n')
-                          .setAuthor(message.author.username, this.getAvatar(message))
-
-                          .setColor('#FF0000')
-                          .setFooter("© Corporate Clash 2017-2018")
-
-                          .setTimestamp()
-                          .addField('**Reason**', reason, true)
-                          .addField('**Invoker**', inv, true)
-                          .addField('**Invoker ID**', inv_id, true)
-
-
-                        this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
-                    }
+                    );
                 }
             }
 
