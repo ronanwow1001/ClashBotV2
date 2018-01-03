@@ -3,8 +3,11 @@
 
     "Roles":
     {
-        "Muted": "Muted",
-        "Staff": "admin"
+        "Staff": "admin",
+        "Mute": "Mute",
+        "HQLimit": "HQ Limit",
+        "ArtLimit": "Art Limit",
+        "SuggestionLimit": "Suggestion Limit"
     },
 
     "Sentry":
@@ -30,7 +33,11 @@
                 "http://youtube.com/",
                 "youtu.be",
                 "www.youtube.com",
-                "youtube.com"
+                "youtube.com",
+                "gyazo.com",
+                "https://gyazo.com",
+                "http://prntscr.com",
+                "prntscr.com"
             ],
 
             "Default":
@@ -38,7 +45,11 @@
                 "http://corporateclash.net/",
                 "http://corpclash.com/",
                 "corporateclash.net",
-                "corpclash.com"
+                "corpclash.com",
+                "gyazo.com",
+                "https://gyazo.com",
+                "http://prntscr.com",
+                "prntscr.com"
             ]
         },
 
@@ -48,12 +59,12 @@
             "Moderation": "moderation",
             "Logging": "logging",
             "Suggestions": "suggestions",
-            "ToonHQ": "hq"
+            "ToonHQ": "toonhq"
         },
 
         "Admins":
         [
-            ""
+            "1234567891011121314"
         ],
 
         "Rules":
@@ -375,8 +386,10 @@
 		"kys",
 		"suicide",
 		"red room",
+        "retard",
 		"off yourself",
 		"kill yourself",
-		"fatass"
+		"fatass",
+        "coon"
 	]
 }

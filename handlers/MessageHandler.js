@@ -475,10 +475,10 @@ class MessageHandler
                       .addField('**Kick Points**', this.parent.stats_hndler.getKickPoints(target_id), true)
                       .addField('**Ban Points**', this.parent.stats_hndler.getBanPoints(target_id), true)
 
-                      .addField('**HQ Limit**', this.checkRole(target_id, 'HQ Limit'), true)
-                      .addField('**Art Limit**', this.checkRole(target_id, 'Art Limit'), true)
-                      .addField('**Suggestion Limit**', this.checkRole(target_id, 'Suggestion Limit'), true)
-                      .addField('**Muted**', this.checkRole(target_id, 'Muted'), true)
+                      .addField('**HQ Limit**', this.checkRole(target_id, Config.Roles.HQLimit), true)
+                      .addField('**Art Limit**', this.checkRole(target_id, Config.Roles.ArtLimit), true)
+                      .addField('**Suggestion Limit**', this.checkRole(target_id, Config.Roles.SuggestionLimit), true)
+                      .addField('**Muted**', this.checkRole(target_id, Config.Roles.Mute), true)
 
 
                     this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
@@ -1662,16 +1662,16 @@ class MessageHandler
         switch(type)
         {
             case 's':
-                return [true, 'Suggestion Limit'];
+                return [true, Config.Roles.SuggestionLimit];
                 break;
             case 'm':
-                return [true, 'Mute'];
+                return [true, Config.Roles.Mute];
                 break;
             case 'a':
-                return [true, 'Art Limit'];
+                return [true, Config.Roles.ArtLimit];
                 break;
             case 'hq':
-                return [true, 'HQ Limit'];
+                return [true, Config.Roles.HQLimit];
                 break;
             default:
                 return [false, ''];
