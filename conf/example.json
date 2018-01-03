@@ -59,12 +59,13 @@
             "Moderation": "moderation",
             "Logging": "logging",
             "Suggestions": "suggestions",
-            "ToonHQ": "toonhq"
+            "ToonHQ": "toonhq",
+            "Art": "art"
         },
 
         "Admins":
         [
-            "1234567891011121314"
+            "12345678910121314"
         ],
 
         "Rules":
