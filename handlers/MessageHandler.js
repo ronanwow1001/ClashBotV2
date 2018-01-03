@@ -570,7 +570,15 @@ class MessageHandler
 
                             let stream = this.fs.createWriteStream(`${path}/${db_type}.log`);
 
-                            var p = Database.getData(`/${target_id}/${db_type}`);
+                            try
+                            {
+                                var p = Database.getData(`/${target_id}/${db_type}`);
+                            }
+                            catch (err)
+                            {
+                                message.reply(err.message);
+                                return;
+                            }
 
                             if (log_type == 'li')
                             {
@@ -788,7 +796,7 @@ class MessageHandler
                       }
                       catch(err)
                       {
-                          message.reply(err);
+                          message.reply(err.message);
                       }
                     }
                     else
@@ -812,7 +820,7 @@ class MessageHandler
                       }
                       catch(err)
                       {
-                          message.reply(err);
+                          message.reply(err.message);
                       }
                     }
                 }
@@ -892,7 +900,7 @@ class MessageHandler
                           }
                           catch(err)
                           {
-                              message.reply(err);
+                              message.reply(err.message);
                           }
                         }
                     }
@@ -926,7 +934,7 @@ class MessageHandler
                       }
                       catch(err)
                       {
-                          message.reply(err);
+                          message.reply(err.message);
                       }
                     }
                 }
