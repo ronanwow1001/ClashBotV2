@@ -844,6 +844,33 @@ class MessageHandler
                 }
             }
 
+            if ((msg.startsWith(`${command_prefix}help`)) && (this.checkPerms(message, uid) === true))
+            {
+                const embed = new Discord.RichEmbed()
+                  .setDescription('**Commands**\n')
+
+                  .setColor('#FF0000')
+                  .setFooter("© Corporate Clash 2017-2018")
+
+                  .setTimestamp()
+
+                  .addField('**Mod Types**', `\n- 1 (rule)\n - 2 (other reason)\n`, true)
+                  .addField('**Log Types**', `\n- li (link infractions)\n - pw (profanity warnings)\n - w (mod warnings)\n - n (mod notes)\n - k (kicks)\n - b (bans)\n`, true)
+                  .addField('**Limit Types**', `\n- a (#${Config.Server.Channels.Art})\n - s (#${Config.Server.Channels.Suggestions})\n - hq (#${Config.Server.Channels.ToonHQ})\n - m (mute)`, true)
+
+                  .addField('**Warn User**', '```' + `${command_prefix}warn <user's id> <type> <reason>` + '```', true)
+                  .addField('**Kick User**', '```' + `${command_prefix}kick <user's id> <type> <reason>` + '```', true)
+                  .addField('**Ban User**', '```' + `${command_prefix}ban <user's id> <#> <type> <reason>` + '```', true)
+                  .addField('**Limit User**', '```' + `${command_prefix}limit <user's id> <limit type> <reason>` + '```', true)
+                  .addField('**Add Note**', '```' + `${command_prefix}note <user's id> <note>` + '```', true)
+
+                  .addField('**User Information**', '```' + `${command_prefix}user <user's id>` + '```', true)
+                  .addField('**User Log**', '```' + `${command_prefix}log <user's id> <type>` + '```', true)
+                  .addField('**Remove Log-Item**', '```' + `${command_prefix}remove <user's id> <type> <item id>` + '```', true)
+
+                this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
+            }
+
             if ((msg.startsWith(`${command_prefix}limit`)) && (this.checkPerms(message, uid) === true))
             {
                 var split_msg = msg.split(' ');
