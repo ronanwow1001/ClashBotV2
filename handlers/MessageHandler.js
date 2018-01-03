@@ -531,41 +531,6 @@ class MessageHandler
                 }
             }
 
-            if ((msg.startsWith(`${command_prefix}testlog`)) && (this.checkPerms(message, uid) === true))
-            {
-                let target_id = '300403718959136769';
-                let db_type = 'link_infractions';
-                let path = `./u_logs/${target_id}`;
-
-                this.fs.exists(path,
-                (exists) =>
-                    {
-                        if (exists === false)
-                        {
-                            this.shell.mkdir('-p', path);
-                        }
-
-                        let stream = this.fs.createWriteStream(`${path}/${db_type}.log`);
-
-                        for (var i = 0; i < 10; i ++)
-                        {
-                            stream.write('hi\n', 'utf8');
-                        }
-
-                        stream.on('finish',
-                        () =>
-                            {
-                                let file = new Discord.Attachment(`${path}/${db_type}.log`, `${target_id}_${db_type}.log`)
-                                this.sendChannelMessage(file, Config.Server.Channels.Moderation);
-                            }
-                        );
-
-                        stream.end();
-                    }
-                );
-            }
-
-
             if ((msg.startsWith(`${command_prefix}log`)) && (this.checkPerms(message, uid) === true))
             {
                 var split_msg = msg.split(' ');
