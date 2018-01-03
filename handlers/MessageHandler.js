@@ -838,102 +838,77 @@ class MessageHandler
 
             if ((msg.startsWith(`${command_prefix}mute`)) && (this.checkPerms(message, uid) === true))
             {
-                if (message.mentions.users.first())
-                {
-                    var time = 0;
-                    var self = this;
-                    var user = message.mentions.users.first();
-                    var guildUser = message.guild.members.get(user.id);
-                    var role = guildUser.guild.roles.find(r => r.name == Config.Roles.Muted);
-                    this.silence(guildUser, user, message, role);
-                }
-            }
-            else if ((msg.startsWith(`${command_prefix}mute`)) && (this.checkPerms(message, uid) === false))
-            {
-                message.author.send('sorry but you don\'t have the proper permissions to execute this command!')
-            }
+                var split_msg = msg.split(' ');
+                var target_id = split_msg[1];
+                var g_member = message.guild.members.get(target_id)
+                var mute_type = this.removeFirstTwoParams(msg);
+                var check_type = this.checkMuteType(mute_type);
 
-            if ((msg.startsWith(`${command_prefix}s_mute`)) && (this.checkPerms(message, uid) === true))
-            {
-                if (message.mentions.users.first())
+                if (target_id === undefined)
                 {
-                    var time = 0;
-                    var self = this;
-                    var user = message.mentions.users.first();
-                    var guildUser = message.guild.members.get(user.id);
-                    var role = guildUser.guild.roles.find(r => r.name == Config.Roles.MutedSuggestions);
-                    this.silence(guildUser, user, message, role);
+                    message.reply('please supply the target user\'s id!')
                 }
-            }
-            else if ((msg.startsWith(`${command_prefix}s_mute`)) && (this.checkPerms(message, uid) === false))
-            {
-                message.author.send('sorry but you don\'t have the proper permissions to execute this command!')
-            }
+                else if (g_member === undefined)
+                {
+                    message.reply('this user does not exist!')
+                }
+                else if (/^\s*$/.test(log_type) == true)
+                {
+                    message.reply('please supply a mute type!')
+                }
+                else if (check_type[0] == false)
+                {
+                    message.reply('please supply a valid mute type!')
+                }
+                else
+                {
+                    var role_type = check_type[1];
+                    var roles = this.parent.bot.guilds.first().roles.array();
+                    var role = roles.find(r => r.name === check_type[1]);
+                    var has_role = g_member.roles.find(r => r.name === check_type[1]);
 
-            if ((msg.startsWith(`${command_prefix}s_unmute`)) && (this.checkPerms(message, uid) === true))
-            {
-                if (message.mentions.users.first())
-                {
-                    var time = 0;
-                    var self = this;
-                    var user = message.mentions.users.first();
-                    var guildUser = message.guild.members.get(user.id);
-                    var role = guildUser.guild.roles.find(r => r.name == Config.Roles.MutedSuggestions);
-                    this.un_silence(guildUser, user, message, role);
-                }
-            }
-            else if ((msg.startsWith(`${command_prefix}s_unmute`)) && (this.checkPerms(message, uid) === false))
-            {
-                message.author.send('sorry but you don\'t have the proper permissions to execute this command!')
-            }
+                    if (mute_type == 'a')
+                    {
+                        if (has_role == null)
+                        {
+                            g_member.addRole(role);
+                            message.reply('user has been art limited!');
+                        }
+                        else
+                        {
+                            g_member.removeRole(role);
+                            message.reply('user has been un-art limited!');
+                        }
+                    }
 
-            if ((msg.startsWith(`${command_prefix}a_mute`)) && (this.checkPerms(message, uid) === true))
-            {
-                if (message.mentions.users.first())
-                {
-                    var time = 0;
-                    var self = this;
-                    var user = message.mentions.users.first();
-                    var guildUser = message.guild.members.get(user.id);
-                    var role = guildUser.guild.roles.find(r => r.name == Config.Roles.MutedArt);
-                    this.silence(guildUser, user, message, role);
-                }
-            }
-            else if ((msg.startsWith(`${command_prefix}a_mute`)) && (this.checkPerms(message, uid) === false))
-            {
-                message.author.send('sorry but you don\'t have the proper permissions to execute this command!')
-            }
+                    if (mute_type == 's')
+                    {
+                        if (has_role == null)
+                        {
+                            g_member.addRole(role);
+                            message.reply('user has been suggestion limited!');
+                        }
+                        else
+                        {
+                            g_member.removeRole(role);
+                            message.reply('user has been un-suggestion limited!');
+                        }
+                    }
 
-            if ((msg.startsWith(`${command_prefix}a_unmute`)) && (this.checkPerms(message, uid) === true))
-            {
-                if (message.mentions.users.first())
-                {
-                    var time = 0;
-                    var self = this;
-                    var user = message.mentions.users.first();
-                    var guildUser = message.guild.members.get(user.id);
-                    var role = guildUser.guild.roles.find(r => r.name == Config.Roles.MutedArt);
-                    this.un_silence(guildUser, user, message, role);
+                    if (mute_type == 'hq')
+                    {
+                        if (has_role == null)
+                        {
+                            g_member.addRole(role);
+                            message.reply('user has been hq limited!');
+                        }
+                        else
+                        {
+                            g_member.removeRole(role);
+                            message.reply('user has been un-hq limited!');
+                        }
+                    }
                 }
-            }
-            else if ((msg.startsWith(`${command_prefix}a_unmute`)) && (this.checkPerms(message, uid) === false))
-            {
-                message.author.send('sorry but you don\'t have the proper permissions to execute this command!')
-            }
-
-            if ((msg.startsWith(`${command_prefix}unmute`)) && (this.checkPerms(message, uid) === true))
-            {
-                if (message.mentions.users.first())
-                {
-                    var user = message.mentions.users.first();
-                    var guildUser = message.guild.members.get(user.id);
-                    var role = guildUser.guild.roles.find(r => r.name == Config.Roles.Muted);
-                    this.un_silence(guildUser, user, message, role);
-                }
-            }
-            if ((msg.startsWith(`${command_prefix}unmute`)) && (this.checkPerms(message, uid) === false))
-            {
-                message.reply('sorry but you don\'t have the proper permissions to execute this command!')
             }
 
             if ((msg.startsWith(`${command_prefix}warn`)) && (this.checkPerms(message, uid) === true))
@@ -1632,6 +1607,25 @@ class MessageHandler
     getAvatar(message)
     {
         return message.guild.members.get(message.author.id).user.avatarURL;
+    }
+
+    checkMuteType(type)
+    {
+        switch(type)
+        {
+            case 's':
+                return [true, 'Suggestion Limit'];
+                break;
+            case 'a':
+                return [true, 'Art Limit'];
+                break;
+            case 'hq':
+                return [true, 'HQ Limit'];
+                break;
+            default:
+                return [false, ''];
+                break;
+        }
     }
 
     checkLogType(type)
