@@ -83,15 +83,8 @@ class MessageHandler
                 }
             }
 
-            if (this.checkPerms(message, uid) === true)
-            {
-                var checkLink = [false, ''];
-            }
-            else
-            {
-                var checkLink = this.checkLink(msg, channel);
-                var checkMsg = this.checkProfanity(msg);
-            }
+            var checkLink = this.checkLink(msg, channel);
+            var checkMsg = this.checkProfanity(msg);
 
             if (checkLink[0] === true)
             {
