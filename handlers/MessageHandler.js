@@ -434,6 +434,11 @@ class MessageHandler
                 }
                 else
                 {
+                    let suggestion_count = this.parent.stats_hndler.getSuggestionStats(uid);
+                    let uv = parseInt(suggestion_count.uv);
+                    let dv = parseInt(suggestion_count.dv);
+                    let total = (uv) - (dv);
+
                     const embed = new Discord.RichEmbed()
                       .setDescription('**User Information**\n')
                       .setAuthor(message.author.username, this.getAvatar(message))
@@ -464,6 +469,10 @@ class MessageHandler
                       .addField('**Art Limit**', this.checkRole(target_id, Config.Roles.ArtLimit), true)
                       .addField('**Suggestion Limit**', this.checkRole(target_id, Config.Roles.SuggestionLimit), true)
                       .addField('**Muted**', this.checkRole(target_id, Config.Roles.Mute), true)
+
+                      .addField('**Upvotes**', `**${uv}**`, true)
+                      .addField('**Downvotes**', `**${dv}**`, true)
+                      .addField('**Total Score**', `**${total}**`, true)
 
 
                     this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
