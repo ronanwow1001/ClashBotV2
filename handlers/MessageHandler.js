@@ -392,15 +392,22 @@ class MessageHandler
 
         if (channel === Config.Server.Channels.ToonHQ)
         {
-            if (msg == `${command_prefix}stats`)
+            if (msg.startsWith(`${command_prefix}stats`))
             {
-                var suggestion_count = this.parent.stats_hndler.getSuggestionStats(uid);
-                var uv = parseInt(suggestion_count.uv);
-                var dv = parseInt(suggestion_count.dv);
-                var total = (uv) - (dv);
+                if (message.mentions.members.first() != undefined)
+                {
+                    uid = message.mentions.members.first().id;
+                }
+
+                let suggestion_count = this.parent.stats_hndler.getSuggestionStats(uid);
+                let uv = parseInt(suggestion_count.uv);
+                let dv = parseInt(suggestion_count.dv);
+                let total = (uv) - (dv);
+                let name = this.getAnonAvatarName(message, uid);
+                let a_url = this.getAnonAvatar(message, uid);
 
                 const embed = new Discord.RichEmbed()
-                  .setAuthor(`${author}'s stats`, this.getAvatar(message))
+                  .setAuthor(`${name}'s stats`, a_url)
 
                   .setColor('#00ff00')
                   .setFooter("© Corporate Clash 2017-2018")
@@ -1488,6 +1495,11 @@ class MessageHandler
     getAvatar(message)
     {
         return message.guild.members.get(message.author.id).user.avatarURL;
+    }
+
+    getAnonAvatarName(message, id)
+    {
+        return message.guild.members.get(id).user.username;
     }
 
     getAnonAvatar(message, id)

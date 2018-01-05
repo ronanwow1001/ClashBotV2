@@ -7,8 +7,20 @@ class StatsHandler
 
     getSuggestionStats(uid)
     {
-        var data = Database.getData(`/${uid}/suggestion_count[0]`);
-        return (data);
+        try
+        {
+            var data = Database.getData(`/${uid}/suggestion_count[0]`);
+            return (data);
+        }
+        catch (err)
+        {
+            return (
+                {
+                    uv: 0,
+                    dv: 0
+                }
+            )
+        }
     }
 
     getProfanityStats(uid)
