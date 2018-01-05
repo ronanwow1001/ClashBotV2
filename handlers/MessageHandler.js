@@ -85,7 +85,7 @@ class MessageHandler
 
             var checkLink = this.checkLink(msg, channel);
             var checkMsg = this.checkProfanity(msg);
-            var checkImage = this.checkImage(message);
+            await this.checkImage(message);
 
             if ((checkLink[0] === true) && (this.checkPerms(message, uid) === false))
             {
@@ -1439,43 +1439,77 @@ class MessageHandler
         for (let i = 0; i < url_arr.length; i++)
         {
             let url = url_arr[i];
+            var check = [];
 
             this.parent.vis.safeSearchDetection(url)
-                .then(
-                    (results) =>
+            .then(
+                (results) =>
+                {
+                    let detections = results[0].safeSearchAnnotation;
+
+                    if (detections !== null)
                     {
-                        let detections = results[0].safeSearchAnnotation;
-                        let is_adult = detections.adult;
-                        let is_spoof = detections.spoof;
-                        let is_violent = detections.violence;
-
-                        if (filters.includes(is_adult))
+                        if (filters.includes(detections.adult) == true)
                         {
-                            this.img_check = 1;
+                            check.push('adult');
                         }
 
-                        if (filters.includes(is_spoof))
+                        if (filters.includes(detections.spoof) == true)
                         {
-                            this.img_check = 1;
+                            check.push('spoof');
                         }
 
-                        if (filters.includes(is_violent))
+                        if (filters.includes(detections.violence) == true)
                         {
-                            this.img_check = 1;
+                            check.push('violent');
                         }
-
-                        console.log(filters.includes(is_adult));
-                        console.log(filters.includes(is_spoof));
-                        console.log(filters.includes(is_violent));
-
                     }
-                )
-                .catch(
-                    (err) =>
-                    {
-                        console.log(err);
-                    }
-                );
+
+                    this.handleImageCheck(msg, check, url);
+                }
+            )
+            .catch(
+                (err) =>
+                {
+                    console.log(err);
+                }
+            );
+
+        }
+    }
+
+    handleImageCheck(msg, check, url)
+    {
+        if (check.length > 0)
+        {
+            Database.push(`/${msg.author.id}/image_infractions[]/`, {
+                type: check,
+                media: url
+            }, true);
+
+            if (msg.length >= 600)
+            {
+                msg = msg.substring(0, 500);
+            }
+
+            const embed = new Discord.RichEmbed()
+              .setDescription('Our bot has detected you sending inappropriate media!\nPlease remember the Corporate Clash rules.\n')
+              .setAuthor(msg.author, this.getAvatar(msg))
+
+              .setColor('#FF0000')
+              .setFooter("© Corporate Clash 2017-2018")
+
+              .setTimestamp()
+              .setImage(url)
+              .addField('**Detected Types**', "```" + check + "```", true)
+
+             msg.author.send(
+                 {
+                     embed
+                 }
+             );
+
+             msg.delete();
         }
     }
 
