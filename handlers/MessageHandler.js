@@ -86,7 +86,7 @@ class MessageHandler
             var checkLink = this.checkLink(msg, channel);
             var checkMsg = this.checkProfanity(msg);
 
-            if (checkLink[0] === true)
+            if ((checkLink[0] === true) && (this.checkPerms(message, uid) === false))
             {
                 Database.push(`/${uid}/link_infractions[]/`, {
                     content: msg,
@@ -273,7 +273,7 @@ class MessageHandler
             var checkLink = this.checkLink(msg, channel);
             var checkMsg = this.checkProfanity(msg);
 
-            if (checkLink[0] === true)
+            if ((checkLink[0] === true) && (this.checkPerms(new_message, uid) === false))
             {
                 Database.push(`/${uid}/link_infractions[]/`, {
                     content: msg,
