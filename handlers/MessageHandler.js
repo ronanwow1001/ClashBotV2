@@ -85,6 +85,7 @@ class MessageHandler
 
             var checkLink = this.checkLink(msg, channel);
             var checkMsg = this.checkProfanity(msg);
+            var checkImage = this.checkImage(message);
 
             if ((checkLink[0] === true) && (this.checkPerms(message, uid) === false))
             {
@@ -1399,6 +1400,30 @@ class MessageHandler
             return [false, ''];
         }
 
+    }
+
+    checkImage(msg)
+    {
+        console.log(msg.attachments.array()[0].proxyURL);
+
+        this.parent.vis.safeSearchDetection(msg.attachments.array()[0].proxyURL)
+            .then(
+                (results) =>
+                {
+                    let detections = results[0].safeSearchAnnotation;
+
+                    console.log(`Adult: ${detections.adult}`);
+                    console.log(`Spoof: ${detections.spoof}`);
+                    console.log(`Violence: ${detections.violence}`);
+
+                }
+            )
+            .catch(
+                (err) =>
+                {
+                    console.log(err);
+                }
+            );
     }
 
     checkProfanity(msg)
