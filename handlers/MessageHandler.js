@@ -1404,26 +1404,55 @@ class MessageHandler
 
     checkImage(msg)
     {
-        console.log(msg.attachments.array()[0].proxyURL);
+        let attach_arr = msg.attachments.array();
+        let attach_arr_len = attach_arr.length;
+        let filters = ['VERY_LIKELY', 'LIKELY'];
+        this.img_check = 0;
 
-        this.parent.vis.safeSearchDetection(msg.attachments.array()[0].proxyURL)
-            .then(
-                (results) =>
-                {
-                    let detections = results[0].safeSearchAnnotation;
+        if (attach_arr_len > 0)
+        {
+            for (let i = 0; i < attach_arr_len; i++)
+            {
+                let p_url = attach_arr[i].proxyURL;
 
-                    console.log(`Adult: ${detections.adult}`);
-                    console.log(`Spoof: ${detections.spoof}`);
-                    console.log(`Violence: ${detections.violence}`);
+                this.parent.vis.safeSearchDetection(msg.attachments.array()[0].proxyURL)
+                    .then(
+                        (results) =>
+                        {
+                            let detections = results[0].safeSearchAnnotation;
+                            let is_adult = detections.adult;
+                            let is_spoof = detections.spoof;
+                            let is_violent = detections.violence;
 
-                }
-            )
-            .catch(
-                (err) =>
-                {
-                    console.log(err);
-                }
-            );
+                            if (filters.includes(is_adult))
+                            {
+                                this.img_check = 1;
+                            }
+
+                            if (filters.includes(is_spoof))
+                            {
+                                this.img_check = 1;
+                            }
+
+                            if (filters.includes(is_violent))
+                            {
+                                this.img_check = 1;
+                            }
+
+                            console.log(filters.includes(is_adult));
+                            console.log(filters.includes(is_spoof));
+                            console.log(filters.includes(is_violent));
+
+                        }
+                    )
+                    .catch(
+                        (err) =>
+                        {
+                            console.log(err);
+                        }
+                    );
+            }
+        }
     }
 
     checkProfanity(msg)
