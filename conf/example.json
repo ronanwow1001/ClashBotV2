@@ -50,6 +50,20 @@
                 "https://gyazo.com",
                 "http://prntscr.com",
                 "prntscr.com"
+            ],
+
+            "Streams":
+            [
+                "http://corporateclash.net/",
+                "http://corpclash.com/",
+                "corporateclash.net",
+                "corpclash.com",
+                "gyazo.com",
+                "https://gyazo.com",
+                "http://prntscr.com",
+                "prntscr.com",
+                "www.twitch.tv",
+                "https://www.twitch.tv/"
             ]
         },
 
@@ -57,10 +71,11 @@
         {
             "Default": "general",
             "Moderation": "moderation",
-            "Logging": "logging",
+            "Logging": "logs",
             "Suggestions": "suggestions",
             "ToonHQ": "toonhq",
-            "Art": "art"
+            "Art": "art",
+            "Streams": "streams"
         },
 
         "Admins":

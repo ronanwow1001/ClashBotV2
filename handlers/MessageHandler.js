@@ -1333,7 +1333,23 @@ class MessageHandler
 
         if (link_len > 0)
         {
-            if (channel === Config.Server.Channels.ToonHQ)
+            if (channel === Config.Server.Channels.Streams)
+            {
+
+                for (var i = 0; i < Config.Server.Links.Streams.length; i++)
+                {
+                  var link_2_check = Config.Server.Links.Streams[i];
+                  var regex = new RegExp(link_2_check, 'gi');
+                  var check = msg.match(regex);
+                  if (check !== null)
+                  {
+                      return [false, ''];
+                  }
+                }
+
+                return [true, find_link[0].value];
+            }
+            else if (channel === Config.Server.Channels.ToonHQ)
             {
 
                 for (var i = 0; i < Config.Server.Links.ToonHQ.length; i++)
