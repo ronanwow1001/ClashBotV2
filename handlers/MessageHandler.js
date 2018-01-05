@@ -434,7 +434,7 @@ class MessageHandler
                 }
                 else
                 {
-                    let suggestion_count = this.parent.stats_hndler.getSuggestionStats(uid);
+                    let suggestion_count = this.parent.stats_hndler.getSuggestionStats(target_id);
                     let uv = parseInt(suggestion_count.uv);
                     let dv = parseInt(suggestion_count.dv);
                     let total = (uv) - (dv);
