@@ -499,7 +499,7 @@ class MessageHandler
                 var log_type = log_type.split(' ')[0];
                 var check_type = this.checkLogType(log_type);
                 var item_id = parseInt(this.removeFirstThreeParams(msg));
-                var item = item_id + 1;
+                var item = item_id;
 
                 if (target_id === undefined)
                 {
@@ -517,9 +517,9 @@ class MessageHandler
                 {
                     message.reply('please supply a valid log type!')
                 }
-                else if (item_id < -1)
+                else if (item_id < 0)
                 {
-                    message.reply('please supply the item for removal!')
+                    message.reply('please supply a valid item for removal!')
                 }
                 else
                 {
