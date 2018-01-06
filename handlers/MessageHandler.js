@@ -404,7 +404,7 @@ class MessageHandler
                 let dv = parseInt(suggestion_count.dv);
                 let total = (uv) - (dv);
                 let name = this.getAVName(uid);
-                let a_url = this.getAvatar(message, uid);
+                let a_url = this.getAvatar(uid);
 
                 const embed = new Discord.RichEmbed()
                   .setAuthor(`${name}'s stats`, a_url)
@@ -776,7 +776,7 @@ class MessageHandler
                     {
                         const embed = new Discord.RichEmbed()
                           .setDescription('**You\'ve been give restricted in the Corporate Clash discord for violation of our terms.**\n')
-                          .setAuthor(g_member.user.username, this.getAvatar(message, target_id))
+                          .setAuthor(g_member.user.username, this.getAvatar(target_id))
 
                           .setColor('#FF0000')
                           .setFooter("© Corporate Clash 2017-2018")
@@ -802,7 +802,7 @@ class MessageHandler
                     {
                         const embed = new Discord.RichEmbed()
                           .setDescription('**You\'re restriction from the Corporate Clash discord has been lifted.**\n')
-                          .setAuthor(g_member.user.username, this.getAvatar(message, target_id))
+                          .setAuthor(g_member.user.username, this.getAvatar(target_id))
 
                           .setColor('#FF0000')
                           .setFooter("© Corporate Clash 2017-2018")
