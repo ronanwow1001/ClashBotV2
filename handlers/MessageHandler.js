@@ -392,6 +392,32 @@ class MessageHandler
 
         if (channel === Config.Server.Channels.ToonHQ)
         {
+            if (msg === `${command_prefix}leaderboard`)
+            {
+                let top_ten = this.parent.stats_hndler.getTopTen();
+
+                const embed = new Discord.RichEmbed()
+                    .setDescription('**__Top 10 Leaderboard__**\n')
+
+                  .setColor('#00ff00')
+                  .setFooter("© Corporate Clash 2017-2018")
+
+                  .setTimestamp()
+                  .addField(`**1. <@${top_ten[0].uid}>**`, `** Total Score: __${top_ten[0].total}__**`, true)
+                  .addField(`**2. <@${top_ten[1].uid}>**`, `** Total Score: __${top_ten[1].total}__**`, true)
+                  .addField(`**3. <@${top_ten[2].uid}>**`, `** Total Score: __${top_ten[2].total}__**`, true)
+                  .addField(`**4. <@${top_ten[3].uid}>**`, `** Total Score: __${top_ten[3].total}__**`, true)
+                  .addField(`**5. <@${top_ten[4].uid}>**`, `** Total Score: __${top_ten[4].total}__**`, true)
+                  .addField(`**6. <@${top_ten[5].uid}>**`, `** Total Score: __${top_ten[5].total}__**`, true)
+                  .addField(`**7. <@${top_ten[6].uid}>**`, `** Total Score: __${top_ten[6].total}__**`, true)
+                  .addField(`**8. <@${top_ten[7].uid}>**`, `** Total Score: __${top_ten[7].total}__**`, true)
+                  .addField(`**9. <@${top_ten[8].uid}>**`, `** Total Score: __${top_ten[8].total}__**`, true)
+                  .addField(`**10. <@${top_ten[9].uid}>**`, `** Total Score: __${top_ten[9].total}__**`, true)
+
+
+                this.sendChannelMessage(embed, Config.Server.Channels.ToonHQ);
+            }
+
             if (msg.startsWith(`${command_prefix}stats`))
             {
                 if (message.mentions.members.first() != undefined)
@@ -413,9 +439,9 @@ class MessageHandler
                   .setFooter("© Corporate Clash 2017-2018")
 
                   .setTimestamp()
-                  .addField('**Upvotes**', `**${uv}**`, true)
-                  .addField('**Downvotes**', `**${dv}**`, true)
-                  .addField('**Total Score**', `**${total}**`, true)
+                  .addField('**Upvotes**', `**${uv}__**`, true)
+                  .addField('**Downvotes**', `**${dv}__**`, true)
+                  .addField('**Total Score**', `**${total}__**`, true)
 
 
                 this.sendChannelMessage(embed, Config.Server.Channels.ToonHQ);
@@ -477,9 +503,9 @@ class MessageHandler
                       .addField('**Suggestion Limit**', this.checkRole(target_id, Config.Roles.SuggestionLimit), true)
                       .addField('**Muted**', this.checkRole(target_id, Config.Roles.Mute), true)
 
-                      .addField('**Upvotes**', `**${uv}**`, true)
-                      .addField('**Downvotes**', `**${dv}**`, true)
-                      .addField('**Total Score**', `**${total}**`, true)
+                      .addField('**Upvotes**', `**${uv}__**`, true)
+                      .addField('**Downvotes**', `**${dv}__**`, true)
+                      .addField('**Total Score**', `**${total}__**`, true)
 
 
                     this.sendChannelMessage(embed, Config.Server.Channels.Moderation);

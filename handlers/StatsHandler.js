@@ -3,6 +3,30 @@ class StatsHandler
     constructor(parent)
     {
         this.parent = parent;
+        this.sort = require('sort-array');
+    }
+
+    getTopTen()
+    {
+        let data_keys = Object.keys(Database.getData(`/`));
+        let dataK_len = data_keys.length;
+        let arr = [];
+
+        for (let i = 0; i < dataK_len; i++)
+        {
+            let id = data_keys[i];
+            let data = Database.getData(`/${id}/suggestion_count[0]`);
+            let uv = parseInt(data.uv);
+            let dv = parseInt(data.dv);
+            let total = (uv) - (dv);
+
+            arr.push({ 'total': total, 'uid': id });
+        }
+
+        let sorted_arr = this.sort(arr, 'total');
+            sorted_arr = sorted_arr.reverse().slice(0, 10); // top 10 aka item 0 to item 10
+
+        return sorted_arr;
     }
 
     getSuggestionStats(uid)
