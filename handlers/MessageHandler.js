@@ -581,10 +581,10 @@ class MessageHandler
 
                             if (log_type == 'li')
                             {
-                                for (let i = 1; i < p.length; i++)
+                                for (let i = 0; i < p.length; i++)
                                 {
                                     let obj = p[i];
-                                    let inc = i - 1;
+                                    let inc = i;
                                     if (obj.content != undefined)
                                     {
                                         stream.write(`|${inc}| - |${obj.content}| - |${obj.detected_links}| \n\n`, 'utf8');
@@ -594,10 +594,10 @@ class MessageHandler
 
                             if (log_type == 'pw')
                             {
-                                for (let i = 1; i < p.length; i++)
+                                for (let i = 0; i < p.length; i++)
                                 {
                                     let obj = p[i];
-                                    let inc = i - 1;
+                                    let inc = i;
                                     if (obj.content != undefined)
                                     {
                                         stream.write(`|${inc}| - |${obj.content}| - |${obj.detected_word}| \n\n`, 'utf8');
@@ -607,10 +607,10 @@ class MessageHandler
 
                             if ([ 'w', 'k', 'b' ].includes(log_type) === true)
                             {
-                                for (let i = 1; i < p.length; i++)
+                                for (let i = 0; i < p.length; i++)
                                 {
                                     let obj = p[i];
-                                    let inc = i - 1;
+                                    let inc = i;
                                     console.log(obj);
                                     if (obj.reason != undefined)
                                     {
@@ -621,10 +621,10 @@ class MessageHandler
 
                             if (log_type == 'n')
                             {
-                                for (let i = 1; i < p.length; i++)
+                                for (let i = 0; i < p.length; i++)
                                 {
                                     let obj = p[i];
-                                    let inc = i - 1;
+                                    let inc = i;
                                     if (obj.content != undefined)
                                     {
                                         stream.write(`|${inc}| - |${obj.content}| - |${obj.invoker}:${obj.invoker_id}| \n\n`, 'utf8');
