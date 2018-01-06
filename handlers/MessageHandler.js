@@ -428,62 +428,7 @@ class MessageHandler
             {
                 let split_msg = msg.split(' ');
                 let target_id = split_msg[1];
-                let u_member = this.getUser(target_id);
-
-                if (target_id === undefined)
-                {
-                    message.reply('please supply the target user\'s id!')
-                }
-                else if (u_member === undefined)
-                {
-                    message.reply('this user does not exist!')
-                }
-                else
-                {
-                    let g_member = this.getMember(target_id);
-                    let suggestion_count = this.parent.stats_hndler.getSuggestionStats(target_id);
-                    let uv = parseInt(suggestion_count.uv);
-                    let dv = parseInt(suggestion_count.dv);
-                    let total = (uv) - (dv);
-
-                    const embed = new Discord.RichEmbed()
-                      .setDescription('**User Information**\n')
-                      .setAuthor(u_member.username, this.getAvatar(u_member.id))
-
-                      .setColor('#33CCCC')
-                      .setFooter("© Corporate Clash 2017-2018")
-
-                      .setTimestamp()
-                      .setImage(u_member.avatarURL)
-
-                      .addField('**ID**', u_member.id, true)
-                      .addField('**Username**', u_member.username, true)
-                      .addField('**Tag**', u_member.tag, true)
-                      .addField('**Avatar URL**', u_member.avatarURL, true)
-                      .addField('**Is bot?**', u_member.bot, true)
-
-                      .addField('**Account Creation**', u_member.createdAt, true)
-                      .addField('**Highest Role**', g_member.highestRole, true)
-                      .addField('**Join Date**', g_member.joinedAt, true)
-                      .addField('**Display Name**', g_member.displayName, true)
-
-                      .addField('**Profanity Warnings**', this.parent.stats_hndler.getProfanityStats(target_id), true)
-                      .addField('**Moderation Warnings**', this.parent.stats_hndler.getModPoints(target_id), true)
-                      .addField('**Kick Points**', this.parent.stats_hndler.getKickPoints(target_id), true)
-                      .addField('**Ban Points**', this.parent.stats_hndler.getBanPoints(target_id), true)
-
-                      .addField('**HQ Limit**', this.checkRole(target_id, Config.Roles.HQLimit), true)
-                      .addField('**Art Limit**', this.checkRole(target_id, Config.Roles.ArtLimit), true)
-                      .addField('**Suggestion Limit**', this.checkRole(target_id, Config.Roles.SuggestionLimit), true)
-                      .addField('**Muted**', this.checkRole(target_id, Config.Roles.Mute), true)
-
-                      .addField('**Upvotes**', `**${uv}**`, true)
-                      .addField('**Downvotes**', `**${dv}**`, true)
-                      .addField('**Total Score**', `**${total}**`, true)
-
-
-                    this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
-                }
+                this.handleUser(target_id, message);
             }
             else if ((msg.startsWith(`${command_prefix}user`)) && (this.checkPerms(message, uid) === false))
             {
@@ -1289,6 +1234,81 @@ class MessageHandler
                 }
             }
         }
+    }
+
+    handleUser(target_id, message)
+    {
+        this.parent.bot.fetchUser(target_id).then(
+            (user) =>
+            {
+                let u_member = this.getUser(target_id);
+                let g_member = this.getMember(target_id);
+
+                if (target_id === undefined)
+                {
+                    message.reply('please supply the target user\'s id!')
+                }
+                else if (u_member === undefined)
+                {
+                    message.reply('this user does not exist!')
+                }
+                else if (g_member === null)
+                {
+                    message.reply('this user does not exist in the guild!')
+                }
+                else
+                {
+                    let suggestion_count = this.parent.stats_hndler.getSuggestionStats(target_id);
+                    let uv = parseInt(suggestion_count.uv);
+                    let dv = parseInt(suggestion_count.dv);
+                    let total = (uv) - (dv);
+
+                    const embed = new Discord.RichEmbed()
+                      .setDescription('**User Information**\n')
+                      .setAuthor(u_member.username, this.getAvatar(u_member.id))
+
+                      .setColor('#33CCCC')
+                      .setFooter("© Corporate Clash 2017-2018")
+
+                      .setTimestamp()
+                      .setImage(u_member.avatarURL)
+
+                      .addField('**ID**', u_member.id, true)
+                      .addField('**Username**', u_member.username, true)
+                      .addField('**Tag**', u_member.tag, true)
+                      .addField('**Avatar URL**', u_member.avatarURL, true)
+                      .addField('**Is bot?**', u_member.bot, true)
+
+                      .addField('**Account Creation**', u_member.createdAt, true)
+                      .addField('**Highest Role**', g_member.highestRole, true)
+                      .addField('**Join Date**', g_member.joinedAt, true)
+                      .addField('**Display Name**', g_member.displayName, true)
+
+                      .addField('**Profanity Warnings**', this.parent.stats_hndler.getProfanityStats(target_id), true)
+                      .addField('**Moderation Warnings**', this.parent.stats_hndler.getModPoints(target_id), true)
+                      .addField('**Kick Points**', this.parent.stats_hndler.getKickPoints(target_id), true)
+                      .addField('**Ban Points**', this.parent.stats_hndler.getBanPoints(target_id), true)
+
+                      .addField('**HQ Limit**', this.checkRole(target_id, Config.Roles.HQLimit), true)
+                      .addField('**Art Limit**', this.checkRole(target_id, Config.Roles.ArtLimit), true)
+                      .addField('**Suggestion Limit**', this.checkRole(target_id, Config.Roles.SuggestionLimit), true)
+                      .addField('**Muted**', this.checkRole(target_id, Config.Roles.Mute), true)
+
+                      .addField('**Upvotes**', `**${uv}**`, true)
+                      .addField('**Downvotes**', `**${dv}**`, true)
+                      .addField('**Total Score**', `**${total}**`, true)
+
+
+                    this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
+                }
+            }
+        )
+        .catch(
+            (err) =>
+            {
+                console.log(err);
+            }
+        );
     }
 
     checkPerms(message, uid)
