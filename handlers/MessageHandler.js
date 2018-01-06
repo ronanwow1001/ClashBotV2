@@ -100,7 +100,7 @@ class MessageHandler
 
                 const embed = new Discord.RichEmbed()
                   .setDescription('Our bot has detected you sending invalid links!\nPlease remember the Corporate Clash rules.\n')
-                  .setAuthor(author, this.getAvatar(uid))
+                  .setAuthor(author, this.getAvatar(message))
 
                   .setColor('#FF0000')
                   .setFooter("© Corporate Clash 2017-2018")
@@ -132,7 +132,7 @@ class MessageHandler
 
                 const embed = new Discord.RichEmbed()
                   .setDescription('Our bot has detected you swearing!\nPlease remember no NFSW language is allowed in the Corporate Clash discord.\n')
-                  .setAuthor(author, this.getAvatar(uid))
+                  .setAuthor(author, this.getAvatar(message))
 
                   .setColor('#FF0000')
                   .setFooter("© Corporate Clash 2017-2018")
@@ -158,7 +158,7 @@ class MessageHandler
 
                      const embed = new Discord.RichEmbed()
                        .setDescription(`A message by ${author} has been deleted for profanity.`)
-                       .setAuthor(author, this.getAvatar(uid))
+                       .setAuthor(author, this.getAvatar(message))
 
                        .setColor('#FF0000')
                        .setFooter("© Corporate Clash 2017-2018")
@@ -210,7 +210,7 @@ class MessageHandler
 
             const embed = new Discord.RichEmbed()
               .setDescription(`A message by ${author} has been deleted.`)
-              .setAuthor(author, this.getAvatar(uid))
+              .setAuthor(author, this.getAvatar(message))
 
               .setColor('#800080')
               .setFooter("© Corporate Clash 2017-2018")
@@ -253,7 +253,7 @@ class MessageHandler
 
             const embed = new Discord.RichEmbed()
               .setDescription(`A message by ${author} has been edited.`)
-              .setAuthor(author, this.getAvatar(uid))
+              .setAuthor(author, this.getAvatar(new_message))
 
               .setColor('#800080')
               .setFooter("© Corporate Clash 2017-2018")
@@ -287,7 +287,7 @@ class MessageHandler
 
                 const embed = new Discord.RichEmbed()
                   .setDescription('Our bot has detected you sending invalid links!\nPlease remember the Corporate Clash rules.\n')
-                  .setAuthor(author, this.getAvatar(uid))
+                  .setAuthor(author, this.getAvatar(new_message))
 
                   .setColor('#FF0000')
                   .setFooter("© Corporate Clash 2017-2018")
@@ -319,7 +319,7 @@ class MessageHandler
 
                 const embed = new Discord.RichEmbed()
                   .setDescription('Our bot has detected you swearing!\nPlease remember no NFSW language is allowed in the Corporate Clash discord.\n')
-                  .setAuthor(author, this.getAvatar(uid))
+                  .setAuthor(author, this.getAvatar(new_message))
 
                   .setColor('#FF0000')
                   .setFooter("© Corporate Clash 2017-2018")
@@ -346,7 +346,7 @@ class MessageHandler
 
                      const embed = new Discord.RichEmbed()
                        .setDescription(`A message by ${author} that had been edited, has been deleted for profanity.`)
-                       .setAuthor(author, this.getAvatar(uid))
+                       .setAuthor(author, this.getAvatar(new_message))
 
                        .setColor('#FF0000')
                        .setFooter("© Corporate Clash 2017-2018")
@@ -403,8 +403,8 @@ class MessageHandler
                 let uv = parseInt(suggestion_count.uv);
                 let dv = parseInt(suggestion_count.dv);
                 let total = (uv) - (dv);
-                let name = this.getAVName(uid);
-                let a_url = this.getAvatar(message, uid);
+                let name = this.getAnonAvatarName(message, uid);
+                let a_url = this.getAnonAvatar(message, uid);
 
                 const embed = new Discord.RichEmbed()
                   .setAuthor(`${name}'s stats`, a_url)
@@ -428,7 +428,7 @@ class MessageHandler
             {
                 var split_msg = msg.split(' ');
                 var target_id = split_msg[1];
-                var g_member = this.getUser(target_id)
+                var g_member = message.guild.members.get(target_id)
                 var u_member = g_member.user;
 
                 if (target_id === undefined)
@@ -448,7 +448,7 @@ class MessageHandler
 
                     const embed = new Discord.RichEmbed()
                       .setDescription('**User Information**\n')
-                      .setAuthor(message.author.username, this.getAvatar(g_member.id))
+                      .setAuthor(message.author.username, this.getAvatar(message))
 
                       .setColor('#33CCCC')
                       .setFooter("© Corporate Clash 2017-2018")
@@ -494,7 +494,7 @@ class MessageHandler
             {
                 var split_msg = msg.split(' ');
                 var target_id = split_msg[1];
-                var g_member = this.getUser(target_id)
+                var g_member = message.guild.members.get(target_id)
                 var log_type = this.removeFirstTwoParams(msg);
                 var log_type = log_type.split(' ')[0];
                 var check_type = this.checkLogType(log_type);
@@ -534,7 +534,7 @@ class MessageHandler
             {
                 var split_msg = msg.split(' ');
                 var target_id = split_msg[1];
-                var g_member = this.getUser(target_id)
+                var g_member = message.guild.members.get(target_id)
                 var log_type = this.removeFirstTwoParams(msg);
                 var check_type = this.checkLogType(log_type);
                 var db_type = check_type[1];
@@ -677,7 +677,7 @@ class MessageHandler
             {
                 var split_msg = msg.split(' ');
                 var target_id = split_msg[1];
-                var g_member = this.getUser(target_id)
+                var g_member = message.guild.members.get(target_id)
                 var limit_type = this.removeFirstTwoParams(msg);
                     limit_type = limit_type.split(' ')[0];
                 var check_type = this.checkLimitType(limit_type);
@@ -776,7 +776,7 @@ class MessageHandler
                     {
                         const embed = new Discord.RichEmbed()
                           .setDescription('**You\'ve been give restricted in the Corporate Clash discord for violation of our terms.**\n')
-                          .setAuthor(g_member.user.username, this.getAvatar(message, target_id))
+                          .setAuthor(g_member.user.username, this.getAnonAvatar(message, target_id))
 
                           .setColor('#FF0000')
                           .setFooter("© Corporate Clash 2017-2018")
@@ -802,7 +802,7 @@ class MessageHandler
                     {
                         const embed = new Discord.RichEmbed()
                           .setDescription('**You\'re restriction from the Corporate Clash discord has been lifted.**\n')
-                          .setAuthor(g_member.user.username, this.getAvatar(message, target_id))
+                          .setAuthor(g_member.user.username, this.getAnonAvatar(message, target_id))
 
                           .setColor('#FF0000')
                           .setFooter("© Corporate Clash 2017-2018")
@@ -829,7 +829,7 @@ class MessageHandler
             {
                 var split_msg = msg.split(' ');
                 var target_id = split_msg[1];
-                var g_member = this.getUser(target_id)
+                var g_member = message.guild.members.get(target_id)
                 var type = this.checkType(split_msg[2]);
                 var reason = this.removeFirstThreeParams(msg);
 
@@ -877,7 +877,7 @@ class MessageHandler
 
                             const embed = new Discord.RichEmbed()
                               .setDescription('**You\'ve been warned in the Corporate Clash discord for violation of our terms.**\n')
-                              .setAuthor(user.username, this.getAvatar(target_id))
+                              .setAuthor(user.username, this.getAvatar(message))
 
                               .setColor('#FF0000')
                               .setFooter("© Corporate Clash 2017-2018")
@@ -913,7 +913,7 @@ class MessageHandler
 
                         const embed = new Discord.RichEmbed()
                           .setDescription('**You\'ve been warned in the Corporate Clash discord for violation of our terms.**\n')
-                          .setAuthor(user.username, this.getAvatar(target_id))
+                          .setAuthor(user.username, this.getAvatar(message))
 
                           .setColor('#FF0000')
                           .setFooter("© Corporate Clash 2017-2018")
@@ -947,7 +947,7 @@ class MessageHandler
             {
                 var split_msg = msg.split(' ');
                 var target_id = split_msg[1];
-                var g_member = this.getUser(target_id)
+                var g_member = message.guild.members.get(target_id)
                 var type = this.checkType(split_msg[2]);
                 var reason = this.removeFirstThreeParams(msg);
 
@@ -995,7 +995,7 @@ class MessageHandler
 
                             const embed = new Discord.RichEmbed()
                               .setDescription('**You\'ve been kicked from the Corporate Clash discord for violation of our terms.**\n')
-                              .setAuthor(user.username, this.getAvatar(target_id))
+                              .setAuthor(user.username, this.getAvatar(message))
 
                               .setColor('#FF0000')
                               .setFooter("© Corporate Clash 2017-2018")
@@ -1034,7 +1034,7 @@ class MessageHandler
 
                         const embed = new Discord.RichEmbed()
                           .setDescription('**You\'ve been kicked from the Corporate Clash discord for violation of our terms.**\n')
-                          .setAuthor(user.username, this.getAvatar(target_id))
+                          .setAuthor(user.username, this.getAvatar(message))
 
                           .setColor('#FF0000')
                           .setFooter("© Corporate Clash 2017-2018")
@@ -1072,7 +1072,7 @@ class MessageHandler
                 var split_msg = msg.split(' ');
                 var target_id = split_msg[1];
                 var d_messages = parseInt(split_msg[2]);
-                var g_member = this.getUser(target_id)
+                var g_member = message.guild.members.get(target_id)
                 var type = this.checkType(split_msg[3]);
                 var reason = this.removeFirstFourParams(msg);
 
@@ -1125,7 +1125,7 @@ class MessageHandler
 
                             const embed = new Discord.RichEmbed()
                               .setDescription('**You\'ve been kicked from the Corporate Clash discord for repeated violations of our terms.**\n')
-                              .setAuthor(user.username, this.getAvatar(target_id))
+                              .setAuthor(user.username, this.getAvatar(message))
 
                               .setColor('#FF0000')
                               .setFooter("© Corporate Clash 2017-2018")
@@ -1164,7 +1164,7 @@ class MessageHandler
 
                         const embed = new Discord.RichEmbed()
                           .setDescription('**You\'ve been banned from the Corporate Clash discord for repeated violations of our terms.**\n')
-                          .setAuthor(user.username, this.getAvatar(target_id))
+                          .setAuthor(user.username, this.getAvatar(message))
 
                           .setColor('#FF0000')
                           .setFooter("© Corporate Clash 2017-2018")
@@ -1201,7 +1201,7 @@ class MessageHandler
             {
                 var split_msg = msg.split(' ');
                 var target_id = split_msg[1];
-                var g_member = this.getUser(target_id)
+                var g_member = message.guild.members.get(target_id)
                 var reason = this.removeFirstTwoParams(msg);
 
                 if (target_id === undefined)
@@ -1293,7 +1293,7 @@ class MessageHandler
 
     checkPerms(message, uid)
     {
-        if (this.getUser(uid).roles.find(r => r.name === Config.Roles.Staff) !== null)
+        if (message.guild.members.get(uid).roles.find(r => r.name === Config.Roles.Staff) !== null)
         {
             return true;
         }
@@ -1492,46 +1492,19 @@ class MessageHandler
         return true;
     }
 
-    getAVName(id)
+    getAvatar(message)
     {
-        let users = this.parent.bot.users.array();
-        let user = users.find(
-            (u) =>
-            {
-                return u.id === id;
-            }
-        );
-
-        return user.username;
+        return message.guild.members.get(message.author.id).user.avatarURL;
     }
 
-    getUser(id)
+    getAnonAvatarName(message, id)
     {
-        let users = this.parent.bot.users.array();
-        let user = users.find(
-            (u) =>
-            {
-                return u.id === id;
-            }
-        );
-
-        var first_guild = this.parent.bot.guilds.first();
-        var member = first_guild.member(user);
-
-        return member;
+        return message.guild.members.get(id).user.username;
     }
 
-    getAvatar(id)
+    getAnonAvatar(message, id)
     {
-        let users = this.parent.bot.users.array();
-        let user = users.find(
-            (u) =>
-            {
-                return u.id === id;
-            }
-        );
-
-        return user.avatarURL;
+        return message.guild.members.get(id).user.avatarURL;
     }
 
     checkLimitType(type)
