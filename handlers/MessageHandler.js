@@ -415,7 +415,7 @@ class MessageHandler
                   .addField(`**10. ${this.getAVName(top_ten[9].uid)}**`, `** Total Score: __${top_ten[9].total}__**`, true)
 
 
-                this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
+                this.sendChannelMessage(embed, Config.Server.Channels.ToonHQ);
             }
 
             if (msg.startsWith(`${command_prefix}stats`))
