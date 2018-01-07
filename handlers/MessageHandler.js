@@ -403,19 +403,19 @@ class MessageHandler
                   .setFooter("© Corporate Clash 2017-2018")
 
                   .setTimestamp()
-                  .addField(`**1. <@${top_ten[0].uid}>**`, `** Total Score: __${top_ten[0].total}__**`, true)
-                  .addField(`**2. <@${top_ten[1].uid}>**`, `** Total Score: __${top_ten[1].total}__**`, true)
-                  .addField(`**3. <@${top_ten[2].uid}>**`, `** Total Score: __${top_ten[2].total}__**`, true)
-                  .addField(`**4. <@${top_ten[3].uid}>**`, `** Total Score: __${top_ten[3].total}__**`, true)
-                  .addField(`**5. <@${top_ten[4].uid}>**`, `** Total Score: __${top_ten[4].total}__**`, true)
-                  .addField(`**6. <@${top_ten[5].uid}>**`, `** Total Score: __${top_ten[5].total}__**`, true)
-                  .addField(`**7. <@${top_ten[6].uid}>**`, `** Total Score: __${top_ten[6].total}__**`, true)
-                  .addField(`**8. <@${top_ten[7].uid}>**`, `** Total Score: __${top_ten[7].total}__**`, true)
-                  .addField(`**9. <@${top_ten[8].uid}>**`, `** Total Score: __${top_ten[8].total}__**`, true)
-                  .addField(`**10. <@${top_ten[9].uid}>**`, `** Total Score: __${top_ten[9].total}__**`, true)
+                  .addField(`**1. ${this.getAVName(top_ten[0].uid)}**`, `** Total Score: __${top_ten[0].total}__**`, true)
+                  .addField(`**2. ${this.getAVName(top_ten[1].uid)}**`, `** Total Score: __${top_ten[1].total}__**`, true)
+                  .addField(`**3. ${this.getAVName(top_ten[2].uid)}**`, `** Total Score: __${top_ten[2].total}__**`, true)
+                  .addField(`**4. ${this.getAVName(top_ten[3].uid)}**`, `** Total Score: __${top_ten[3].total}__**`, true)
+                  .addField(`**5. ${this.getAVName(top_ten[4].uid)}**`, `** Total Score: __${top_ten[4].total}__**`, true)
+                  .addField(`**6. ${this.getAVName(top_ten[5].uid)}**`, `** Total Score: __${top_ten[5].total}__**`, true)
+                  .addField(`**7. ${this.getAVName(top_ten[6].uid)}**`, `** Total Score: __${top_ten[6].total}__**`, true)
+                  .addField(`**8. ${this.getAVName(top_ten[7].uid)}**`, `** Total Score: __${top_ten[7].total}__**`, true)
+                  .addField(`**9. ${this.getAVName(top_ten[8].uid)}**`, `** Total Score: __${top_ten[8].total}__**`, true)
+                  .addField(`**10. ${this.getAVName(top_ten[9].uid)}**`, `** Total Score: __${top_ten[9].total}__**`, true)
 
 
-                this.sendChannelMessage(embed, Config.Server.Channels.ToonHQ);
+                this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
             }
 
             if (msg.startsWith(`${command_prefix}stats`))
