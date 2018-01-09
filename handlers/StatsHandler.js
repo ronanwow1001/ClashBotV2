@@ -16,11 +16,14 @@ class StatsHandler
         {
             let id = data_keys[i];
             let data = Database.getData(`/${id}/suggestion_count[0]`);
-            let uv = parseInt(data.uv);
-            let dv = parseInt(data.dv);
-            let total = (uv) - (dv);
+            if (data)
+            {
+                let uv = parseInt(data.uv);
+                let dv = parseInt(data.dv);
+                let total = (uv) - (dv);
 
-            arr.push({ 'total': total, 'uid': id });
+                arr.push({ 'total': total, 'uid': id });    
+            }
         }
 
         let sorted_arr = this.sort(arr, 'total');
