@@ -85,6 +85,7 @@ class MessageHandler
 
             var checkLink = this.checkLink(msg, channel);
             var checkMsg = this.checkProfanity(msg);
+            await this.checkImage(message);
 
             if ((checkLink[0] === true) && (this.checkPerms(message, uid) === false))
             {
@@ -1471,6 +1472,117 @@ class MessageHandler
             return [false, ''];
         }
 
+    }
+
+    checkImage(msg)
+    {
+        let attach_arr = msg.attachments.array();
+        let attach_arr_len = attach_arr.length;
+        let embed_arr = msg.embeds;
+        let embed_arr_len = embed_arr.length;
+
+        let filters = ['VERY_LIKELY', 'LIKELY'];
+        this.img_check = 0;
+
+        var url_arr = [];
+
+        if (embed_arr_len > 0)
+        {
+            for (let i = 0; i < embed_arr_len; i++)
+            {
+                let p_url = embed_arr[i].thumbnail.proxyURL;
+
+                url_arr.push(p_url);
+            }
+        }
+
+
+        if (attach_arr_len > 0)
+        {
+            for (let i = 0; i < attach_arr_len; i++)
+            {
+                let p_url = attach_arr[i].proxyURL;
+
+                url_arr.push(p_url);
+            }
+        }
+
+
+        for (let i = 0; i < url_arr.length; i++)
+        {
+            let url = url_arr[i];
+            var check = [];
+
+            this.parent.vis.safeSearchDetection(url)
+            .then(
+                (results) =>
+                {
+                    let detections = results[0].safeSearchAnnotation;
+
+                    if (detections !== null)
+                    {
+                        if (filters.includes(detections.adult) == true)
+                        {
+                            check.push('adult');
+                        }
+
+                        if (filters.includes(detections.spoof) == true)
+                        {
+                            check.push('spoof');
+                        }
+
+                        if (filters.includes(detections.violence) == true)
+                        {
+                            check.push('violent');
+                        }
+                    }
+
+                    this.handleImageCheck(msg, check, url);
+                }
+            )
+            .catch(
+                (err) =>
+                {
+                    console.log(err);
+                }
+            );
+
+        }
+    }
+
+    handleImageCheck(msg, check, url)
+    {
+        if (check.length > 0)
+        {
+            Database.push(`/${msg.author.id}/image_infractions[]/`, {
+                type: check,
+                media: url
+            }, true);
+
+            if (msg.length >= 600)
+            {
+                msg = msg.substring(0, 500);
+            }
+
+            const embed = new Discord.RichEmbed()
+              .setDescription('Our bot has detected you sending inappropriate media!\nPlease remember the Corporate Clash rules.\n')
+              .setAuthor(msg.author, this.getAvatar(msg))
+
+              .setColor('#FF0000')
+              .setFooter("© Corporate Clash 2017-2018")
+
+              .setTimestamp()
+              .setImage(url)
+              .addField('**Detected Types**', "```" + check + "```", true)
+
+             msg.author.send(
+                 {
+                     embed
+                 }
+             );
+
+             msg.delete();
+        }
     }
 
     checkProfanity(msg)
