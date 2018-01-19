@@ -17,7 +17,6 @@ class Bot
         // Create Bot
         this.parent = parent
         this.bot = new Discord.Client();
-        this.vis = new Vision.ImageAnnotatorClient();
 
         // Bot Variables
         this.id = 0;
