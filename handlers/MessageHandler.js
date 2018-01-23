@@ -1412,10 +1412,10 @@ class MessageHandler
     checkLink(msg, channel)
     {
 
-        if (/\s/.test(msg))
+        /*if (/\s/.test(msg))
         {
             msg = msg.split(' ').join('');
-        }
+        }*/
 
         var find_link = this.linkify.find(msg);
         var link_len = find_link.length;
