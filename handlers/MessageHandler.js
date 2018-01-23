@@ -277,8 +277,9 @@ class MessageHandler
         if (new_message.channel.type == "text")
         {
 
-            var checkLink = this.checkLink(msg, channel);
-            var checkMsg = this.checkProfanity(msg);
+            let c_msg = this.replace(msg, this.replaceList);
+            var checkLink = this.checkLink(c_msg, channel);
+            var checkMsg = this.checkProfanity(c_msg);
 
             if ((checkLink[0] === true) && (this.checkPerms(new_message, uid) === false))
             {
