@@ -12,6 +12,12 @@ class MessageHandler
         this.profanity = require('../lib/profanity-util');
         this.fs = require('fs');
         this.shell = require('shelljs');
+        this.replaceList = {
+            '!': 'i',
+            '0': 'o',
+            'l': 'i',
+            '1': 'i'
+        }
     }
 
     /*
@@ -83,8 +89,9 @@ class MessageHandler
                 }
             }
 
-            var checkLink = this.checkLink(msg, channel);
-            var checkMsg = this.checkProfanity(msg);
+            let c_msg = this.replace(msg, this.replaceList);
+            var checkLink = this.checkLink(c_msg, channel);
+            var checkMsg = this.checkProfanity(c_msg);
 
             if ((checkLink[0] === true) && (this.checkPerms(message, uid) === false))
             {
@@ -1702,6 +1709,19 @@ class MessageHandler
         split_msg.shift()
         var join_msg = split_msg.join(' ')
         return join_msg;
+    }
+
+    replace(str, obj)
+    {
+        for (var i in obj)
+        {
+            if (str.includes(i))
+            {
+                str = str.replace(new RegExp(i, 'g'), obj[i])
+            }
+        }
+
+        return str;
     }
 
 }
