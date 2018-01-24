@@ -440,6 +440,14 @@ class MessageHandler
                 let name = await this.getAVName(uid);
                 let a_url = await this.getAvatar(uid);
 
+                if (uid === '296476753298456577')
+                {
+                    let infinity = String.fromCharCode(8734);
+                        uv = infinity;
+                        dv = infinity;
+                        total = infinity;
+                }
+
                 const embed = new Discord.RichEmbed()
                   .setAuthor(`${name}'s stats`, a_url)
 
