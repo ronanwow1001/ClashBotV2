@@ -426,6 +426,32 @@ class MessageHandler
                 this.sendChannelMessage(embed, Config.Server.Channels.ToonHQ);
             }
 
+            if ((msg === `${command_prefix}sadboard`) || (msg === `${command_prefix}):`))
+            {
+                let last_ten = this.parent.stats_hndler.getLastTen();
+
+                const embed = new Discord.RichEmbed()
+                    .setDescription('**__SAD! board ):__**\n')
+
+                  .setColor('#00ff00')
+                  .setFooter("© Corporate Clash 2017-2018")
+
+                  .setTimestamp()
+                  .addField(`**1. ${await this.getAVName(last_ten[0].uid)}**`, `** Total Score: __${last_ten[0].total}__**`, true)
+                  .addField(`**2. ${await this.getAVName(last_ten[1].uid)}**`, `** Total Score: __${last_ten[1].total}__**`, true)
+                  .addField(`**3. ${await this.getAVName(last_ten[2].uid)}**`, `** Total Score: __${last_ten[2].total}__**`, true)
+                  .addField(`**4. ${await this.getAVName(last_ten[3].uid)}**`, `** Total Score: __${last_ten[3].total}__**`, true)
+                  .addField(`**5. ${await this.getAVName(last_ten[4].uid)}**`, `** Total Score: __${last_ten[4].total}__**`, true)
+                  .addField(`**6. ${await this.getAVName(last_ten[5].uid)}**`, `** Total Score: __${last_ten[5].total}__**`, true)
+                  .addField(`**7. ${await this.getAVName(last_ten[6].uid)}**`, `** Total Score: __${last_ten[6].total}__**`, true)
+                  .addField(`**8. ${await this.getAVName(last_ten[7].uid)}**`, `** Total Score: __${last_ten[7].total}__**`, true)
+                  .addField(`**9. ${await this.getAVName(last_ten[8].uid)}**`, `** Total Score: __${last_ten[8].total}__**`, true)
+                  .addField(`**10. ${await this.getAVName(last_ten[9].uid)}**`, `** Total Score: __${last_ten[9].total}__**`, true)
+
+
+                this.sendChannelMessage(embed, Config.Server.Channels.ToonHQ);
+            }
+
             if (msg.startsWith(`${command_prefix}stats`))
             {
                 if (message.mentions.members.first() != undefined)
