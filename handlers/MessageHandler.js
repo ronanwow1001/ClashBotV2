@@ -12,6 +12,12 @@ class MessageHandler
         this.profanity = require('../lib/profanity-util');
         this.fs = require('fs');
         this.shell = require('shelljs');
+        this.replaceList = {
+            '!': 'i',
+            '0': 'o',
+            'l': 'i',
+            '1': 'i'
+        }
     }
 
     /*
@@ -83,8 +89,9 @@ class MessageHandler
                 }
             }
 
-            var checkLink = this.checkLink(msg, channel);
-            var checkMsg = this.checkProfanity(msg);
+            let c_msg = this.replace(msg, this.replaceList);
+            var checkLink = this.checkLink(c_msg, channel);
+            var checkMsg = this.checkProfanity(c_msg);
 
             if ((checkLink[0] === true) && (this.checkPerms(message, uid) === false))
             {
@@ -270,8 +277,9 @@ class MessageHandler
         if (new_message.channel.type == "text")
         {
 
-            var checkLink = this.checkLink(msg, channel);
-            var checkMsg = this.checkProfanity(msg);
+            let c_msg = this.replace(msg, this.replaceList);
+            var checkLink = this.checkLink(c_msg, channel);
+            var checkMsg = this.checkProfanity(c_msg);
 
             if ((checkLink[0] === true) && (this.checkPerms(new_message, uid) === false))
             {
@@ -418,6 +426,32 @@ class MessageHandler
                 this.sendChannelMessage(embed, Config.Server.Channels.ToonHQ);
             }
 
+            if ((msg === `${command_prefix}sadboard`) || (msg === `${command_prefix}):`))
+            {
+                let last_ten = this.parent.stats_hndler.getLastTen();
+
+                const embed = new Discord.RichEmbed()
+                    .setDescription('**__SAD! board ):__**\n')
+
+                  .setColor('#00ff00')
+                  .setFooter("© Corporate Clash 2017-2018")
+
+                  .setTimestamp()
+                  .addField(`**1. ${await this.getAVName(last_ten[0].uid)}**`, `** Total Score: __${last_ten[0].total}__**`, true)
+                  .addField(`**2. ${await this.getAVName(last_ten[1].uid)}**`, `** Total Score: __${last_ten[1].total}__**`, true)
+                  .addField(`**3. ${await this.getAVName(last_ten[2].uid)}**`, `** Total Score: __${last_ten[2].total}__**`, true)
+                  .addField(`**4. ${await this.getAVName(last_ten[3].uid)}**`, `** Total Score: __${last_ten[3].total}__**`, true)
+                  .addField(`**5. ${await this.getAVName(last_ten[4].uid)}**`, `** Total Score: __${last_ten[4].total}__**`, true)
+                  .addField(`**6. ${await this.getAVName(last_ten[5].uid)}**`, `** Total Score: __${last_ten[5].total}__**`, true)
+                  .addField(`**7. ${await this.getAVName(last_ten[6].uid)}**`, `** Total Score: __${last_ten[6].total}__**`, true)
+                  .addField(`**8. ${await this.getAVName(last_ten[7].uid)}**`, `** Total Score: __${last_ten[7].total}__**`, true)
+                  .addField(`**9. ${await this.getAVName(last_ten[8].uid)}**`, `** Total Score: __${last_ten[8].total}__**`, true)
+                  .addField(`**10. ${await this.getAVName(last_ten[9].uid)}**`, `** Total Score: __${last_ten[9].total}__**`, true)
+
+
+                this.sendChannelMessage(embed, Config.Server.Channels.ToonHQ);
+            }
+
             if (msg.startsWith(`${command_prefix}stats`))
             {
                 if (message.mentions.members.first() != undefined)
@@ -431,6 +465,14 @@ class MessageHandler
                 let total = (uv) - (dv);
                 let name = await this.getAVName(uid);
                 let a_url = await this.getAvatar(uid);
+
+                if (uid === '296476753298456577')
+                {
+                    let infinity = String.fromCharCode(8734);
+                        uv = infinity;
+                        dv = infinity;
+                        total = infinity;
+                }
 
                 const embed = new Discord.RichEmbed()
                   .setAuthor(`${name}'s stats`, a_url)
@@ -1404,10 +1446,10 @@ class MessageHandler
     checkLink(msg, channel)
     {
 
-        if (/\s/.test(msg))
+        /*if (/\s/.test(msg))
         {
             msg = msg.split(' ').join('');
-        }
+        }*/
 
         var find_link = this.linkify.find(msg);
         var link_len = find_link.length;
@@ -1702,6 +1744,19 @@ class MessageHandler
         split_msg.shift()
         var join_msg = split_msg.join(' ')
         return join_msg;
+    }
+
+    replace(str, obj)
+    {
+        for (var i in obj)
+        {
+            if (str.includes(i))
+            {
+                str = str.replace(new RegExp(i, 'g'), obj[i])
+            }
+        }
+
+        return str;
     }
 
 }
