@@ -14,6 +14,10 @@ class WebServer
         this.app = this.express();
         this.server = this.http.createServer(this.app);
         this.bp = require('body-parser');
+
+        this.crypto = require('crypto')
+        this.algorithm = ('aes-256-ctr');
+        this.password = ('TZXVm8fiVvDWJkmASokT');
     }
 
     /*
@@ -97,7 +101,7 @@ class WebServer
                             }
                             else if (data)
                             {
-                                let buffer = new Buffer(`${target_id}-${db_type}`).toString('base64');
+                                let buffer = this.encrypt(`${target_id}-${db_type}`); //new Buffer(`${target_id}-${db_type}`).toString('base64');
                                 res.setHeader('Content-Type', 'text/plain; charset=UTF-8');
                                 res.end(buffer);
                             }
@@ -114,7 +118,7 @@ class WebServer
             case 'GET':
 
                 let o_url = req.originalUrl.replace('/logs/', '');
-                let d_type = new Buffer(o_url, 'base64').toString('ascii');
+                let d_type = this.decrypt(o_url); //new Buffer(o_url, 'base64').toString('ascii');
                 let b_type = d_type.split('-');
                 let uid = b_type[0];
                 let type_db = b_type[1];
@@ -137,6 +141,24 @@ class WebServer
                 );
                 break;
         }
+    }
+
+    encrypt(text)
+    {
+        let cipher = this.crypto.createCipher(this.algorithm, this.password);
+        let crypted = cipher.update(text, 'utf8', 'hex');
+        crypted += cipher.final('hex');
+
+        return crypted;
+    }
+
+    decrypt(text)
+    {
+        let decipher = this.crypto.createDecipher(this.algorithm, this.password)
+        let dec = decipher.update(text, 'hex', 'utf8')
+        dec += decipher.final('utf8');
+
+        return dec;
     }
 }
 
