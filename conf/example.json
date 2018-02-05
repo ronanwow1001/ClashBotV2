@@ -17,6 +17,12 @@
         "DSN3": ""
     },
 
+    "Crypto":
+    {
+        "Password": "",
+        "Key": ""
+    },
+
     "Server":
     {
         "Token": "",

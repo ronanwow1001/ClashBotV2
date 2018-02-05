@@ -17,7 +17,7 @@ class WebServer
 
         this.crypto = require('crypto')
         this.algorithm = ('aes-256-ctr');
-        this.password = ('TZXVm8fiVvDWJkmASokT');
+        this.password = (Config.Crypto.Password);
     }
 
     /*
@@ -88,7 +88,7 @@ class WebServer
                 let target_id = String(req.body.uid);
                 let db_type = String(req.body.dbtype);
 
-                if (key === Config.Server.Key)
+                if (key === Config.Crypto.Key)
                 {
                     let path = `./u_logs/${target_id}`;
                     this.fs.readFile(`${path}/${db_type}.log`, { encoding: 'utf8' },
