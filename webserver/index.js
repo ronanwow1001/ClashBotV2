@@ -64,9 +64,11 @@ class WebServer
         let url_path   = url_parsed.path.split('/');
         let url_filtered = url_path.filter(p => p !== '');
 
-        /*if (url_filtered.includes('logs'))
+        if (url_filtered.includes('logs') == false)
         {
-        }*/
+            res.sendStatus(501);
+            return;
+        }
 
         switch(req.method)
         {
@@ -118,6 +120,12 @@ class WebServer
             case 'GET':
 
                 let o_url = req.originalUrl.replace('/logs/', '');
+                if (/^\s*$/.test(o_url) == true)
+                {
+                    res.sendStatus(404);
+                    return;
+                }
+
                 let d_type = this.decrypt(o_url); //new Buffer(o_url, 'base64').toString('ascii');
                 let b_type = d_type.split('-');
                 let uid = b_type[0];
@@ -155,7 +163,7 @@ class WebServer
     decrypt(text)
     {
         let decipher = this.crypto.createDecipher(this.algorithm, this.password)
-        let dec = decipher.update(text, 'hex', 'utf8')
+        let dec = decipher.update(text, 'hex', 'utf8');
         dec += decipher.final('utf8');
 
         return dec;
