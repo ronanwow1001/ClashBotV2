@@ -67,37 +67,75 @@ class WebServer
         switch(req.method)
         {
             case 'OPTIONS':
-              var headers = {};
-              headers["Access-Control-Allow-Origin"] = "*";
-              headers["Access-Control-Allow-Methods"] = "POST, GET, PUT, DELETE, OPTIONS";
-              headers["Access-Control-Allow-Credentials"] = false;
-              headers["Access-Control-Max-Age"] = '86400'; // 24 hours
-              headers["Access-Control-Allow-Headers"] = "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept";
-              res.writeHead(200, headers);
-              res.end();
-              break;
+
+                var headers = {};
+                headers["Access-Control-Allow-Origin"] = "*";
+                headers["Access-Control-Allow-Methods"] = "POST, GET, PUT, DELETE, OPTIONS";
+                headers["Access-Control-Allow-Credentials"] = false;
+                headers["Access-Control-Max-Age"] = '86400'; // 24 hours
+                headers["Access-Control-Allow-Headers"] = "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept";
+                res.writeHead(200, headers);
+                res.end();
+                break;
+
             case 'POST':
 
-                var key = String(req.body.key);
-                var target_id = String(req.body.uid);
-                var db_type = String(req.body.dbtype);
+                let key = String(req.body.key);
+                let target_id = String(req.body.uid);
+                let db_type = String(req.body.dbtype);
 
                 if (key === Config.Server.Key)
                 {
                     let path = `./u_logs/${target_id}`;
-                    this.fs.readFile(`${path}/${db_type}.log`, {encoding: 'utf8'},
+                    this.fs.readFile(`${path}/${db_type}.log`, { encoding: 'utf8' },
                     (err, data) =>
                         {
-                            res.setHeader('Content-Type', 'text/plain; charset=UTF-8');
-                            res.end(data);
+                            if (err)
+                            {
+                                res.sendStatus(404);
+                                return;
+                            }
+                            else if (data)
+                            {
+                                let buffer = new Buffer(`${target_id}-${db_type}`).toString('base64');
+                                res.setHeader('Content-Type', 'text/plain; charset=UTF-8');
+                                res.end(buffer);
+                            }
                         }
                     );
-                    //res.sendStatus(200);
                 }
                 else
                 {
                     res.sendStatus(401);
                 }
+
+                break;
+
+            case 'GET':
+
+                let o_url = req.originalUrl.replace('/logs/', '');
+                let d_type = new Buffer(o_url, 'base64').toString('ascii');
+                let b_type = d_type.split('-');
+                let uid = b_type[0];
+                let type_db = b_type[1];
+
+                let path = `./u_logs/${uid}`;
+                this.fs.readFile(`${path}/${type_db}.log`, { encoding: 'utf8' },
+                (err, data) =>
+                    {
+                        if (err)
+                        {
+                            res.sendStatus(404);
+                            return;
+                        }
+                        else if (data)
+                        {
+                            res.setHeader('Content-Type', 'text/plain; charset=UTF-8');
+                            res.end(data);
+                        }
+                    }
+                );
+                break;
         }
     }
 }
