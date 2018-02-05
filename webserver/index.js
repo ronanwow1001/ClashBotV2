@@ -10,6 +10,7 @@ class WebServer
         this.express = require('express');
         this.http = require('http');
         this.url = require('url');
+        this.fs = require('fs');
         this.app = this.express();
         this.server = this.http.createServer(this.app);
         this.bp = require('body-parser');
@@ -59,7 +60,45 @@ class WebServer
         let url_path   = url_parsed.path.split('/');
         let url_filtered = url_path.filter(p => p !== '');
 
-        Logger.debug(`Got url: ${url_filtered}`);
+        /*if (url_filtered.includes('logs'))
+        {
+        }*/
+
+        switch(req.method)
+        {
+            case 'OPTIONS':
+              var headers = {};
+              headers["Access-Control-Allow-Origin"] = "*";
+              headers["Access-Control-Allow-Methods"] = "POST, GET, PUT, DELETE, OPTIONS";
+              headers["Access-Control-Allow-Credentials"] = false;
+              headers["Access-Control-Max-Age"] = '86400'; // 24 hours
+              headers["Access-Control-Allow-Headers"] = "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept";
+              res.writeHead(200, headers);
+              res.end();
+              break;
+            case 'POST':
+
+                var key = String(req.body.key);
+                var target_id = String(req.body.uid);
+                var db_type = String(req.body.dbtype);
+
+                if (key === Config.Server.Key)
+                {
+                    let path = `./u_logs/${target_id}`;
+                    this.fs.readFile(`${path}/${db_type}.log`, {encoding: 'utf8'},
+                    (err, data) =>
+                        {
+                            res.setHeader('Content-Type', 'text/plain; charset=UTF-8');
+                            res.end(data);
+                        }
+                    );
+                    //res.sendStatus(200);
+                }
+                else
+                {
+                    res.sendStatus(401);
+                }
+        }
     }
 }
 
