@@ -12,12 +12,25 @@ class MessageHandler
         this.profanity = require('../lib/profanity-util');
         this.fs = require('fs');
         this.shell = require('shelljs');
+        this.RESTCLIENT = require('node-rest-client').Client;
+        this.rest_client = new this.RESTCLIENT();
         this.replaceList = {
             '!': 'i',
             '0': 'o',
             'l': 'i',
             '1': 'i'
         }
+
+        this.registerRESTEvents();
+    }
+
+    /*
+    Registers all REST events
+    */
+
+    registerRESTEvents()
+    {
+        this.rest_client.registerMethod("post", "http://localhost:777/v1/logs/", "POST");
     }
 
     /*
@@ -742,8 +755,31 @@ class MessageHandler
                             stream.on('finish',
                             () =>
                                 {
-                                    let file = new Discord.Attachment(`${path}/${db_type}.log`, `${target_id}_${db_type}.log`)
-                                    this.sendChannelMessage(file, Config.Server.Channels.Moderation);
+                                    let args =
+                                    {
+                                        data: {
+                                            'key': Config.Crypto.Key,
+                                            'uid': target_id,
+                                            'dbtype': db_type
+                                        },
+
+                                        headers:
+                                        {
+                                            'Content-Type': 'application/json'
+                                        }
+                                    }
+
+                                    this.rest_client.methods.post(args,
+                                        (data, response) =>
+                                            {
+                                                let data_key = data.toString('utf8');
+                                                let url = `http://localhost:777/logs/${data_key}`;
+                                                this.sendChannelMessage(url, Config.Server.Channels.Moderation);
+                                            }
+                                    );
+
+                                    //let file = new Discord.Attachment(`${path}/${db_type}.log`, `${target_id}_${db_type}.log`)
+                                    //this.sendChannelMessage(file, Config.Server.Channels.Moderation);
                                 }
                             );
 

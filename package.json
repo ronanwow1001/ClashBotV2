@@ -30,6 +30,7 @@
     "linkifyjs": "^2.1.5",
     "node-gameloop": "^0.1.4",
     "node-json-db": "^0.7.3",
+    "node-rest-client": "^3.1.0",
     "raven": "^2.3.0",
     "recoo": "^1.0.8",
     "shelljs": "^0.7.8",

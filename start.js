@@ -66,7 +66,7 @@ const startBot = async() =>
 
 startDatabase();
 startWebServer();
-//startBot();
+startBot();
 
 // Error handling;
 process.on('uncaughtException',
