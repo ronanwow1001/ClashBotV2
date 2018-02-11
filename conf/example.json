@@ -30,6 +30,7 @@
         "LogMessages": true,
         "Prefix": "-",
         "WSLink": "",
+        "WSPort": 0,
 
         "Links":
         {
