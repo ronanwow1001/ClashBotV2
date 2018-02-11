@@ -30,7 +30,7 @@ class MessageHandler
 
     registerRESTEvents()
     {
-        this.rest_client.registerMethod("post", "http://localhost:777/v1/logs/", "POST");
+        this.rest_client.registerMethod("post", `http://${Config.Server.WSLink}/v1/logs/`, "POST");
     }
 
     /*
@@ -773,7 +773,7 @@ class MessageHandler
                                         (data, response) =>
                                             {
                                                 let data_key = data.toString('utf8');
-                                                let url = `http://localhost:777/logs/${data_key}`;
+                                                let url = `http://${Config.Server.WSLink}/logs/${data_key}`;
                                                 this.sendChannelMessage(url, Config.Server.Channels.Moderation);
                                             }
                                     );

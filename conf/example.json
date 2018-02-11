@@ -29,6 +29,7 @@
         "Tick": 50,
         "LogMessages": true,
         "Prefix": "-",
+        "WSLink": "",
 
         "Links":
         {
