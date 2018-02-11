@@ -4,9 +4,8 @@ class WebServer
     Initializes a new instance of the WebServer
     */
 
-    constructor(port)
+    constructor()
     {
-        this.port = port
         this.express = require('express');
         this.http = require('http');
         this.url = require('url');
@@ -43,7 +42,7 @@ class WebServer
             )
         );
 
-        this.server.listen(this.port, () =>
+        this.server.listen(Config.Server.WSPort, () =>
             {
                 Logger.info(`Server started on port: ${this.server.address().port}`);
             }

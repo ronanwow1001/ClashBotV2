@@ -39,7 +39,7 @@ const startWebServer = async() =>
     try
     {
         // Start Bot
-        var server = new Server(777);
+        var server = new Server();
         await server.start();
     }
     catch(err)
