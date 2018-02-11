@@ -17,12 +17,19 @@
         "DSN3": ""
     },
 
+    "Crypto":
+    {
+        "Password": "",
+        "Key": ""
+    },
+
     "Server":
     {
         "Token": "",
         "Tick": 50,
         "LogMessages": true,
         "Prefix": "-",
+        "WSLink": "",
 
         "Links":
         {
