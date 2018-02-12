@@ -773,7 +773,7 @@ class MessageHandler
                                         (data, response) =>
                                             {
                                                 let data_key = data.toString('utf8');
-                                                let url = `http://${Config.Server.WSLink}/logs/${data_key}`;
+                                                let url = `${Config.WebServer.Protocol}://${Config.WebServer.Link}/logs/${data_key}`;
                                                 this.sendChannelMessage(url, Config.Server.Channels.Moderation);
                                             }
                                     );
