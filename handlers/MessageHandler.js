@@ -30,7 +30,7 @@ class MessageHandler
 
     registerRESTEvents()
     {
-        this.rest_client.registerMethod("post", `http://${Config.Server.WSLink}/v1/logs/`, "POST");
+        this.rest_client.registerMethod("post", `${Config.WebServer.Protocol}://${Config.WebServer.Link}/v1/logs/`, "POST");
     }
 
     /*

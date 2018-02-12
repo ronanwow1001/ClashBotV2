@@ -23,14 +23,19 @@
         "Key": ""
     },
 
+    "WebServer":
+    {
+        "Link": "",
+        "Port": 0,
+        "Protocol": ""
+    },
+
     "Server":
     {
         "Token": "",
         "Tick": 50,
         "LogMessages": true,
         "Prefix": "-",
-        "WSLink": "",
-        "WSPort": 0,
 
         "Links":
         {

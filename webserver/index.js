@@ -42,7 +42,7 @@ class WebServer
             )
         );
 
-        this.server.listen(Config.Server.WSPort, () =>
+        this.server.listen(Config.WebServer.Port, () =>
             {
                 Logger.info(`Server started on port: ${this.server.address().port}`);
             }
