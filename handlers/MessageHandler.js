@@ -12,12 +12,25 @@ class MessageHandler
         this.profanity = require('../lib/profanity-util');
         this.fs = require('fs');
         this.shell = require('shelljs');
+        this.RESTCLIENT = require('node-rest-client').Client;
+        this.rest_client = new this.RESTCLIENT();
         this.replaceList = {
             '!': 'i',
             '0': 'o',
             'l': 'i',
             '1': 'i'
         }
+
+        this.registerRESTEvents();
+    }
+
+    /*
+    Registers all REST events
+    */
+
+    registerRESTEvents()
+    {
+        this.rest_client.registerMethod("post", `${Config.WebServer.Protocol}://${Config.WebServer.Link}/v1/logs/`, "POST");
     }
 
     /*
@@ -66,6 +79,25 @@ class MessageHandler
             );
 
             //await message.reply('updated code!');
+        }
+
+        if (message.channel.type == "dm")
+        {
+            const embed = new Discord.RichEmbed()
+              .setDescription('Greetings from the official Toontown: Corporate Clash bot. \nYou may use these mediums to get in contact with our team!\n')
+
+              .setColor('#1abc9c')
+              .setFooter("© Corporate Clash 2017-2018")
+
+              .setTimestamp()
+              .addField('ModMail', "<@397403358782029825>", true)
+              .addField('Email', "support@corporateclash.net", true)
+
+             message.reply(
+                 {
+                     embed
+                 }
+             );
         }
 
         if (message.channel.type == "text")
@@ -742,8 +774,31 @@ class MessageHandler
                             stream.on('finish',
                             () =>
                                 {
-                                    let file = new Discord.Attachment(`${path}/${db_type}.log`, `${target_id}_${db_type}.log`)
-                                    this.sendChannelMessage(file, Config.Server.Channels.Moderation);
+                                    let args =
+                                    {
+                                        data: {
+                                            'key': Config.Crypto.Key,
+                                            'uid': target_id,
+                                            'dbtype': db_type
+                                        },
+
+                                        headers:
+                                        {
+                                            'Content-Type': 'application/json'
+                                        }
+                                    }
+
+                                    this.rest_client.methods.post(args,
+                                        (data, response) =>
+                                            {
+                                                let data_key = data.toString('utf8');
+                                                let url = `${Config.WebServer.Protocol}://${Config.WebServer.Link}/logs/${data_key}`;
+                                                this.sendChannelMessage(url, Config.Server.Channels.Moderation);
+                                            }
+                                    );
+
+                                    //let file = new Discord.Attachment(`${path}/${db_type}.log`, `${target_id}_${db_type}.log`)
+                                    //this.sendChannelMessage(file, Config.Server.Channels.Moderation);
                                 }
                             );
 

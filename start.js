@@ -7,6 +7,7 @@ global.Database = require('./lib/Database');
 global.Colors   = require('colors');
 global.Discord  = require('discord.js');
 global.Bot      = require('./bot');
+global.Server   = require('./webserver');
 global.rl       = readline.createInterface(
     {
         input:  process.stdin,
@@ -33,6 +34,21 @@ const startDatabase = async () =>
     }
 }
 
+const startWebServer = async() =>
+{
+    try
+    {
+        // Start Bot
+        var server = new Server();
+        await server.start();
+    }
+    catch(err)
+    {
+        Logger.error(err);
+    }
+
+}
+
 const startBot = async() =>
 {
     try
@@ -49,6 +65,7 @@ const startBot = async() =>
 }
 
 startDatabase();
+startWebServer();
 startBot();
 
 // Error handling;

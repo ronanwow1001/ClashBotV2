@@ -1,2 +1,2 @@
 yarn
-node-dev start
+sudo node-dev start
