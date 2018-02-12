@@ -81,6 +81,25 @@ class MessageHandler
             //await message.reply('updated code!');
         }
 
+        if (message.channel.type == "dm")
+        {
+            const embed = new Discord.RichEmbed()
+              .setDescription('Greetings from the official Toontown: Corporate Clash bot. \nYou may use these mediums to get in contact with our team!\n')
+
+              .setColor('#1abc9c')
+              .setFooter("© Corporate Clash 2017-2018")
+
+              .setTimestamp()
+              .addField('ModMail', "<@397403358782029825>", true)
+              .addField('Email', "support@corporateclash.net", true)
+
+             message.reply(
+                 {
+                     embed
+                 }
+             );
+        }
+
         if (message.channel.type == "text")
         {
             // Check that the user has data, if not then create the dummy data
