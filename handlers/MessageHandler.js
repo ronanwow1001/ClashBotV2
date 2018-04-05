@@ -1485,11 +1485,10 @@ class MessageHandler
         var channel = channels.find(
             (c) =>
             {
-                return c.name === channel;
+                return c.id === channel;
             }
         );
 
-        //channel.send(msg, {split: {maxLength: 1024, char: "\n", prepend: '', append: '' }});
         channel.send(msg);
     }
 
