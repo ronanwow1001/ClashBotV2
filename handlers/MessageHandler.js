@@ -45,6 +45,7 @@ class MessageHandler
         }
 
         var channel = message.channel.name;
+        var channelId = message.channel.id;
     	var author = message.author.username;
         var uid = message.author.id;
     	var msg = message.content;
@@ -122,7 +123,7 @@ class MessageHandler
             }
 
             let c_msg = this.replace(msg, this.replaceList);
-            var checkLink = this.checkLink(c_msg, channel);
+            var checkLink = this.checkLink(c_msg, channelId);
             var checkMsg = this.checkProfanity(c_msg);
 
             if ((checkLink[0] === true) && (this.checkPerms(message, uid) === false))
@@ -418,21 +419,21 @@ class MessageHandler
     async handleMessage(message)
     {
         var channel = message.channel.name;
+        var channelId = message.channel.id;
     	var author = message.author.username;
         var uid = message.author.id;
     	var msg = message.content;
     	var date = message.createdAt;
-        var command_prefix = Config.Server.Prefix;
 
-        if (channel === Config.Server.Channels.Suggestions)
+        if (channelId === Config.Server.Channels.Suggestions)
         {
             await message.react("✅");
             await message.react("❌");
         }
 
-        if (channel === Config.Server.Channels.ToonHQ)
+        if (channelId === Config.Server.Channels.ToonHQ)
         {
-            if (msg === `${command_prefix}leaderboard`)
+            if (msg === `${Config.Server.Prefix}leaderboard`)
             {
                 let top_ten = this.parent.stats_hndler.getTopTen();
 
@@ -458,7 +459,7 @@ class MessageHandler
                 this.sendChannelMessage(embed, Config.Server.Channels.ToonHQ);
             }
 
-            if ((msg === `${command_prefix}sadboard`) || (msg === `${command_prefix}):`))
+            if ((msg === `${Config.Server.Prefix}sadboard`) || (msg === `${Config.Server.Prefix}):`))
             {
                 let last_ten = this.parent.stats_hndler.getLastTen();
 
@@ -484,7 +485,7 @@ class MessageHandler
                 this.sendChannelMessage(embed, Config.Server.Channels.ToonHQ);
             }
 
-            if (msg.startsWith(`${command_prefix}stats`))
+            if (msg.startsWith(`${Config.Server.Prefix}stats`))
             {
                 if (message.mentions.members.first() != undefined)
                 {
@@ -522,9 +523,9 @@ class MessageHandler
             }
         }
 
-        if (channel === Config.Server.Channels.Moderation)
+        if (channelId === Config.Server.Channels.Moderation)
         {
-            if ((msg.startsWith(`${command_prefix}user`)) && (this.checkPerms(message, uid) === true))
+            if ((msg.startsWith(`${Config.Server.Prefix}user`)) && (this.checkPerms(message, uid) === true))
             {
                 let split_msg = msg.split(' ');
                 let target_id = split_msg[1];
@@ -624,12 +625,12 @@ class MessageHandler
                     }
                 }
             }
-            else if ((msg.startsWith(`${command_prefix}user`)) && (this.checkPerms(message, uid) === false))
+            else if ((msg.startsWith(`${Config.Server.Prefix}user`)) && (this.checkPerms(message, uid) === false))
             {
                 message.author.send('sorry but you don\'t have the proper permissions to execute this command!')
             }
 
-            if ((msg.startsWith(`${command_prefix}remove`)) && (this.checkPerms(message, uid) === true))
+            if ((msg.startsWith(`${Config.Server.Prefix}remove`)) && (this.checkPerms(message, uid) === true))
             {
                 var split_msg = msg.split(' ');
                 var target_id = split_msg[1];
@@ -669,7 +670,7 @@ class MessageHandler
                 }
             }
 
-            if ((msg.startsWith(`${command_prefix}log`)) && (this.checkPerms(message, uid) === true))
+            if ((msg.startsWith(`${Config.Server.Prefix}log`)) && (this.checkPerms(message, uid) === true))
             {
                 var split_msg = msg.split(' ');
                 var target_id = split_msg[1];
@@ -808,7 +809,7 @@ class MessageHandler
                 }
             }
 
-            if ((msg.startsWith(`${command_prefix}help`)) && (this.checkPerms(message, uid) === true))
+            if ((msg.startsWith(`${Config.Server.Prefix}help`)) && (this.checkPerms(message, uid) === true))
             {
                 const embed = new Discord.RichEmbed()
                   .setDescription('**Commands**\n')
@@ -822,20 +823,20 @@ class MessageHandler
                   .addField('**Log Types**', `\n- li (link infractions)\n - pw (profanity warnings)\n - w (mod warnings)\n - n (mod notes)\n - k (kicks)\n - b (bans)\n`, true)
                   .addField('**Limit Types**', `\n- a (#${Config.Server.Channels.Art})\n - s (#${Config.Server.Channels.Suggestions})\n - hq (#${Config.Server.Channels.ToonHQ})\n - m (mute)`, true)
 
-                  .addField('**Warn User**', '```' + `${command_prefix}warn <user's id> <type> <reason>` + '```', true)
-                  .addField('**Kick User**', '```' + `${command_prefix}kick <user's id> <type> <reason>` + '```', true)
-                  .addField('**Ban User**', '```' + `${command_prefix}ban <user's id> <#> <type> <reason>` + '```', true)
-                  .addField('**Limit User**', '```' + `${command_prefix}limit <user's id> <limit type> <reason>` + '```', true)
-                  .addField('**Add Note**', '```' + `${command_prefix}note <user's id> <note>` + '```', true)
+                  .addField('**Warn User**', '```' + `${Config.Server.Prefix}warn <user's id> <type> <reason>` + '```', true)
+                  .addField('**Kick User**', '```' + `${Config.Server.Prefix}kick <user's id> <type> <reason>` + '```', true)
+                  .addField('**Ban User**', '```' + `${Config.Server.Prefix}ban <user's id> <#> <type> <reason>` + '```', true)
+                  .addField('**Limit User**', '```' + `${Config.Server.Prefix}limit <user's id> <limit type> <reason>` + '```', true)
+                  .addField('**Add Note**', '```' + `${Config.Server.Prefix}note <user's id> <note>` + '```', true)
 
-                  .addField('**User Information**', '```' + `${command_prefix}user <user's id>` + '```', true)
-                  .addField('**User Log**', '```' + `${command_prefix}log <user's id> <type>` + '```', true)
-                  .addField('**Remove Log-Item**', '```' + `${command_prefix}remove <user's id> <type> <item id>` + '```', true)
+                  .addField('**User Information**', '```' + `${Config.Server.Prefix}user <user's id>` + '```', true)
+                  .addField('**User Log**', '```' + `${Config.Server.Prefix}log <user's id> <type>` + '```', true)
+                  .addField('**Remove Log-Item**', '```' + `${Config.Server.Prefix}remove <user's id> <type> <item id>` + '```', true)
 
                 this.sendChannelMessage(embed, Config.Server.Channels.Moderation);
             }
 
-            if ((msg.startsWith(`${command_prefix}limit`)) && (this.checkPerms(message, uid) === true))
+            if ((msg.startsWith(`${Config.Server.Prefix}limit`)) && (this.checkPerms(message, uid) === true))
             {
                 var split_msg = msg.split(' ');
                 var target_id = split_msg[1];
@@ -987,7 +988,7 @@ class MessageHandler
                 }
             }
 
-            if ((msg.startsWith(`${command_prefix}warn`)) && (this.checkPerms(message, uid) === true))
+            if ((msg.startsWith(`${Config.Server.Prefix}warn`)) && (this.checkPerms(message, uid) === true))
             {
                 var split_msg = msg.split(' ');
                 var target_id = split_msg[1];
@@ -1100,12 +1101,12 @@ class MessageHandler
                     }
                 }
             }
-            if ((msg.startsWith(`${command_prefix}warn`)) && (this.checkPerms(message, uid) === false))
+            if ((msg.startsWith(`${Config.Server.Prefix}warn`)) && (this.checkPerms(message, uid) === false))
             {
                 message.reply('sorry but you don\'t have the proper permissions to execute this command!')
             }
 
-            if ((msg.startsWith(`${command_prefix}kick`)) && (this.checkPerms(message, uid) === true))
+            if ((msg.startsWith(`${Config.Server.Prefix}kick`)) && (this.checkPerms(message, uid) === true))
             {
                 var split_msg = msg.split(' ');
                 var target_id = split_msg[1];
@@ -1224,12 +1225,12 @@ class MessageHandler
                     }
                 }
             }
-            if ((msg.startsWith(`${command_prefix}kick`)) && (this.checkPerms(message, uid) === false))
+            if ((msg.startsWith(`${Config.Server.Prefix}kick`)) && (this.checkPerms(message, uid) === false))
             {
                 message.reply('sorry but you don\'t have the proper permissions to execute this command!')
             }
 
-            if ((msg.startsWith(`${command_prefix}ban`)) && (this.checkPerms(message, uid) === true))
+            if ((msg.startsWith(`${Config.Server.Prefix}ban`)) && (this.checkPerms(message, uid) === true))
             {
                 var split_msg = msg.split(' ');
                 var target_id = split_msg[1];
@@ -1354,12 +1355,12 @@ class MessageHandler
                     }
                 }
             }
-            if ((msg.startsWith(`${command_prefix}ban`)) && (this.checkPerms(message, uid) === false))
+            if ((msg.startsWith(`${Config.Server.Prefix}ban`)) && (this.checkPerms(message, uid) === false))
             {
                 message.reply('sorry but you don\'t have the proper permissions to execute this command!')
             }
 
-            if ((msg.startsWith(`${command_prefix}note`)) && (this.checkPerms(message, uid) === true))
+            if ((msg.startsWith(`${Config.Server.Prefix}note`)) && (this.checkPerms(message, uid) === true))
             {
                 var split_msg = msg.split(' ');
                 var target_id = split_msg[1];
@@ -1392,7 +1393,7 @@ class MessageHandler
 
                 }
             }
-            if ((msg.startsWith(`${command_prefix}note`)) && (this.checkPerms(message, uid) === false))
+            if ((msg.startsWith(`${Config.Server.Prefix}note`)) && (this.checkPerms(message, uid) === false))
             {
                 message.reply('sorry but you don\'t have the proper permissions to execute this command!')
             }
@@ -1410,11 +1411,12 @@ class MessageHandler
         var emoji = reaction.emoji.name;
         var auth_id = message.author.id;
         var channel = message.channel.name;
+        var channelId = message.channel.id;
         var suggestion_count = this.parent.stats_hndler.getSuggestionStats(auth_id);
         var uv = parseInt(suggestion_count.uv);
         var dv = parseInt(suggestion_count.dv);
 
-        if (channel === Config.Server.Channels.Suggestions)
+        if (channelId === Config.Server.Channels.Suggestions)
         {
             if (emoji == "✅")
             {
@@ -1455,7 +1457,15 @@ class MessageHandler
 
     checkPerms(message, uid)
     {
-        if (this.getMember(uid).roles.find(r => r.name === Config.Roles.Staff) !== null)
+        var roles = this.getMember(uid).roles;
+        var role = roles.find(
+            (r) =>
+            {
+                return r.name === Config.Roles.Staff;
+            }
+        );
+
+        if (role !== null)
         {
             return true;
         }
@@ -1468,8 +1478,14 @@ class MessageHandler
     checkRole(uid, role_name)
     {
         var roles = this.parent.bot.guilds.first().members.get(uid).roles.array();
+        var role = roles.find(
+            (r) =>
+            {
+                return r.name === role_name;
+            }
+        );
 
-        if (roles.find(r => r.name === role_name))
+        if (role)
         {
             return true;
         }
@@ -1497,7 +1513,7 @@ class MessageHandler
         return str.match(/[^]{1,1024}/g);
     }
 
-    checkLink(msg, channel)
+    checkLink(msg, channelId)
     {
 
         /*if (/\s/.test(msg))
@@ -1510,7 +1526,7 @@ class MessageHandler
 
         if (link_len > 0)
         {
-            if (channel === Config.Server.Channels.Streams)
+            if (channelId === Config.Server.Channels.Streams)
             {
 
                 for (var i = 0; i < Config.Server.Links.Streams.length; i++)
@@ -1526,7 +1542,7 @@ class MessageHandler
 
                 return [true, find_link[0].value];
             }
-            else if (channel === Config.Server.Channels.ToonHQ)
+            else if (channelId === Config.Server.Channels.ToonHQ)
             {
 
                 for (var i = 0; i < Config.Server.Links.ToonHQ.length; i++)
@@ -1542,7 +1558,7 @@ class MessageHandler
 
                 return [true, find_link[0].value];
             }
-            else if (channel !== Config.Server.Channels.ToonHQ)
+            else if (channelId !== Config.Server.Channels.ToonHQ)
             {
                 for (var i = 0; i < Config.Server.Links.Default.length; i++)
                 {
