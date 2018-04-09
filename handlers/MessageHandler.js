@@ -461,6 +461,7 @@ class MessageHandler
 
             if ((msg === `${Config.Server.Prefix}sadboard`) || (msg === `${Config.Server.Prefix}):`))
             {
+                /*
                 let last_ten = this.parent.stats_hndler.getLastTen();
 
                 const embed = new Discord.RichEmbed()
@@ -481,8 +482,9 @@ class MessageHandler
                   .addField(`**9. ${await this.getAVName(last_ten[8].uid)}**`, `** Total Score: __${last_ten[8].total}__**`, true)
                   .addField(`**10. ${await this.getAVName(last_ten[9].uid)}**`, `** Total Score: __${last_ten[9].total}__**`, true)
 
+                  */
 
-                this.sendChannelMessage(embed, Config.Server.Channels.ToonHQ);
+                this.sendChannelMessage('Sorry, this feature has been removed.', Config.Server.Channels.ToonHQ);
             }
 
             if (msg.startsWith(`${Config.Server.Prefix}stats`))
